@@ -27,19 +27,19 @@ public interface QueryAccessor {
     @Query("SELECT * FROM average_ratings WHERE content_id = :content_id AND content_type = 'Album'")
     public ResultSetFuture albumAverageRating(@Param("content_id") UUID content_id);
 
-    @Query("SELECT * FROM user_data_by_user WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Album'")
+    @Query("SELECT * FROM user_ratings WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Album'")
     public ResultSetFuture albumUserRating(@Param("user_id") UUID user_id, @Param("content_id") UUID content_id);
 
     @Query("SELECT * FROM average_ratings WHERE content_id = :content_id AND content_type = 'Artist'")
     public ResultSetFuture artistAverageRating(@Param("content_id") UUID content_id);
 
-    @Query("SELECT * FROM user_data_by_user WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Artist'")
+    @Query("SELECT * FROM user_ratings WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Artist'")
     public ResultSetFuture artistUserRating(@Param("user_id") UUID user_id, @Param("content_id") UUID content_id);
 
     @Query("SELECT * FROM average_ratings WHERE content_id = :content_id AND content_type = 'Song'")
     public ResultSetFuture songAverageRating(@Param("content_id") UUID content_id);
 
-    @Query("SELECT * FROM user_data_by_user WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Song'")
+    @Query("SELECT * FROM user_ratings WHERE user_id = :user_id AND content_id = :content_id AND content_type = 'Song'")
     public ResultSetFuture songUserRating(@Param("user_id") UUID user_id, @Param("content_id") UUID content_id);
 
     /**

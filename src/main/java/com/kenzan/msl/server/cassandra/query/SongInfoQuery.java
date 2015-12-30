@@ -9,7 +9,7 @@ import com.kenzan.msl.server.bo.SongBo;
 import com.kenzan.msl.server.cassandra.QueryAccessor;
 import com.kenzan.msl.server.dao.AverageRatingsDao;
 import com.kenzan.msl.server.dao.AlbumArtistBySongDao;
-import com.kenzan.msl.server.dao.UserDataByUserDao;
+import com.kenzan.msl.server.dao.UserRatingsDao;
 import io.swagger.model.MyLibrary;
 
 import java.util.UUID;
@@ -102,12 +102,12 @@ public class SongInfoQuery {
 
         if ( userUuid != null ) {
             // Select the row for the artist and user from the user_data_by_user table
-            UserDataByUserDao userDataByUserDao = mappingManager.mapper(UserDataByUserDao.class)
+            UserRatingsDao userRatingsDao = mappingManager.mapper(UserRatingsDao.class)
                 .map(queryAccessor.songUserRating(userUuid, songUuid).getUninterruptibly()).one();
 
             // If we retrieved a DAO, then include that info into the SongInfo
-            if ( null != userDataByUserDao ) {
-                songBo.setPersonalRating(userDataByUserDao.getRating());
+            if ( null != userRatingsDao ) {
+                songBo.setPersonalRating(userRatingsDao.getRating());
             }
         }
 

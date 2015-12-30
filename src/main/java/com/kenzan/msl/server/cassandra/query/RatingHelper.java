@@ -4,7 +4,7 @@ import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.mapping.MappingManager;
 import com.kenzan.msl.server.cassandra.QueryAccessor;
 import com.kenzan.msl.server.dao.AverageRatingsDao;
-import com.kenzan.msl.server.dao.UserDataByUserDao;
+import com.kenzan.msl.server.dao.UserRatingsDao;
 import io.swagger.model.AlbumInfo;
 import io.swagger.model.ArtistInfo;
 import io.swagger.model.SongInfo;
@@ -137,14 +137,14 @@ public class RatingHelper {
 
         for ( ResultSetFuture future : resultFutures ) {
             // Wait for the query to complete and map single result row to a DAO POJOs
-            UserDataByUserDao userDataByUserDao = mappingManager.mapper(UserDataByUserDao.class)
+            UserRatingsDao userRatingsDao = mappingManager.mapper(UserRatingsDao.class)
                 .map(future.getUninterruptibly()).one();
 
             // Find and update the matching Album
-            if ( userDataByUserDao != null ) {
+            if ( userRatingsDao != null ) {
                 for ( AlbumInfo albumInfo : albumInfoList ) {
-                    if ( albumInfo.getAlbumId().equals(userDataByUserDao.getContentUuid().toString()) ) {
-                        albumInfo.setPersonalRating(userDataByUserDao.getRating());
+                    if ( albumInfo.getAlbumId().equals(userRatingsDao.getContentUuid().toString()) ) {
+                        albumInfo.setPersonalRating(userRatingsDao.getRating());
                         break;
                     }
                 }
@@ -172,14 +172,14 @@ public class RatingHelper {
 
         for ( ResultSetFuture future : resultFutures ) {
             // Wait for the query to complete and map single result row to a DAO POJOs
-            UserDataByUserDao userDataByUserDao = mappingManager.mapper(UserDataByUserDao.class)
+            UserRatingsDao userRatingsDao = mappingManager.mapper(UserRatingsDao.class)
                 .map(future.getUninterruptibly()).one();
 
             // Find and update the matching Artist
-            if ( userDataByUserDao != null ) {
+            if ( userRatingsDao != null ) {
                 for ( ArtistInfo artistInfo : artistInfoList ) {
-                    if ( artistInfo.getArtistId().equals(userDataByUserDao.getContentUuid().toString()) ) {
-                        artistInfo.setPersonalRating(userDataByUserDao.getRating());
+                    if ( artistInfo.getArtistId().equals(userRatingsDao.getContentUuid().toString()) ) {
+                        artistInfo.setPersonalRating(userRatingsDao.getRating());
                         break;
                     }
                 }
@@ -207,15 +207,15 @@ public class RatingHelper {
 
         for ( ResultSetFuture future : resultFutures ) {
             // Wait for the query to complete and map single result row to a DAO POJOs
-            UserDataByUserDao userDataByUserDao = mappingManager.mapper(UserDataByUserDao.class)
+            UserRatingsDao userRatingsDao = mappingManager.mapper(UserRatingsDao.class)
                 .map(future.getUninterruptibly()).one();
 
             // Find and update the matching Song
-            if ( userDataByUserDao != null ) {
+            if ( userRatingsDao != null ) {
                 for ( SongInfo songInfo : songInfoList ) {
-                    if ( userDataByUserDao.getContentUuid() != null ) {
-                        if ( songInfo.getSongId().equals(userDataByUserDao.getContentUuid().toString()) ) {
-                            songInfo.setPersonalRating(userDataByUserDao.getRating());
+                    if ( userRatingsDao.getContentUuid() != null ) {
+                        if ( songInfo.getSongId().equals(userRatingsDao.getContentUuid().toString()) ) {
+                            songInfo.setPersonalRating(userRatingsDao.getRating());
                             break;
                         }
                     }

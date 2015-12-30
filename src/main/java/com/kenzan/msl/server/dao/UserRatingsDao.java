@@ -11,12 +11,10 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- *
- *
  * @author billschwanitz
  */
-@Table(name = "user_data_by_user")
-public class UserDataByUserDao extends AbstractDao {
+@Table(name = "user_ratings")
+public class UserRatingsDao extends AbstractDao {
     @PartitionKey
     @Column(name = "user_id")
     private UUID userId;
@@ -24,8 +22,6 @@ public class UserDataByUserDao extends AbstractDao {
     private String contentType;
     @Column(name = "content_uuid")
     private UUID contentUuid;
-    @Column(name = "favorites_timestamp")
-    private Date favoritesTimestamp;
     @Column(name = "rating")
     private Integer rating;
 
@@ -69,20 +65,6 @@ public class UserDataByUserDao extends AbstractDao {
      */
     public void setContentUuid(UUID contentUuid) {
         this.contentUuid = contentUuid;
-    }
-
-    /**
-     * @return the favoritesTimestamp
-     */
-    public Date getFavoritesTimestamp() {
-        return favoritesTimestamp;
-    }
-
-    /**
-     * @param favoritesTimestamp the favoritesTimestamp to set
-     */
-    public void setFavoritesTimestamp(Date favoritesTimestamp) {
-        this.favoritesTimestamp = favoritesTimestamp;
     }
 
     /**
