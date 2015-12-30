@@ -11,7 +11,7 @@ import com.kenzan.msl.server.bo.ArtistListBo;
 import com.kenzan.msl.server.cassandra.CassandraConstants;
 import com.kenzan.msl.server.cassandra.QueryAccessor;
 import com.kenzan.msl.server.dao.AverageRatingsDao;
-import com.kenzan.msl.server.dao.UserDataByUserDao;
+import com.kenzan.msl.server.dao.UserRatingsDao;
 import io.swagger.model.MyLibrary;
 
 import java.util.HashSet;
@@ -162,15 +162,15 @@ public class ArtistListQuery
                                           final Set<ResultSetFuture> resultFutures) {
         for ( ResultSetFuture future : resultFutures ) {
             // Wait for the query to complete and map single result row to a DAO POJOs
-            UserDataByUserDao userDataByUserDao = mappingManager.mapper(UserDataByUserDao.class)
+            UserRatingsDao userRatingsDao = mappingManager.mapper(UserRatingsDao.class)
                 .map(future.getUninterruptibly()).one();
 
             // Find and update the matching ArtistBo
             for ( ArtistBo artistBo : artistListBo.getBoList() ) {
 
-                if ( userDataByUserDao != null ) {
-                    if ( artistBo.getArtistId().equals(userDataByUserDao.getContentUuid()) ) {
-                        artistBo.setPersonalRating(userDataByUserDao.getRating());
+                if ( userRatingsDao != null ) {
+                    if ( artistBo.getArtistId().equals(userRatingsDao.getContentUuid()) ) {
+                        artistBo.setPersonalRating(userRatingsDao.getRating());
                         break;
                     }
                 }
