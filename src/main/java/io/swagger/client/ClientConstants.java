@@ -10,9 +10,4 @@ public class ClientConstants {
     public static final String TEST_ALBUM_ID = "afa688c7-894d-4537-98f0-bdbccc184cbd";
     public static final String PAGE_SIZE = "12";
     public static final String TIMESTAMP = "";
-
-    public static final String ADD_LIBRARY_RESOURCE = "/v1/accountedge/users/mylibrary/addartist/";
-    public static final String RATE_ARTIST_RESOURCE = "/v1/ratingsedge/rateartist/";
-    public static final String BROWSE_ARTIST_RESOURCE = "/v1/catalogedge/browse/artist";
-
 }

@@ -14,7 +14,7 @@ public class ArtistClientTest {
 
     private ArtistClient artistClient = new ArtistClient();;
     static Logger logger = Logger.getLogger(ArtistClientTest.class);
-    
+
     @Before
     public void init() {
         logger.setLevel(Level.DEBUG);

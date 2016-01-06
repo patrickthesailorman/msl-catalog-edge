@@ -1,9 +1,9 @@
 package io.swagger.api.impl;
 
 import com.google.common.base.Optional;
-import com.kenzan.msl.server.manager.FacetManager;
-import com.kenzan.msl.server.services.CassandraCatalogService;
-import com.kenzan.msl.server.services.CatalogService;
+import com.kenzan.msl.catalog.edge.manager.FacetManager;
+import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
+import com.kenzan.msl.catalog.edge.services.CatalogEdge;
 import io.swagger.api.*;
 
 import io.swagger.model.AlbumInfo;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JaxRSServerCodegen", date = "2015-12-23T16:59:19.184-06:00")
 public class MslApiServiceImpl extends MslApiService {
 
-      private CatalogService catalogService = new CassandraCatalogService();
+      private CatalogEdge catalogEdge = new CatalogEdgeService();
   
       @Override
       public Response getAlbum(String albumId)
@@ -34,7 +34,7 @@ public class MslApiServiceImpl extends MslApiService {
 
           Optional<AlbumInfo> optAlbumInfo;
           try {
-              optAlbumInfo = catalogService.getAlbum(albumId, null).toBlocking().first();
+              optAlbumInfo = catalogEdge.getAlbum(albumId, null).toBlocking().first();
           } catch (Exception e) {
               e.printStackTrace();
 
@@ -62,7 +62,7 @@ public class MslApiServiceImpl extends MslApiService {
 
               Optional<ArtistInfo> optArtistInfo;
               try {
-                  optArtistInfo = catalogService.getArtist(artistId, null).toBlocking().first();
+                  optArtistInfo = catalogEdge.getArtist(artistId, null).toBlocking().first();
               } catch (Exception e) {
                   e.printStackTrace();
 
@@ -85,7 +85,7 @@ public class MslApiServiceImpl extends MslApiService {
                throws NotFoundException {
            AlbumList albumList;
            try {
-               albumList = catalogService.browseAlbums(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
+               albumList = catalogEdge.browseAlbums(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
                        .toBlocking()
                        .first();
            } catch (Exception e) {
@@ -104,7 +104,7 @@ public class MslApiServiceImpl extends MslApiService {
                   throws NotFoundException {
               ArtistList artistList;
               try {
-                  artistList = catalogService.browseArtists(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
+                  artistList = catalogEdge.browseArtists(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
                           .toBlocking()
                           .first();
               } catch (Exception e) {
@@ -123,7 +123,7 @@ public class MslApiServiceImpl extends MslApiService {
                   throws NotFoundException {
               SongList songList;
               try {
-                  songList = catalogService.browseSongs(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
+                  songList = catalogEdge.browseSongs(pagingState, items, facets, MslSessionToken.getInstance().getTokenValue())
                           .toBlocking()
                           .first();
               } catch (Exception e) {
@@ -157,7 +157,7 @@ public class MslApiServiceImpl extends MslApiService {
 
              Optional<SongInfo> optSongInfo;
              try {
-                 optSongInfo = catalogService.getSong(songId, null).toBlocking().first();
+                 optSongInfo = catalogEdge.getSong(songId, null).toBlocking().first();
              } catch (Exception e) {
                  e.printStackTrace();
                  ErrorResponse errorResponse = new ErrorResponse();
