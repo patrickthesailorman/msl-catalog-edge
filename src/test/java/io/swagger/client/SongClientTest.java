@@ -12,10 +12,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class SongClientTest {
 
-
     private SongClient songClient;
     static Logger logger = Logger.getLogger(SongClientTest.class);
-
 
     @Before
     public void init() {
@@ -51,7 +49,8 @@ public class SongClientTest {
     @Test
     public void testRateSong() {
         logger.debug("songClient.testRateSong");
-        MslApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2, ClientConstants.TEST_TOKEN);
+        MslApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2,
+                                                             ClientConstants.TEST_TOKEN);
         assertNotNull(response);
         assertEquals("rateSong response is successful", "magic!", response.getMessage());
     }

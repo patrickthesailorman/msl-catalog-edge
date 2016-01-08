@@ -23,8 +23,7 @@ public class AlbumClient {
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        MslApiResponseMessage responseWrapper = response.readEntity(MslApiResponseMessage.class);
-        return responseWrapper;
+        return response.readEntity(MslApiResponseMessage.class);
     }
 
     public MslApiResponseMessage browse(String items) {
@@ -32,11 +31,10 @@ public class AlbumClient {
         target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/browse/album?items=" + items);
         Response response = target.request().get();
 
-        MslApiResponseMessage responseWrapper = response.readEntity(MslApiResponseMessage.class);
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return responseWrapper;
+        return response.readEntity(MslApiResponseMessage.class);
     }
 
     public MslApiResponseMessage rateAlbum(String albumId, Integer rating, String sessionToken) {
@@ -50,7 +48,6 @@ public class AlbumClient {
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        MslApiResponseMessage responseWrapper = response.readEntity(MslApiResponseMessage.class);
-        return responseWrapper;
+        return response.readEntity(MslApiResponseMessage.class);
     }
 }

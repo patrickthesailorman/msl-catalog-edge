@@ -7,8 +7,24 @@ is an example of building a swagger-enabled JAX-RS server.
 
 This example uses the [JAX-RS](https://jax-rs-spec.java.net/) framework.
 
-To run the server, please execute the following:
 
+To generate sources from swagger spec
 ```
-mvn clean package jetty:run
+mvn -P build clean generate-sources
 ```
+
+To run the server, please execute the following:
+```
+mvn -P dev clean jetty:run
+```
+
+To format code
+```
+mvn clean formatter:format
+```
+
+## Some dependencies required installation before running
+- msl-models
+- msl-account-data-client
+- msl-catalog-data-client
+- msl-ratings-data-client
