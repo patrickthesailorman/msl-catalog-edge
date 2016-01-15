@@ -42,7 +42,7 @@ public class LibraryHelper {
      * @param userAlbums Result<SongsByUserDao> userAlbums
      * @param album com.kenzan.msl.common.bo.AlbumBo
      */
-    public void processLibraryAlbumInfo(Result<AlbumsByUserDao> userAlbums, final AlbumBo album) {
+    public void processLibraryAlbumInfo(Iterable<AlbumsByUserDao> userAlbums, final AlbumBo album) {
         for ( AlbumsByUserDao albumsByUserDao : userAlbums ) {
             if ( albumsByUserDao.getAlbumId().equals(album.getAlbumId()) ) {
                 album.setInMyLibrary(true);
@@ -74,7 +74,7 @@ public class LibraryHelper {
      * @param userArtists Result<SongsByUserDao> userArtists
      * @param artist com.kenzan.msl.common.bo.ArtistBo
      */
-    public void processLibraryArtistInfo(Result<ArtistsByUserDao> userArtists, final ArtistBo artist) {
+    public void processLibraryArtistInfo(Iterable<ArtistsByUserDao> userArtists, final ArtistBo artist) {
         for ( ArtistsByUserDao artistsByUserDao : userArtists ) {
             if ( artistsByUserDao.getArtistId().equals(artist.getArtistId()) ) {
                 artist.setInMyLibrary(true);
@@ -106,7 +106,7 @@ public class LibraryHelper {
      * @param userSongs Result<SongsByUserDao> userSongs
      * @param song com.kenzan.msl.common.bo.SongBo
      */
-    public void processLibrarySongInfo(Result<SongsByUserDao> userSongs, final SongBo song) {
+    public void processLibrarySongInfo(Iterable<SongsByUserDao> userSongs, final SongBo song) {
         for ( SongsByUserDao songsByUserDao : userSongs ) {
             if ( songsByUserDao.getSongId().equals(song.getSongId()) ) {
                 song.setInMyLibrary(true);

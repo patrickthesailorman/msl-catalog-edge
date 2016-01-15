@@ -2,7 +2,7 @@ package io.swagger.client;
 
 public class ClientConstants {
 
-    public static final String BASE_URL = "http://local.msl.dev:9000/msl";
+    public static final String BASE_URL = "http://local.msl.dev:9003/msl";
 
     public static final String TEST_TOKEN = "2883607a-176d-4729-a20b-ec441c285afb";
     public static final String TEST_ARTIST_ID = "3f213d36-0e22-45e1-a688-e14fda3bace3";

@@ -3,6 +3,7 @@
  */
 package com.kenzan.msl.catalog.edge.services;
 
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
@@ -16,26 +17,28 @@ import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
 import com.kenzan.msl.ratings.client.dao.UserRatingsDao;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
+import rx.Observable;
 
 import java.util.UUID;
 
 public class SongsService
     implements PaginatorHelper {
 
-    private LibraryHelper libraryHelper = new LibraryHelper();
-
     public Optional<SongBo> getSong(final CassandraCatalogService cassandraCatalogService,
                                     final Optional<UUID> userUuid, final UUID songUuid) {
-        SongBo songBo = new SongBo();
+        Observable<ResultSet> queryResults = cassandraCatalogService.getAlbumArtistBySong(songUuid, Optional.absent());
 
-        AlbumArtistBySongDao albumArtistBySongDao = cassandraCatalogService
-            .mapAlbumArtistBySong(cassandraCatalogService.getAlbumArtistBySong(songUuid, Optional.absent()))
-            .toBlocking().first().one();
+        Result<AlbumArtistBySongDao> mappingResults = cassandraCatalogService
+            .mapAlbumArtistBySong(queryResults)
+            .toBlocking().first();
 
-        if ( null == albumArtistBySongDao ) {
+        if ( null == mappingResults ) {
             return Optional.absent();
         }
         else {
+            SongBo songBo = new SongBo();
+            AlbumArtistBySongDao albumArtistBySongDao = mappingResults.one();
+
             songBo.setSongId(albumArtistBySongDao.getSongId());
             songBo.setSongName(albumArtistBySongDao.getSongName());
             songBo.setAlbumId(albumArtistBySongDao.getAlbumId());
@@ -50,7 +53,8 @@ public class SongsService
             }
 
             if ( userUuid.isPresent() ) {
-                libraryHelper.processLibrarySongInfo(libraryHelper.getUserSongs(userUuid.get()), songBo);
+                LibraryHelper libraryHelper = new LibraryHelper();
+                libraryHelper.processLibrarySongInfo((Iterable<SongsByUserDao>) libraryHelper.getUserSongs(userUuid.get()), songBo);
             }
 
             CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
@@ -83,9 +87,10 @@ public class SongsService
                       items, facets).getPage(songListBo);
 
         if ( userUuid.isPresent() ) {
+            LibraryHelper libraryHelper = new LibraryHelper();
             Result<SongsByUserDao> userSongs = libraryHelper.getUserSongs(userUuid.get());
             for ( SongBo songBo : songListBo.getBoList() ) {
-                libraryHelper.processLibrarySongInfo(userSongs, songBo);
+                libraryHelper.processLibrarySongInfo((Iterable<SongsByUserDao>) userSongs, songBo);
             }
         }
 

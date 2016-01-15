@@ -6,7 +6,6 @@ package com.kenzan.msl.catalog.edge.translate;
 import static org.junit.Assert.*;
 
 import com.kenzan.msl.catalog.client.dao.*;
-
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
 import com.kenzan.msl.common.bo.ArtistBo;
@@ -74,7 +73,8 @@ public class TranslatorsTest {
     private static final String SONG2_NAME = "SongName2";
     private static final Integer SONG2_DURATION = 102;
 
-    private static final UUID PAGINGSTATE1_UUID = UUID.fromString("00000000-0000-0000-0003-000000001");
+    private static final UUID PAGINGSTATE1_UUID =
+            UUID.fromString("00000000-0000-0000-0003-000000001");
 
     // ==========================================================================================================
     // ALBUMS
@@ -108,7 +108,7 @@ public class TranslatorsTest {
         assertEquals(model.getAverageRating(), ALBUM1_AVERAGE_RATING);
         assertEquals(model.getPersonalRating(), ALBUM1_PERSONAL_RATING);
         assertEquals(model.getImageLink(), ALBUM1_IMAGE_LINK);
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertNotNull(model.getSongsList());
         assertEquals(model.getSongsList().size(), 2);
         assertTrue(model.getSongsList().contains(SONG1_UUID.toString()));
@@ -131,7 +131,7 @@ public class TranslatorsTest {
         assertNull(model.getAverageRating());
         assertNull(model.getPersonalRating());
         assertNull(model.getImageLink());
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertNull(model.getSongsList());
     }
 
@@ -178,7 +178,7 @@ public class TranslatorsTest {
                 assertNull(albumModel.getAverageRating());
                 assertNull(albumModel.getPersonalRating());
                 assertNull(albumModel.getImageLink());
-                assertNotNull(albumModel.getInMyLibrary());
+                assertFalse(albumModel.getInMyLibrary());
                 assertNull(albumModel.getSongsList());
             }
             else if ( albumModel.getAlbumId().equals(ALBUM2_UUID.toString()) ) {
@@ -190,7 +190,7 @@ public class TranslatorsTest {
                 assertNull(albumModel.getAverageRating());
                 assertNull(albumModel.getPersonalRating());
                 assertNull(albumModel.getImageLink());
-                assertNotNull(albumModel.getInMyLibrary());
+                assertFalse(albumModel.getInMyLibrary());
                 assertNull(albumModel.getSongsList());
             }
             else {
@@ -242,7 +242,7 @@ public class TranslatorsTest {
         assertEquals(model.getPersonalRating(), ARTIST1_PERSONAL_RATING);
         assertEquals(model.getImageLink(), ARTIST1_IMAGE_LINK);
         assertEquals(model.getGenre(), ARTIST1_GENRE);
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertNotNull(model.getAlbumsList());
         assertEquals(model.getAlbumsList().size(), 2);
         assertTrue(model.getAlbumsList().contains(ALBUM1_UUID.toString()));
@@ -270,7 +270,7 @@ public class TranslatorsTest {
         assertNull(model.getPersonalRating());
         assertNull(model.getImageLink());
         assertNull(model.getGenre());
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertNull(model.getAlbumsList());
         assertNull(model.getSongsList());
         assertNull(model.getSimilarArtistsList());
@@ -310,7 +310,7 @@ public class TranslatorsTest {
                 assertNull(artistModel.getPersonalRating());
                 assertNull(artistModel.getImageLink());
                 assertNull(artistModel.getGenre());
-                assertNotNull(artistModel.getInMyLibrary());
+                assertFalse(artistModel.getInMyLibrary());
                 assertNull(artistModel.getAlbumsList());
                 assertNull(artistModel.getSongsList());
                 assertNull(artistModel.getSimilarArtistsList());
@@ -321,7 +321,7 @@ public class TranslatorsTest {
                 assertNull(artistModel.getPersonalRating());
                 assertNull(artistModel.getImageLink());
                 assertNull(artistModel.getGenre());
-                assertNotNull(artistModel.getInMyLibrary());
+                assertFalse(artistModel.getInMyLibrary());
                 assertNull(artistModel.getAlbumsList());
                 assertNull(artistModel.getSongsList());
                 assertNull(artistModel.getSimilarArtistsList());
@@ -380,7 +380,7 @@ public class TranslatorsTest {
         assertEquals(model.getPersonalRating(), SONG1_PERSONAL_RATING);
         assertEquals(model.getSongHotttnesss(), SONG1_SONG_HOTTTNESSS);
         assertEquals(model.getYear(), SONG1_YEAR);
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertEquals(model.getArtistId(), ARTIST1_UUID.toString());
         assertEquals(model.getArtistName(), ARTIST1_NAME);
         assertEquals(model.getAlbumId(), ALBUM1_UUID.toString());
@@ -404,7 +404,7 @@ public class TranslatorsTest {
         assertNull(model.getPersonalRating());
         assertNull(model.getSongHotttnesss());
         assertNull(model.getYear());
-        assertNotNull(model.getInMyLibrary());
+        assertFalse(model.getInMyLibrary());
         assertNull(model.getArtistId());
         assertNull(model.getArtistName());
         assertNull(model.getAlbumId());
@@ -462,7 +462,7 @@ public class TranslatorsTest {
                 assertNull(songModel.getAverageRating());
                 assertNull(songModel.getPersonalRating());
                 assertNull(songModel.getSongHotttnesss());
-                assertNotNull(songModel.getInMyLibrary());
+                assertFalse(songModel.getInMyLibrary());
                 assertEquals(songModel.getArtistId(), ARTIST1_UUID.toString());
                 assertEquals(songModel.getArtistName(), ARTIST1_NAME);
                 assertEquals(songModel.getAlbumId(), ALBUM1_UUID.toString());
@@ -478,7 +478,7 @@ public class TranslatorsTest {
                 assertNull(songModel.getAverageRating());
                 assertNull(songModel.getPersonalRating());
                 assertNull(songModel.getSongHotttnesss());
-                assertNotNull(songModel.getInMyLibrary());
+                assertFalse(songModel.getInMyLibrary());
                 assertEquals(songModel.getArtistId(), ARTIST2_UUID.toString());
                 assertEquals(songModel.getArtistName(), ARTIST2_NAME);
                 assertEquals(songModel.getAlbumId(), ALBUM2_UUID.toString());

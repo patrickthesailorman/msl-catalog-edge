@@ -15,6 +15,7 @@ import java.util.List;
 
 public class FacetManager {
 
+    private FacetConstants fc = FacetConstants.getInstance();
     private static FacetManager instance = new FacetManager();
 
     private FacetManager() {
@@ -37,18 +38,18 @@ public class FacetManager {
 
         // genreFacet or ratingFacet
         if ( facet_id.contains("A") ) {
-            if ( facet_id.equals("A1") ) { // - genre facet case
+            if ( facet_id.equals(fc.GENRE_FACET_ID) ) { // - genre facet case
                 FacetInfoWithChildren genreFacet = new FacetInfoWithChildren();
-                genreFacet.setFacetId("A1");
-                genreFacet.setName("genres");
+                genreFacet.setFacetId(fc.GENRE_FACET_ID);
+                genreFacet.setName(fc.GENRE_FACET_NAME);
                 genreFacet.setChildren((Translators.translateFacetList(getGenreFacets())));
                 return genreFacet;
 
             }
             else {
                 FacetInfoWithChildren ratingFacet = new FacetInfoWithChildren();
-                ratingFacet.setFacetId("1");
-                ratingFacet.setName("ratings");
+                ratingFacet.setFacetId(fc.RATING_FACET_ID);
+                ratingFacet.setName(fc.RATING_FACET_NAME);
                 ratingFacet.setChildren(Translators.translateFacetList(getRatingFacets()));
                 return ratingFacet;
             }
@@ -73,18 +74,18 @@ public class FacetManager {
     private FacetInfoWithChildren getRootFacet() {
         List<FacetInfo> mainFacets = new ArrayList<>();
         FacetInfo genreFacets = new FacetInfo();
-        genreFacets.setFacetId("A1");
-        genreFacets.setName("genres");
+        genreFacets.setFacetId(fc.GENRE_FACET_ID);
+        genreFacets.setName(fc.GENRE_FACET_NAME);
         mainFacets.add(genreFacets);
 
         FacetInfo ratingFacets = new FacetInfo();
-        ratingFacets.setFacetId("A2");
-        ratingFacets.setName("rating");
+        ratingFacets.setFacetId(fc.RATING_FACET_ID);
+        ratingFacets.setName(fc.RATING_FACET_NAME);
         mainFacets.add(ratingFacets);
 
         FacetInfoWithChildren result = new FacetInfoWithChildren();
-        result.setFacetId("00");
-        result.setName("root");
+        result.setFacetId(fc.ROOT_FACET_ID);
+        result.setName(fc.ROOT_FACET_NAME);
         result.setChildren(mainFacets);
         return result;
     }
@@ -138,36 +139,9 @@ public class FacetManager {
      * @return ArrayList<FacetDao>
      */
     private ArrayList<FacetDao> getGenreFacets() {
-        String[] genres = {
-            "Classical",
-            "Blues",
-            "Dubstep",
-            "Jazz",
-            "Electronica",
-            "Latin",
-            "Soul",
-            "Funk",
-            "Cajun",
-            "Celtic",
-            "Folk",
-            "Big Band",
-            "Alternative",
-            "Reggae",
-            "Bluegrass",
-            "Punk",
-            "Rap",
-            "Rock",
-            "Hip Hop",
-            "Gospel",
-            "Heavy Metal",
-            "Country",
-            "Salsa",
-            "Opera",
-            "Pop" };
-
         ArrayList<FacetDao> result = new ArrayList<>();
-        for ( int i = 0; i < genres.length; i++ ) {
-            result.add(new FacetDao(Integer.toString(i + 5), genres[i]));
+        for ( int i = 0; i < fc.GENRES.length; i++ ) {
+            result.add(new FacetDao(Integer.toString(i + 5), fc.GENRES[i]));
         }
         return result;
     }
