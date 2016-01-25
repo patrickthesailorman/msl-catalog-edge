@@ -1,6 +1,6 @@
 package io.swagger.client;
 
-import io.swagger.api.impl.MslApiResponseMessage;
+import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -28,7 +28,7 @@ public class FacetClientTest {
     @Test
     public void testGetFacets() {
         logger.debug("FacetClient.testGetFacets");
-        MslApiResponseMessage facetList = facetClient.getFacets(ALL_FACETS);
+        CatalogEdgeApiResponseMessage facetList = facetClient.getFacets(ALL_FACETS);
         assertNotNull(facetList);
         assertEquals("get facets call is successful", "success", facetList.getMessage());
     }
@@ -36,7 +36,7 @@ public class FacetClientTest {
     @Test
     public void testBrowseAlbumFilteredByFacets() {
         logger.debug("FacetClient.testBrowseAlbumFilteredByFacets");
-        MslApiResponseMessage albumList = facetClient.browseAlbums(PAGE_SIZE, TEST_FACET);
+        CatalogEdgeApiResponseMessage albumList = facetClient.browseAlbums(PAGE_SIZE, TEST_FACET);
         assertNotNull(albumList);
         assertEquals("album browse facet filtered call is successful", "success", albumList.getMessage());
     }
@@ -50,7 +50,7 @@ public class FacetClientTest {
     @Test
     public void testBrowseArtistFilteredByFacets() {
         logger.debug("FacetClient.testBrowseArtistFilteredByFacets");
-        MslApiResponseMessage artistList = facetClient.browseArtists(PAGE_SIZE, TEST_FACET);
+        CatalogEdgeApiResponseMessage artistList = facetClient.browseArtists(PAGE_SIZE, TEST_FACET);
         assertNotNull(artistList);
         assertEquals("artist browse facet filtered call is successful", "success", artistList.getMessage());
     }
@@ -64,7 +64,7 @@ public class FacetClientTest {
     @Test
     public void testBrowseSongFilteredByFacets() {
         logger.debug("FacetClient.testBrowseSongFilteredByFacets");
-        MslApiResponseMessage albumList = facetClient.browseSongs(PAGE_SIZE, TEST_FACET);
+        CatalogEdgeApiResponseMessage albumList = facetClient.browseSongs(PAGE_SIZE, TEST_FACET);
         assertEquals("songs browse facet filtered call is successful", "success", albumList.getMessage());
     }
 

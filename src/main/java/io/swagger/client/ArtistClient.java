@@ -1,6 +1,6 @@
 package io.swagger.client;
 
-import io.swagger.api.impl.MslApiResponseMessage;
+import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -18,7 +18,7 @@ public class ArtistClient {
         client = new ResteasyClientBuilder().build();
     }
 
-    public MslApiResponseMessage get(String id) {
+    public CatalogEdgeApiResponseMessage get(String id) {
 
         ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/");
         Response response = target.path("artist/" + id).request().get();
@@ -27,10 +27,10 @@ public class ArtistClient {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
 
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
-    public MslApiResponseMessage browse(String items) {
+    public CatalogEdgeApiResponseMessage browse(String items) {
         ResteasyWebTarget target;
         target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/browse/artist?items=" + items);
         Response response = target.request().get();
@@ -39,10 +39,10 @@ public class ArtistClient {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
 
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
-    public MslApiResponseMessage rateArtist(String artistId, Integer rating, String sessionToken) {
+    public CatalogEdgeApiResponseMessage rateArtist(String artistId, Integer rating, String sessionToken) {
         ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/ratingsedge/rateartist/" + artistId);
 
         Form form = new Form();
@@ -54,7 +54,7 @@ public class ArtistClient {
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
 
     }
 }

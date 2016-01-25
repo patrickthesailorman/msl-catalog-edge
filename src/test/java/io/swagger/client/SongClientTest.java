@@ -1,6 +1,6 @@
 package io.swagger.client;
 
-import io.swagger.api.impl.MslApiResponseMessage;
+import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class SongClientTest {
     @Ignore
     public void testGet() {
         logger.debug("SongClient.testGet");
-        MslApiResponseMessage song = songClient.get(ClientConstants.TEST_SONG_ID);
+        CatalogEdgeApiResponseMessage song = songClient.get(ClientConstants.TEST_SONG_ID);
         assertNotNull(song);
         assertNotNull(song.getData());
         assertEquals("song get call is successful", "success", song.getMessage());
@@ -42,7 +42,7 @@ public class SongClientTest {
     public void testBrowse() {
         String PAGE_SIZE = "12";
         logger.debug("songClient.testBrowse");
-        MslApiResponseMessage songList = songClient.browse(PAGE_SIZE);
+        CatalogEdgeApiResponseMessage songList = songClient.browse(PAGE_SIZE);
         assertNotNull(songList);
         assertNotNull(songList.getData());
         assertEquals("song browse call is successful", "success", songList.getMessage());
@@ -52,7 +52,7 @@ public class SongClientTest {
     @Ignore
     public void testRateSong() {
         logger.debug("songClient.testRateSong");
-        MslApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2,
+        CatalogEdgeApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2,
                                                              ClientConstants.TEST_TOKEN);
         assertNotNull(response);
         assertEquals("rateSong response is successful", "magic!", response.getMessage());
