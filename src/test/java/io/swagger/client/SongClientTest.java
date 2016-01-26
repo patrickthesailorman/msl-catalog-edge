@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import org.junit.Test;
 import org.junit.Before;
+import org.junit.Ignore;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,6 +23,7 @@ public class SongClientTest {
     }
 
     @Test
+    @Ignore
     public void testGet() {
         logger.debug("SongClient.testGet");
         MslApiResponseMessage song = songClient.get(ClientConstants.TEST_SONG_ID);
@@ -47,6 +49,7 @@ public class SongClientTest {
     }
 
     @Test
+    @Ignore
     public void testRateSong() {
         logger.debug("songClient.testRateSong");
         MslApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2,

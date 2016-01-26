@@ -2,10 +2,9 @@ package io.swagger.api.impl;
 
 import com.google.common.base.Optional;
 import com.kenzan.msl.catalog.edge.manager.FacetManager;
-import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
-import com.kenzan.msl.catalog.edge.services.CatalogEdge;
-import io.swagger.api.*;
+import com.kenzan.msl.catalog.edge.services.*;
 
+import io.swagger.api.MslApiService;
 import io.swagger.model.AlbumInfo;
 import io.swagger.model.NotFoundResponse;
 import io.swagger.model.ErrorResponse;
@@ -22,7 +21,11 @@ import javax.ws.rs.core.Response;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JaxRSServerCodegen", date = "2015-12-23T16:59:19.184-06:00")
 public class MslApiServiceImpl extends MslApiService {
 
-      private CatalogEdge catalogEdge = new CatalogEdgeService();
+      private CatalogEdge catalogEdge = new CatalogEdgeService(
+              new AlbumsService(),
+              new ArtistsService(),
+              new SongsService()
+      );
   
       @Override
       public Response getAlbum(String albumId)

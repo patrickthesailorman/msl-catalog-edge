@@ -18,8 +18,8 @@ public class AlbumClient {
     }
 
     public MslApiResponseMessage get(String id) {
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/");
-        Response response = target.path("album/" + id).request().get();
+        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/album" + id);
+        Response response = target.request().get();
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }

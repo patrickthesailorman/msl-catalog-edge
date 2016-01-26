@@ -13,8 +13,6 @@ import com.kenzan.msl.common.dao.AbstractDao;
  */
 public class CatalogEdgeConstants {
 
-    public static final String MSL_KEYSPACE = "msl";
-
     public static final int MSL_BROWSE_MIN_PAGE_SIZE = 1;
     public static final int MSL_BROWSE_MAX_PAGE_SIZE = 100;
     public static final int MSL_BROWSE_DEFAULT_PAGE_SIZE = 25;

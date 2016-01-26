@@ -4,6 +4,7 @@ import io.swagger.api.impl.MslApiResponseMessage;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.NewCookie;
@@ -26,6 +27,7 @@ public class AlbumClientTest {
     }
 
     @Test
+    @Ignore
     public void testGet() {
         logger.debug("AlbumClient.testGet");
         MslApiResponseMessage album = albumClient.get(TEST_ALBUM_ID);
@@ -50,6 +52,7 @@ public class AlbumClientTest {
     }
 
     @Test
+    @Ignore
     public void testRateAlbum() {
         logger.debug("AlbumClient.testRateAlbum");
         NewCookie cookie = new NewCookie("sessionToken", TEST_TOKEN);

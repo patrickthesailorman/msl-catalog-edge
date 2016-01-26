@@ -127,6 +127,22 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>no-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
     <build>
@@ -329,10 +345,41 @@
             <artifactId>junit</artifactId>
             <version>${junit-version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>${easymock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-easymock</artifactId>
+            <version>${powermock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${org-jboss-resteasy.version}</version>
         </dependency>
 
         <dependency>
@@ -436,7 +483,11 @@
         <testng.version>6.8.8</testng.version>
         <maven-failsafe-plugin.version>2.6</maven-failsafe-plugin.version>
         <maven-surefire-report-plugin.version>2.19</maven-surefire-report-plugin.version>
-        <mockito-version>1.9.5</mockito-version>
+
+        <mockito-version>1.10.19</mockito-version>
+        <powermock.version>1.6.2</powermock.version>
+        <powermock-easymock-release-full.version>1.6.4</powermock-easymock-release-full.version>
+        <easymock.version>3.2</easymock.version>
 
         <formatter-maven-plugin.version>0.5.2</formatter-maven-plugin.version>
         <maven-java-formatter-plugin.version>0.4</maven-java-formatter-plugin.version>

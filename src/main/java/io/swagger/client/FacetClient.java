@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 
 public class FacetClient {
 
-    private String baseUrl = "http://localhost:9000/msl";
+    private String baseUrl = "http://localhost:9003/msl";
     private ResteasyClient client;
 
     public FacetClient() {
