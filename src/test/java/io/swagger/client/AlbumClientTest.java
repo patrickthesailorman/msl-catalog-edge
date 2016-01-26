@@ -1,6 +1,6 @@
 package io.swagger.client;
 
-import io.swagger.api.impl.MslApiResponseMessage;
+import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class AlbumClientTest {
     @Ignore
     public void testGet() {
         logger.debug("AlbumClient.testGet");
-        MslApiResponseMessage album = albumClient.get(TEST_ALBUM_ID);
+        CatalogEdgeApiResponseMessage album = albumClient.get(TEST_ALBUM_ID);
         assertNotNull(album);
         assertNotNull(album.getData());
         assertEquals("album get call is successful", "success", album.getMessage());
@@ -45,7 +45,7 @@ public class AlbumClientTest {
     @Test
     public void testBrowse() {
         logger.debug("AlbumClient.testBrowse");
-        MslApiResponseMessage albumList = albumClient.browse(PAGE_SIZE);
+        CatalogEdgeApiResponseMessage albumList = albumClient.browse(PAGE_SIZE);
         assertNotNull(albumList);
         assertNotNull(albumList.getData());
         assertEquals("album browse call is successful", "success", albumList.getMessage());
@@ -56,7 +56,7 @@ public class AlbumClientTest {
     public void testRateAlbum() {
         logger.debug("AlbumClient.testRateAlbum");
         NewCookie cookie = new NewCookie("sessionToken", TEST_TOKEN);
-        MslApiResponseMessage response = albumClient.rateAlbum(TEST_ALBUM_ID, 4, cookie.toString());
+        CatalogEdgeApiResponseMessage response = albumClient.rateAlbum(TEST_ALBUM_ID, 4, cookie.toString());
         assertNotNull(response);
         assertEquals("rateAlbum response is successful", "magic!", response.getMessage());
     }

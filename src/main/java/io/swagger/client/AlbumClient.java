@@ -1,6 +1,6 @@
 package io.swagger.client;
 
-import io.swagger.api.impl.MslApiResponseMessage;
+import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -17,16 +17,16 @@ public class AlbumClient {
         client = new ResteasyClientBuilder().build();
     }
 
-    public MslApiResponseMessage get(String id) {
+    public CatalogEdgeApiResponseMessage get(String id) {
         ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/album" + id);
         Response response = target.request().get();
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
-    public MslApiResponseMessage browse(String items) {
+    public CatalogEdgeApiResponseMessage browse(String items) {
         ResteasyWebTarget target;
         target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/browse/album?items=" + items);
         Response response = target.request().get();
@@ -34,10 +34,10 @@ public class AlbumClient {
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
-    public MslApiResponseMessage rateAlbum(String albumId, Integer rating, String sessionToken) {
+    public CatalogEdgeApiResponseMessage rateAlbum(String albumId, Integer rating, String sessionToken) {
         ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/ratingsedge/ratealbum/" + albumId);
 
         Form form = new Form();
@@ -48,6 +48,6 @@ public class AlbumClient {
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return response.readEntity(MslApiResponseMessage.class);
+        return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 }
