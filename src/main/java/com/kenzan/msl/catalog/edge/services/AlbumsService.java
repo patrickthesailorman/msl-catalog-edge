@@ -36,49 +36,49 @@ public class AlbumsService
 
         if (mappingResults == null) {
             return Optional.absent();
-        } else {
-            AlbumBo albumBo = new AlbumBo();
-            SongsArtistByAlbumDao songsArtistByAlbumDao = mappingResults.one();
-
-            albumBo.setAlbumId(songsArtistByAlbumDao.getAlbumId());
-            albumBo.setAlbumName(songsArtistByAlbumDao.getAlbumName());
-            albumBo.setArtistId(songsArtistByAlbumDao.getArtistId());
-            albumBo.setArtistName(songsArtistByAlbumDao.getArtistName());
-            albumBo.setImageLink(songsArtistByAlbumDao.getImageLink());
-
-            if (songsArtistByAlbumDao.getArtistGenres() != null && songsArtistByAlbumDao.getArtistGenres().size() > 0) {
-                albumBo.setGenre(songsArtistByAlbumDao.getArtistGenres().iterator().next());
-            }
-
-            // Add the song ID from this DAO if it is not already in the list
-            if (!albumBo.getSongsList().contains(songsArtistByAlbumDao.getSongId().toString())) {
-                albumBo.getSongsList().add(songsArtistByAlbumDao.getSongId().toString());
-            }
-
-            if (userUuid.isPresent()) {
-                LibraryHelper libraryHelper = new LibraryHelper();
-                libraryHelper.processLibraryAlbumInfo((Iterable<AlbumsByUserDao>) libraryHelper.getUserAlbums(userUuid.get()), albumBo);
-            }
-
-            CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
-
-            // Process ratings
-            AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(albumUuid, "Album")
-                    .toBlocking().first();
-            if (null != averageRatingsDao) {
-                albumBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
-            }
-
-            if (userUuid.isPresent()) {
-                UserRatingsDao userRatingsDao = cassandraRatingsService
-                        .getUserRating(userUuid.get(), "Album", albumUuid).toBlocking().first();
-                if (null != userRatingsDao) {
-                    albumBo.setPersonalRating(userRatingsDao.getRating());
-                }
-            }
-
-            return Optional.of(albumBo);
         }
+        
+		AlbumBo albumBo = new AlbumBo();
+		SongsArtistByAlbumDao songsArtistByAlbumDao = mappingResults.one();
+
+		albumBo.setAlbumId(songsArtistByAlbumDao.getAlbumId());
+		albumBo.setAlbumName(songsArtistByAlbumDao.getAlbumName());
+		albumBo.setArtistId(songsArtistByAlbumDao.getArtistId());
+		albumBo.setArtistName(songsArtistByAlbumDao.getArtistName());
+		albumBo.setImageLink(songsArtistByAlbumDao.getImageLink());
+
+		if (songsArtistByAlbumDao.getArtistGenres() != null && songsArtistByAlbumDao.getArtistGenres().size() > 0) {
+		    albumBo.setGenre(songsArtistByAlbumDao.getArtistGenres().iterator().next());
+		}
+
+		// Add the song ID from this DAO if it is not already in the list
+		if (!albumBo.getSongsList().contains(songsArtistByAlbumDao.getSongId().toString())) {
+		    albumBo.getSongsList().add(songsArtistByAlbumDao.getSongId().toString());
+		}
+
+		if (userUuid.isPresent()) {
+		    LibraryHelper libraryHelper = new LibraryHelper();
+		    libraryHelper.processLibraryAlbumInfo(libraryHelper.getUserAlbums(userUuid.get()), albumBo);
+		}
+
+		CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
+
+		// Process ratings
+		AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(albumUuid, "Album")
+		        .toBlocking().first();
+		if (null != averageRatingsDao) {
+		    albumBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
+		}
+
+		if (userUuid.isPresent()) {
+		    UserRatingsDao userRatingsDao = cassandraRatingsService
+		            .getUserRating(userUuid.get(), "Album", albumUuid).toBlocking().first();
+		    if (null != userRatingsDao) {
+		        albumBo.setPersonalRating(userRatingsDao.getRating());
+		    }
+		}
+
+		return Optional.of(albumBo);
 
     }
 

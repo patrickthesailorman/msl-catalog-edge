@@ -6,12 +6,9 @@ import com.google.common.base.Optional;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dao.SongsAlbumsByArtistDao;
-import com.kenzan.msl.catalog.client.dao.SongsArtistByAlbumDao;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.ArtistBo;
-import com.kenzan.msl.common.bo.ArtistListBo;
 import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import org.easymock.EasyMock;
@@ -125,7 +122,7 @@ public class ArtistsServiceTest {
     @Test
     @Ignore
     public void testGetArtistList() {
-        ArtistListBo artistListBo = artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
+        artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
     }
 
     // ================================================================================================================

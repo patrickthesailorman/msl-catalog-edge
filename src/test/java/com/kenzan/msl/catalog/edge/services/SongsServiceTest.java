@@ -9,7 +9,6 @@ import com.kenzan.msl.catalog.client.dao.AlbumArtistBySongDao;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
 import com.kenzan.msl.common.bo.SongBo;
-import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import org.easymock.EasyMock;
@@ -126,7 +125,7 @@ public class SongsServiceTest {
     @Test
     @Ignore
     public void testGetSongList() {
-        SongListBo songListBo = songsService.getSongsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
+        songsService.getSongsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
     }
 
     // ================================================================================================================

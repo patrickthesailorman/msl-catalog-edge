@@ -3,7 +3,6 @@ package com.kenzan.msl.catalog.edge.services;
 import com.google.common.base.Optional;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import com.kenzan.msl.catalog.edge.translate.Translators;
 import io.swagger.model.*;
 import org.junit.Before;
 import org.junit.Test;

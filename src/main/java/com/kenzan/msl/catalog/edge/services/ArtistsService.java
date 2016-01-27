@@ -35,58 +35,58 @@ public class ArtistsService
 
         if (null == mappingResults) {
             return Optional.absent();
-        } else {
-            ArtistBo artistBo = new ArtistBo();
-            SongsAlbumsByArtistDao songsAlbumsByArtistDao = mappingResults.one();
-
-            artistBo.setArtistId(songsAlbumsByArtistDao.getArtistId());
-            artistBo.setArtistName(songsAlbumsByArtistDao.getArtistName());
-
-            if (songsAlbumsByArtistDao.getArtistGenres() != null
-                    && songsAlbumsByArtistDao.getArtistGenres().size() > 0) {
-                artistBo.setGenre(songsAlbumsByArtistDao.getArtistGenres().iterator().next());
-            }
-
-            if (songsAlbumsByArtistDao.getSimilarArtists() != null) {
-                for (UUID similarArtistUuid : songsAlbumsByArtistDao.getSimilarArtists().keySet()) {
-                    artistBo.getSimilarArtistsList().add(similarArtistUuid.toString());
-                }
-            }
-
-            // Add the album ID from this DAO if it is not already in the list
-            if (!artistBo.getAlbumsList().contains(songsAlbumsByArtistDao.getAlbumId().toString())) {
-                artistBo.getAlbumsList().add(songsAlbumsByArtistDao.getAlbumId().toString());
-            }
-
-            // Add the song ID from this DAO if it is not already in the list
-            if (!artistBo.getSongsList().contains(songsAlbumsByArtistDao.getSongId().toString())) {
-                artistBo.getSongsList().add(songsAlbumsByArtistDao.getSongId().toString());
-            }
-
-            if (userUuid.isPresent()) {
-                LibraryHelper libraryHelper = new LibraryHelper();
-                libraryHelper.processLibraryArtistInfo((Iterable<ArtistsByUserDao>) libraryHelper.getUserArtists(userUuid.get()), artistBo);
-            }
-
-            CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
-
-            // Process ratings
-            AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(artistUuid, "Artist")
-                    .toBlocking().first();
-            if (null != averageRatingsDao) {
-                artistBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
-            }
-
-            if (userUuid.isPresent()) {
-                UserRatingsDao userRatingsDao = cassandraRatingsService
-                        .getUserRating(userUuid.get(), "Artist", artistUuid).toBlocking().first();
-                if (null != userRatingsDao) {
-                    artistBo.setPersonalRating(userRatingsDao.getRating());
-                }
-            }
-
-            return Optional.of(artistBo);
         }
+        
+		ArtistBo artistBo = new ArtistBo();
+		SongsAlbumsByArtistDao songsAlbumsByArtistDao = mappingResults.one();
+
+		artistBo.setArtistId(songsAlbumsByArtistDao.getArtistId());
+		artistBo.setArtistName(songsAlbumsByArtistDao.getArtistName());
+
+		if (songsAlbumsByArtistDao.getArtistGenres() != null
+		        && songsAlbumsByArtistDao.getArtistGenres().size() > 0) {
+		    artistBo.setGenre(songsAlbumsByArtistDao.getArtistGenres().iterator().next());
+		}
+
+		if (songsAlbumsByArtistDao.getSimilarArtists() != null) {
+		    for (UUID similarArtistUuid : songsAlbumsByArtistDao.getSimilarArtists().keySet()) {
+		        artistBo.getSimilarArtistsList().add(similarArtistUuid.toString());
+		    }
+		}
+
+		// Add the album ID from this DAO if it is not already in the list
+		if (!artistBo.getAlbumsList().contains(songsAlbumsByArtistDao.getAlbumId().toString())) {
+		    artistBo.getAlbumsList().add(songsAlbumsByArtistDao.getAlbumId().toString());
+		}
+
+		// Add the song ID from this DAO if it is not already in the list
+		if (!artistBo.getSongsList().contains(songsAlbumsByArtistDao.getSongId().toString())) {
+		    artistBo.getSongsList().add(songsAlbumsByArtistDao.getSongId().toString());
+		}
+
+		if (userUuid.isPresent()) {
+		    LibraryHelper libraryHelper = new LibraryHelper();
+		    libraryHelper.processLibraryArtistInfo(libraryHelper.getUserArtists(userUuid.get()), artistBo);
+		}
+
+		CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
+
+		// Process ratings
+		AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(artistUuid, "Artist")
+		        .toBlocking().first();
+		if (null != averageRatingsDao) {
+		    artistBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
+		}
+
+		if (userUuid.isPresent()) {
+		    UserRatingsDao userRatingsDao = cassandraRatingsService
+		            .getUserRating(userUuid.get(), "Artist", artistUuid).toBlocking().first();
+		    if (null != userRatingsDao) {
+		        artistBo.setPersonalRating(userRatingsDao.getRating());
+		    }
+		}
+
+		return Optional.of(artistBo);
     }
 
     public ArtistListBo getArtistsList(final CassandraCatalogService cassandraCatalogService,
@@ -101,7 +101,7 @@ public class ArtistsService
             LibraryHelper libraryHelper = new LibraryHelper();
             Result<ArtistsByUserDao> userArtists = libraryHelper.getUserArtists(userUuid.get());
             for (ArtistBo artistBo : artistListBo.getBoList()) {
-                libraryHelper.processLibraryArtistInfo((Iterable<ArtistsByUserDao>) userArtists, artistBo);
+                libraryHelper.processLibraryArtistInfo(userArtists, artistBo);
             }
         }
 

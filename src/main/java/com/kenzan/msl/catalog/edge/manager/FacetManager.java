@@ -46,13 +46,12 @@ public class FacetManager {
                 return genreFacet;
 
             }
-            else {
-                FacetInfoWithChildren ratingFacet = new FacetInfoWithChildren();
-                ratingFacet.setFacetId(fc.RATING_FACET_ID);
-                ratingFacet.setName(fc.RATING_FACET_NAME);
-                ratingFacet.setChildren(Translators.translateFacetList(getRatingFacets()));
-                return ratingFacet;
-            }
+            
+			FacetInfoWithChildren ratingFacet = new FacetInfoWithChildren();
+			ratingFacet.setFacetId(fc.RATING_FACET_ID);
+			ratingFacet.setName(fc.RATING_FACET_NAME);
+			ratingFacet.setChildren(Translators.translateFacetList(getRatingFacets()));
+			return ratingFacet;
         }
 
         Optional<FacetDao> optResponse = getFacet(facet_id);

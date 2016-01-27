@@ -157,9 +157,9 @@ public class CatalogEdgeService
 
         if (optArtistBo.isPresent()) {
             return Observable.just(Optional.of(Translators.translate(optArtistBo.get())));
-        } else {
-            return Observable.just(Optional.absent());
         }
+        
+		return Observable.just(Optional.absent());
     }
 
     // ===========================================================================================================
@@ -218,9 +218,9 @@ public class CatalogEdgeService
 
         if (optSongBo.isPresent()) {
             return Observable.just(Optional.of(Translators.translate(optSongBo.get())));
-        } else {
-            return Observable.just(Optional.absent());
         }
+        
+		return Observable.just(Optional.absent());
     }
 
 }
