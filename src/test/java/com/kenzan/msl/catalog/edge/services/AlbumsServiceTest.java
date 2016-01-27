@@ -1,7 +1,6 @@
 package com.kenzan.msl.catalog.edge.services;
 
 import com.datastax.driver.core.Statement;
-import com.kenzan.msl.common.bo.AlbumListBo;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,7 +20,6 @@ import com.google.common.base.Optional;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import org.mockito.Mockito;
 import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -161,7 +159,7 @@ public class AlbumsServiceTest {
         System.out.println(tc.albumBoList);
         System.out.println("=================================");
 
-        AlbumListBo albumListBo = albumsService.getAlbumsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
+        albumsService.getAlbumsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
 
     }
 

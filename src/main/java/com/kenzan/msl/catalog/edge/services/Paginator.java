@@ -16,8 +16,6 @@ import com.kenzan.msl.common.bo.AbstractBo;
 import com.kenzan.msl.common.bo.AbstractListBo;
 import com.kenzan.msl.catalog.edge.manager.FacetManager;
 import org.apache.commons.lang3.StringUtils;
-import rx.Observable;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +167,7 @@ public class Paginator {
      */
     // TODO Resolve the issue with adding elements to a generic List<? extends AbstractBo>. This is
     // the reason for the SuppressWarnings annotation.
-    private AbstractListBo buildAbstractListBo(ResultSet resultSet, final UUID pagingStateUuid,
+    private AbstractListBo<? extends AbstractBo> buildAbstractListBo(ResultSet resultSet, final UUID pagingStateUuid,
                                      AbstractListBo<? extends AbstractBo> abstractListBo) {
         // Map the results from the resultSet to our BO POJO
         Class<? extends AbstractDao> boClass;
@@ -272,9 +270,9 @@ public class Paginator {
         PagingStateDao pagingStateDao = cassandraCatalogService.getPagingState(pagingStateUuid).toBlocking().first();
         if (pagingStateDao != null) {
             return Optional.of(pagingStateDao);
-        } else {
-            return Optional.absent();
         }
+        
+		return Optional.absent();
     }
 
     private void deletePagingState(Optional<UUID> pagingStateUuid) {

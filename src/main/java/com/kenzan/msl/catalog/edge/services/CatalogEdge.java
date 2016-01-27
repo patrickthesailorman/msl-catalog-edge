@@ -12,8 +12,6 @@ import io.swagger.model.SongInfo;
 import io.swagger.model.SongList;
 import rx.Observable;
 
-import java.util.UUID;
-
 public interface CatalogEdge {
 
     // ==========================================================================================================

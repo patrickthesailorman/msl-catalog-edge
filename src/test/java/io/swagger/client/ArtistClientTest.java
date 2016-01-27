@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class ArtistClientTest {
 
-    private ArtistClient artistClient = new ArtistClient();;
+    private ArtistClient artistClient = new ArtistClient();
     static Logger logger = Logger.getLogger(ArtistClientTest.class);
 
     @Before
