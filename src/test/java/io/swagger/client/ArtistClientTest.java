@@ -45,20 +45,4 @@ public class ArtistClientTest {
         assertNotNull(artistList.getData());
         assertEquals("artist browse call is successful", "success", artistList.getMessage());
     }
-
-    @Test
-    @Ignore
-    public void testRateArtist() {
-        logger.debug("ArtistClient.testRateArtist");
-        NewCookie cookie = new NewCookie("sessionToken", ClientConstants.TEST_TOKEN);
-        CatalogEdgeApiResponseMessage response = artistClient.rateArtist(ClientConstants.TEST_ARTIST_ID, 3, cookie.toString());
-        assertNotNull(response);
-        assertEquals("rateArtist response is successful", "magic!", response.getMessage());
-    }
-
-    @Test(expected = java.lang.RuntimeException.class)
-    public void testRateArtistThrowException() {
-        logger.debug("ArtistClient.testRateArtistThrowException");
-        artistClient.rateArtist(ClientConstants.TEST_ARTIST_ID, 3, "");
-    }
 }

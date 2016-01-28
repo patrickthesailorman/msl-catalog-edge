@@ -27,53 +27,52 @@ public class SongsService
                                     final Optional<UUID> userUuid, final UUID songUuid) {
         Observable<ResultSet> queryResults = cassandraCatalogService.getAlbumArtistBySong(songUuid, Optional.absent());
 
-        Result<AlbumArtistBySongDao> mappingResults = cassandraCatalogService
-            .mapAlbumArtistBySong(queryResults)
+        Result<AlbumArtistBySongDao> mappingResults = cassandraCatalogService.mapAlbumArtistBySong(queryResults)
             .toBlocking().first();
 
         if ( null == mappingResults ) {
             return Optional.absent();
         }
-        
-		SongBo songBo = new SongBo();
-		AlbumArtistBySongDao albumArtistBySongDao = mappingResults.one();
 
-		songBo.setSongId(albumArtistBySongDao.getSongId());
-		songBo.setSongName(albumArtistBySongDao.getSongName());
-		songBo.setAlbumId(albumArtistBySongDao.getAlbumId());
-		songBo.setAlbumName(albumArtistBySongDao.getAlbumName());
-		songBo.setArtistId(albumArtistBySongDao.getArtistId());
-		songBo.setArtistName(albumArtistBySongDao.getArtistName());
-		songBo.setDuration(albumArtistBySongDao.getSongDuration());
-		songBo.setYear(albumArtistBySongDao.getAlbumYear());
+        SongBo songBo = new SongBo();
+        AlbumArtistBySongDao albumArtistBySongDao = mappingResults.one();
 
-		if ( albumArtistBySongDao.getArtistGenres() != null && albumArtistBySongDao.getArtistGenres().size() > 0 ) {
-		    songBo.setGenre(albumArtistBySongDao.getArtistGenres().iterator().next());
-		}
+        songBo.setSongId(albumArtistBySongDao.getSongId());
+        songBo.setSongName(albumArtistBySongDao.getSongName());
+        songBo.setAlbumId(albumArtistBySongDao.getAlbumId());
+        songBo.setAlbumName(albumArtistBySongDao.getAlbumName());
+        songBo.setArtistId(albumArtistBySongDao.getArtistId());
+        songBo.setArtistName(albumArtistBySongDao.getArtistName());
+        songBo.setDuration(albumArtistBySongDao.getSongDuration());
+        songBo.setYear(albumArtistBySongDao.getAlbumYear());
 
-		if ( userUuid.isPresent() ) {
-		    LibraryHelper libraryHelper = new LibraryHelper();
-		    libraryHelper.processLibrarySongInfo(libraryHelper.getUserSongs(userUuid.get()), songBo);
-		}
+        if ( albumArtistBySongDao.getArtistGenres() != null && albumArtistBySongDao.getArtistGenres().size() > 0 ) {
+            songBo.setGenre(albumArtistBySongDao.getArtistGenres().iterator().next());
+        }
 
-		CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
+        if ( userUuid.isPresent() ) {
+            LibraryHelper libraryHelper = new LibraryHelper();
+            libraryHelper.processLibrarySongInfo(libraryHelper.getUserSongs(userUuid.get()), songBo);
+        }
 
-		// Process ratings
-		AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(songUuid, "Song")
-		    .toBlocking().first();
-		if ( null != averageRatingsDao ) {
-		    songBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
-		}
+        CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
 
-		if ( userUuid.isPresent() ) {
-		    UserRatingsDao userRatingsDao = cassandraRatingsService.getUserRating(userUuid.get(), "Song", songUuid)
-		        .toBlocking().first();
-		    if ( null != userRatingsDao ) {
-		        songBo.setPersonalRating(userRatingsDao.getRating());
-		    }
-		}
+        // Process ratings
+        AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(songUuid, "Song").toBlocking()
+            .first();
+        if ( null != averageRatingsDao ) {
+            songBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
+        }
 
-		return Optional.of(songBo);
+        if ( userUuid.isPresent() ) {
+            UserRatingsDao userRatingsDao = cassandraRatingsService.getUserRating(userUuid.get(), "Song", songUuid)
+                .toBlocking().first();
+            if ( null != userRatingsDao ) {
+                songBo.setPersonalRating(userRatingsDao.getRating());
+            }
+        }
+
+        return Optional.of(songBo);
     }
 
     public SongListBo getSongsList(final CassandraCatalogService cassandraCatalogService,

@@ -20,7 +20,7 @@ public class SongClient {
 
     public CatalogEdgeApiResponseMessage get(String id) {
 
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/");
+        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/catalog-edge/");
         Response response = target.path("song/" + id).request().get();
 
         if ( response.getStatus() != 200 ) {
@@ -32,7 +32,7 @@ public class SongClient {
 
     public CatalogEdgeApiResponseMessage browse(String items) {
         WebTarget target;
-        target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/browse/song?items=" + items);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/song?items=" + items);
         Response response = target.request().get();
 
         if ( response.getStatus() != 200 ) {
@@ -42,18 +42,4 @@ public class SongClient {
         return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
-    public CatalogEdgeApiResponseMessage rateSong(String songId, Integer rating, String sessionToken) {
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/ratingsedge/ratesong/" + songId);
-
-        Form form = new Form();
-        form.param("rating", rating.toString());
-
-        Response response = target.request().cookie("sessionToken", sessionToken)
-            .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
-
-        if ( response.getStatus() != 200 ) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-        return response.readEntity(CatalogEdgeApiResponseMessage.class);
-    }
 }

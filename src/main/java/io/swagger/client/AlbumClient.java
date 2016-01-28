@@ -18,7 +18,7 @@ public class AlbumClient {
     }
 
     public CatalogEdgeApiResponseMessage get(String id) {
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/album" + id);
+        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/catalog-edge/album" + id);
         Response response = target.request().get();
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -28,23 +28,9 @@ public class AlbumClient {
 
     public CatalogEdgeApiResponseMessage browse(String items) {
         ResteasyWebTarget target;
-        target = client.target(ClientConstants.BASE_URL + "/v1/catalogedge/browse/album?items=" + items);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/album?items=" + items);
         Response response = target.request().get();
 
-        if ( response.getStatus() != 200 ) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-        return response.readEntity(CatalogEdgeApiResponseMessage.class);
-    }
-
-    public CatalogEdgeApiResponseMessage rateAlbum(String albumId, Integer rating, String sessionToken) {
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/v1/ratingsedge/ratealbum/" + albumId);
-
-        Form form = new Form();
-        form.param("rating", rating.toString());
-
-        Response response = target.request().header("Cookie", sessionToken)
-            .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }

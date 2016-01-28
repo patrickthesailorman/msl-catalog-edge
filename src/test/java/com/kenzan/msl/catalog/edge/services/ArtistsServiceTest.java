@@ -36,7 +36,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CassandraRatingsService.class, CassandraAccountService.class, CassandraCatalogService.class})
+@PrepareForTest({ CassandraRatingsService.class, CassandraAccountService.class, CassandraCatalogService.class })
 public class ArtistsServiceTest {
 
     private TestConstants tc = TestConstants.getInstance();
@@ -55,7 +55,8 @@ public class ArtistsServiceTest {
     private ArtistsService artistsService = new ArtistsService();
 
     @Before
-    public void init() throws Exception {
+    public void init()
+        throws Exception {
         ResultSet resultSet = createMock(ResultSet.class);
         observableResultSet = Observable.just(resultSet);
         queryAccessor = mock(QueryAccessor.class);
@@ -71,13 +72,14 @@ public class ArtistsServiceTest {
     }
 
     @Test
-    public void testGetArtist() throws Exception {
+    public void testGetArtist()
+        throws Exception {
         expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ALBUM_ID, Optional.absent()))
-                .andReturn(observableResultSet);
+            .andReturn(observableResultSet);
 
         Result<SongsAlbumsByArtistDao> songsAlbumsByArtistDaoResult = PowerMockito.mock(Result.class);
         expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet))
-                .andReturn(Observable.just(songsAlbumsByArtistDaoResult));
+            .andReturn(Observable.just(songsAlbumsByArtistDaoResult));
 
         PowerMockito.when(songsAlbumsByArtistDaoResult.one()).thenReturn(tc.songsAlbumsByArtistDao);
 
@@ -87,7 +89,7 @@ public class ArtistsServiceTest {
         averageRatingsDao.setNumRating(new Long(2));
         averageRatingsDao.setSumRating(new Long(4));
         expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-                .andReturn(Observable.just(averageRatingsDao));
+            .andReturn(Observable.just(averageRatingsDao));
 
         EasyMock.replay(cassandraRatingsService);
         EasyMock.replay(cassandraCatalogService);
@@ -107,22 +109,23 @@ public class ArtistsServiceTest {
     @Test
     public void testGetNullArtist() {
         expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ARTIST_ID, Optional.absent()))
-                .andReturn(observableResultSet);
-        expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet))
-                .andReturn(Observable.just(null));
+            .andReturn(observableResultSet);
+        expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet)).andReturn(Observable.just(null));
 
         EasyMock.replay(cassandraCatalogService);
         EasyMock.replay(cassandraAccountService);
         PowerMock.replayAll();
 
-        Optional<ArtistBo> result = artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ARTIST_ID);
+        Optional<ArtistBo> result = artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID),
+                                                             tc.ARTIST_ID);
         assertEquals(result, Optional.absent());
     }
 
     @Test
     @Ignore
     public void testGetArtistList() {
-        artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
+        artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS,
+                                      Optional.of(tc.PAGING_STATE_ID));
     }
 
     // ================================================================================================================
@@ -156,7 +159,7 @@ public class ArtistsServiceTest {
     }
 
     private void mockRatingsHelper()
-            throws Exception {
+        throws Exception {
         PowerMock.mockStatic(CassandraRatingsService.class);
         cassandraRatingsService = createMock(CassandraRatingsService.class);
         PowerMock.expectNew(CassandraRatingsService.class).andReturn(cassandraRatingsService);

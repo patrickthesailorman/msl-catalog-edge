@@ -27,14 +27,14 @@ import rx.Observable;
  * Implementation of the CatalogEdge interface that retrieves its data from a Cassandra cluster.
  */
 public class CatalogEdgeService
-        implements CatalogEdge {
+    implements CatalogEdge {
 
     private AlbumsService albumsService;
     private ArtistsService artistsService;
     private SongsService songsService;
     private CassandraCatalogService cassandraCatalogService;
 
-    public CatalogEdgeService(AlbumsService _albumsService, ArtistsService _artistsService, SongsService _songsService) {
+    public CatalogEdgeService( AlbumsService _albumsService, ArtistsService _artistsService, SongsService _songsService ) {
         albumsService = _albumsService;
         artistsService = _artistsService;
         songsService = _songsService;
@@ -61,32 +61,32 @@ public class CatalogEdgeService
      * when retrieving subsequent pages).
      *
      * @param pagingState Used for pagination control. To retrieve the first page, use
-     *                    <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
-     *                    that accompanied the previous page.
-     * @param items       Specifies the number of items to include in each page. This value is only
-     *                    necessary on the retrieval of the first page, and will be used for all subsequent
-     *                    pages.
-     * @param facets      Specifies a comma delimited list of search facet Ids to filter the results.
-     *                    Pass null or an empty string to not filter.
-     * @param userId      Specifies a user UUID identifying the currently logged-in user. Will be null
-     *                    for unauthenticated requests.
+     *            <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
+     *            that accompanied the previous page.
+     * @param items Specifies the number of items to include in each page. This value is only
+     *            necessary on the retrieval of the first page, and will be used for all subsequent
+     *            pages.
+     * @param facets Specifies a comma delimited list of search facet Ids to filter the results.
+     *            Pass null or an empty string to not filter.
+     * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
+     *            for unauthenticated requests.
      * @return Observable<AlbumList>
      */
     public Observable<AlbumList> browseAlbums(String pagingState, Integer items, String facets, String userId) {
         Optional<UUID> pagingStateUuid = StringUtils.isEmpty(pagingState) ? Optional.absent() : Optional.of(UUID
-                .fromString(pagingState));
+            .fromString(pagingState));
         Optional<UUID> userUuid = StringUtils.isEmpty(userId) ? Optional.absent() : Optional
-                .of(UUID.fromString(userId));
+            .of(UUID.fromString(userId));
 
         return Observable.just(Translators.translate(albumsService.getAlbumsList(cassandraCatalogService, userUuid,
-                items, facets, pagingStateUuid)));
+                                                                                 items, facets, pagingStateUuid)));
     }
 
     /**
      * Get data on an album in the catalog.
      *
      * @param albumId Specifies the UUID of the album to retrieve.
-     * @param userId  Specifies the UUID of the authenticated user.
+     * @param userId Specifies the UUID of the authenticated user.
      * @return Observable<Optional<AlbumInfo>>
      */
     public Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId) {
@@ -95,7 +95,7 @@ public class CatalogEdgeService
 
         Optional<AlbumBo> optAlbumBo = albumsService.getAlbum(cassandraCatalogService, userUuid, albumUuid);
 
-        if (!optAlbumBo.isPresent()) {
+        if ( !optAlbumBo.isPresent() ) {
             return Observable.just(Optional.absent());
         }
         return Observable.just(Optional.of(Translators.translate(optAlbumBo.get())));
@@ -121,32 +121,32 @@ public class CatalogEdgeService
      * when retrieving subsequent pages).
      *
      * @param pagingState Used for pagination control. To retrieve the first page, use
-     *                    <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
-     *                    that accompanied the previous page.
-     * @param items       Specifies the number of items to include in each page. This value is only
-     *                    necessary on the retrieval of the first page, and will be used for all subsequent
-     *                    pages.
-     * @param facets      Specifies a comma delimited list of search facet Ids to filter the results.
-     *                    Pass null or an empty string to not filter.
-     * @param userId      Specifies a user UUID identifying the currently logged-in user. Will be null
-     *                    for unauthenticated requests.
+     *            <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
+     *            that accompanied the previous page.
+     * @param items Specifies the number of items to include in each page. This value is only
+     *            necessary on the retrieval of the first page, and will be used for all subsequent
+     *            pages.
+     * @param facets Specifies a comma delimited list of search facet Ids to filter the results.
+     *            Pass null or an empty string to not filter.
+     * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
+     *            for unauthenticated requests.
      * @return Observable<ArtistList>
      */
     public Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets, String userId) {
         Optional<UUID> pagingStateUuid = StringUtils.isEmpty(pagingState) ? Optional.absent() : Optional.of(UUID
-                .fromString(pagingState));
+            .fromString(pagingState));
         Optional<UUID> userUuid = StringUtils.isEmpty(userId) ? Optional.absent() : Optional
-                .of(UUID.fromString(userId));
+            .of(UUID.fromString(userId));
 
         return Observable.just(Translators.translate(artistsService.getArtistsList(cassandraCatalogService, userUuid,
-                items, facets, pagingStateUuid)));
+                                                                                   items, facets, pagingStateUuid)));
     }
 
     /**
      * Get data on an artist in the catalog.
      *
      * @param artistId Specifies the UUID of the artist to retrieve.
-     * @param userId   Specifies the UUID of the authenticated user
+     * @param userId Specifies the UUID of the authenticated user
      * @return Observable<Optional<ArtistInfo>>
      */
     public Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId) {
@@ -155,11 +155,11 @@ public class CatalogEdgeService
 
         Optional<ArtistBo> optArtistBo = artistsService.getArtist(cassandraCatalogService, userUuid, artistUuid);
 
-        if (optArtistBo.isPresent()) {
+        if ( optArtistBo.isPresent() ) {
             return Observable.just(Optional.of(Translators.translate(optArtistBo.get())));
         }
-        
-		return Observable.just(Optional.absent());
+
+        return Observable.just(Optional.absent());
     }
 
     // ===========================================================================================================
@@ -182,25 +182,25 @@ public class CatalogEdgeService
      * when retrieving subsequent pages).
      *
      * @param pagingState Used for pagination control. To retrieve the first page, use
-     *                    <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
-     *                    that accompanied the previous page.
-     * @param items       Specifies the number of items to include in each page. This value is only
-     *                    necessary on the retrieval of the first page, and will be used for all subsequent
-     *                    pages.
-     * @param facets      Specifies a comma delimited list of search facet Ids to filter the results.
-     *                    Pass null or an empty string to not filter.
-     * @param userId      Specifies a user UUID identifying the currently logged-in user. Will be null
-     *                    for unauthenticated requests.
+     *            <code>null</code>. To retrieve subsequent pages, use the <code>pagingState</code>
+     *            that accompanied the previous page.
+     * @param items Specifies the number of items to include in each page. This value is only
+     *            necessary on the retrieval of the first page, and will be used for all subsequent
+     *            pages.
+     * @param facets Specifies a comma delimited list of search facet Ids to filter the results.
+     *            Pass null or an empty string to not filter.
+     * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
+     *            for unauthenticated requests.
      * @return Observable<SongList>
      */
     public Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId) {
         Optional<UUID> pagingStateUuid = StringUtils.isEmpty(pagingState) ? Optional.absent() : Optional.of(UUID
-                .fromString(pagingState));
+            .fromString(pagingState));
         Optional<UUID> userUuid = StringUtils.isEmpty(userId) ? Optional.absent() : Optional
-                .of(UUID.fromString(userId));
+            .of(UUID.fromString(userId));
 
         return Observable.just(Translators.translate(songsService.getSongsList(cassandraCatalogService, userUuid,
-                items, facets, pagingStateUuid)));
+                                                                               items, facets, pagingStateUuid)));
     }
 
     /**
@@ -216,11 +216,11 @@ public class CatalogEdgeService
 
         Optional<SongBo> optSongBo = songsService.getSong(cassandraCatalogService, userUuid, songUuid);
 
-        if (optSongBo.isPresent()) {
+        if ( optSongBo.isPresent() ) {
             return Observable.just(Optional.of(Translators.translate(optSongBo.get())));
         }
-        
-		return Observable.just(Optional.absent());
+
+        return Observable.just(Optional.absent());
     }
 
 }

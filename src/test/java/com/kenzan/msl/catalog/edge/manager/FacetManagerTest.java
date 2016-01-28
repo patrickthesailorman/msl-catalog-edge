@@ -45,7 +45,7 @@ public class FacetManagerTest {
 
     @Test
     public void getRatingFacet() {
-        for (int i = 1; i < 5; i++) {
+        for ( int i = 1; i < 5; i++ ) {
             Optional<FacetDao> result = facetManager.getFacet(Integer.toString(i));
             assertEquals(result.get().getFacetId(), Integer.toString(i));
             assertEquals(result.get().getFacetName(), String.format("%s & UP", Integer.toString(i)));
@@ -53,8 +53,8 @@ public class FacetManagerTest {
     }
 
     @Test
-    public void getGenreFacets () {
-        for (int i = 5; i < 30; i++) {
+    public void getGenreFacets() {
+        for ( int i = 5; i < 30; i++ ) {
             Optional<FacetDao> result = facetManager.getFacet(Integer.toString(i));
             assertEquals(result.get().getFacetId(), Integer.toString(i));
             assertNotNull(result.get().getFacetName());

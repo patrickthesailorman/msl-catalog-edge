@@ -73,8 +73,7 @@ public class TranslatorsTest {
     private static final String SONG2_NAME = "SongName2";
     private static final Integer SONG2_DURATION = 102;
 
-    private static final UUID PAGINGSTATE1_UUID =
-            UUID.fromString("00000000-0000-0000-0003-000000001");
+    private static final UUID PAGINGSTATE1_UUID = UUID.fromString("00000000-0000-0000-0003-000000001");
 
     // ==========================================================================================================
     // ALBUMS

@@ -51,19 +51,4 @@ public class AlbumClientTest {
         assertEquals("album browse call is successful", "success", albumList.getMessage());
     }
 
-    @Test
-    @Ignore
-    public void testRateAlbum() {
-        logger.debug("AlbumClient.testRateAlbum");
-        NewCookie cookie = new NewCookie("sessionToken", TEST_TOKEN);
-        CatalogEdgeApiResponseMessage response = albumClient.rateAlbum(TEST_ALBUM_ID, 4, cookie.toString());
-        assertNotNull(response);
-        assertEquals("rateAlbum response is successful", "magic!", response.getMessage());
-    }
-
-    @Test(expected = java.lang.RuntimeException.class)
-    public void testRateAlbumThrowException() {
-        logger.debug("AlbumClient.testRateAlbumThrowException");
-        albumClient.rateAlbum(TEST_ALBUM_ID, 3, "");
-    }
 }

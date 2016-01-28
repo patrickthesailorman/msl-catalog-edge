@@ -35,7 +35,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CassandraRatingsService.class, CassandraAccountService.class, CassandraCatalogService.class, Paginator.class})
+@PrepareForTest({
+    CassandraRatingsService.class,
+    CassandraAccountService.class,
+    CassandraCatalogService.class,
+    Paginator.class })
 public class AlbumsServiceTest {
 
     private TestConstants tc = TestConstants.getInstance();
@@ -56,7 +60,8 @@ public class AlbumsServiceTest {
     private AlbumsService albumsService = new AlbumsService();
 
     @Before
-    public void init() throws Exception {
+    public void init()
+        throws Exception {
         resultSet = createMock(ResultSet.class);
         observableResultSet = Observable.just(resultSet);
         queryAccessor = mock(QueryAccessor.class);
@@ -72,13 +77,14 @@ public class AlbumsServiceTest {
     }
 
     @Test
-    public void testGetAlbum() throws Exception {
+    public void testGetAlbum()
+        throws Exception {
         expect(cassandraCatalogService.getSongsArtistByAlbum(tc.ALBUM_ID, Optional.absent()))
-                .andReturn(observableResultSet);
+            .andReturn(observableResultSet);
 
         Result<SongsArtistByAlbumDao> songsArtistByAlbumDaoResult = PowerMockito.mock(Result.class);
         expect(cassandraCatalogService.mapSongsArtistByAlbum(observableResultSet))
-                .andReturn(Observable.just(songsArtistByAlbumDaoResult));
+            .andReturn(Observable.just(songsArtistByAlbumDaoResult));
 
         PowerMockito.when(songsArtistByAlbumDaoResult.one()).thenReturn(tc.songsArtistByAlbumDao);
 
@@ -88,7 +94,7 @@ public class AlbumsServiceTest {
         averageRatingsDao.setNumRating(new Long(2));
         averageRatingsDao.setSumRating(new Long(4));
         expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-                .andReturn(Observable.just(averageRatingsDao));
+            .andReturn(Observable.just(averageRatingsDao));
 
         EasyMock.replay(cassandraRatingsService);
         EasyMock.replay(cassandraCatalogService);
@@ -108,41 +114,37 @@ public class AlbumsServiceTest {
     @Test
     public void testGetNullAlbum() {
         expect(cassandraCatalogService.getSongsArtistByAlbum(tc.ALBUM_ID, Optional.absent()))
-                .andReturn(observableResultSet);
-        expect(cassandraCatalogService.mapSongsArtistByAlbum(observableResultSet))
-                .andReturn(Observable.just(null));
+            .andReturn(observableResultSet);
+        expect(cassandraCatalogService.mapSongsArtistByAlbum(observableResultSet)).andReturn(Observable.just(null));
 
         EasyMock.replay(cassandraCatalogService);
         EasyMock.replay(cassandraAccountService);
         PowerMock.replayAll();
 
-        Optional<AlbumBo> result = albumsService.getAlbum(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ALBUM_ID);
+        Optional<AlbumBo> result = albumsService
+            .getAlbum(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ALBUM_ID);
         assertEquals(result, Optional.absent());
     }
 
     @Test
     @Ignore
-    public void testGetAlbumsList() throws Exception {
+    public void testGetAlbumsList()
+        throws Exception {
 
         Paginator paginator = EasyMock.createMock(Paginator.class);
-        PowerMock.expectNew(Paginator.class,
-                EasyMock.eq(CatalogEdgeConstants.MSL_CONTENT_TYPE.ALBUM),
-                EasyMock.eq(cassandraCatalogService),
-                anyObject(),
-                anyObject(),
-                anyObject(),
-                anyObject())
-                .andReturn(paginator);
+        PowerMock.expectNew(Paginator.class, EasyMock.eq(CatalogEdgeConstants.MSL_CONTENT_TYPE.ALBUM),
+                            EasyMock.eq(cassandraCatalogService), anyObject(), anyObject(), anyObject(), anyObject())
+            .andReturn(paginator);
 
         mockRatingsHelper();
 
         EasyMock.expect(cassandraCatalogService.getPagingState(tc.PAGING_STATE_ID))
-                .andReturn(Observable.just(tc.pagingStateDao));
+            .andReturn(Observable.just(tc.pagingStateDao));
 
-        EasyMock.expect(cassandraCatalogService.mappingManager.getSession().execute(EasyMock.anyObject(Statement.class)))
-                .andReturn(resultSet);
+        EasyMock.expect(cassandraCatalogService.mappingManager.getSession()
+                            .execute(EasyMock.anyObject(Statement.class))).andReturn(resultSet);
 
-//        expect(cassandraCatalogService.mappingManager.mapper(EasyMock.anyObject()).map(resultSet)).andReturn(tc.featuredAlbumDaoList);
+        // expect(cassandraCatalogService.mappingManager.mapper(EasyMock.anyObject()).map(resultSet)).andReturn(tc.featuredAlbumDaoList);
         expect(resultSet.getAvailableWithoutFetching()).andReturn(0);
         expect(resultSet.isFullyFetched()).andReturn(false);
 
@@ -159,7 +161,8 @@ public class AlbumsServiceTest {
         System.out.println(tc.albumBoList);
         System.out.println("=================================");
 
-        albumsService.getAlbumsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS, Optional.of(tc.PAGING_STATE_ID));
+        albumsService.getAlbumsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS,
+                                    Optional.of(tc.PAGING_STATE_ID));
 
     }
 
@@ -194,7 +197,7 @@ public class AlbumsServiceTest {
     }
 
     private void mockRatingsHelper()
-            throws Exception {
+        throws Exception {
         PowerMock.mockStatic(CassandraRatingsService.class);
         cassandraRatingsService = createMock(CassandraRatingsService.class);
         PowerMock.expectNew(CassandraRatingsService.class).andReturn(cassandraRatingsService);

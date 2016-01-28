@@ -17,8 +17,6 @@ import java.util.UUID;
 
 public class LibraryHelper {
 
-    private static CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
-
     // =================================================================================================================
     // ALBUMS
     // =================================================================================================================
@@ -30,6 +28,7 @@ public class LibraryHelper {
      * @return Result<AlbumsByUserDao>
      */
     public Result<AlbumsByUserDao> getUserAlbums(final UUID userId) {
+        CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapAlbumsByUser(cassandraAccountService.getAlbumsByUser(userId, Optional.absent(), Optional.absent()))
             .toBlocking().first();
@@ -62,6 +61,7 @@ public class LibraryHelper {
      * @return Result<ArtistsByUserDao>
      */
     public Result<ArtistsByUserDao> getUserArtists(final UUID userId) {
+        CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapArtistByUser(cassandraAccountService.getArtistsByUser(userId, Optional.absent(), Optional.absent()))
             .toBlocking().first();
@@ -94,6 +94,7 @@ public class LibraryHelper {
      * @return Result<SongsByUserDao>
      */
     public Result<SongsByUserDao> getUserSongs(final UUID userId) {
+        CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapSongsByUser(cassandraAccountService.getSongsByUser(userId, Optional.absent(), Optional.absent()))
             .toBlocking().first();

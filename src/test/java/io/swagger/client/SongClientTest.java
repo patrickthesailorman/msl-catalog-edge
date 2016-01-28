@@ -47,21 +47,4 @@ public class SongClientTest {
         assertNotNull(songList.getData());
         assertEquals("song browse call is successful", "success", songList.getMessage());
     }
-
-    @Test
-    @Ignore
-    public void testRateSong() {
-        logger.debug("songClient.testRateSong");
-        CatalogEdgeApiResponseMessage response = songClient.rateSong(ClientConstants.TEST_SONG_ID, 2,
-                                                             ClientConstants.TEST_TOKEN);
-        assertNotNull(response);
-        assertEquals("rateSong response is successful", "magic!", response.getMessage());
-    }
-
-    @Test(expected = java.lang.RuntimeException.class)
-    public void testRateSongThrowException() {
-        logger.debug("songClient.testRateSongThrowException");
-        songClient.rateSong(ClientConstants.TEST_SONG_ID, 3, "");
-    }
-
 }

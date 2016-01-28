@@ -35,17 +35,17 @@ public class Paginator {
     /**
      * Constructor
      *
-     * @param contentType             the type of content to be retrieved
+     * @param contentType the type of content to be retrieved
      * @param cassandraCatalogService the Datastax QueryAccessor declaring our prepared queries
-     * @param paginatorHelper         a PaginatorHelper instance to make queries to the appropriate tables
-     * @param pagingStateUuid         a UUID identifier of the current paging location. Will be null for the
-     *                                first page and non-null for subsequent pages)
-     * @param items                   the number of items to be included in each page
-     * @param facets                  a comma delimited list of zero or more facet Ids to use to filter the results
+     * @param paginatorHelper a PaginatorHelper instance to make queries to the appropriate tables
+     * @param pagingStateUuid a UUID identifier of the current paging location. Will be null for the
+     *            first page and non-null for subsequent pages)
+     * @param items the number of items to be included in each page
+     * @param facets a comma delimited list of zero or more facet Ids to use to filter the results
      */
-    public Paginator(final CatalogEdgeConstants.MSL_CONTENT_TYPE contentType,
-                     final CassandraCatalogService cassandraCatalogService, final PaginatorHelper paginatorHelper,
-                     final Optional<UUID> pagingStateUuid, final Integer items, final String facets) {
+    public Paginator( final CatalogEdgeConstants.MSL_CONTENT_TYPE contentType,
+                      final CassandraCatalogService cassandraCatalogService, final PaginatorHelper paginatorHelper,
+                      final Optional<UUID> pagingStateUuid, final Integer items, final String facets ) {
 
         this.contentType = contentType;
         this.cassandraCatalogService = cassandraCatalogService;
@@ -53,15 +53,15 @@ public class Paginator {
         this.pagingStateUuid = pagingStateUuid;
 
         this.items = (null == items || items < CatalogEdgeConstants.MSL_BROWSE_MIN_PAGE_SIZE || items > CatalogEdgeConstants.MSL_BROWSE_MAX_PAGE_SIZE)
-                ? CatalogEdgeConstants.MSL_BROWSE_DEFAULT_PAGE_SIZE
-                : items;
+                                                                                                                                                      ? CatalogEdgeConstants.MSL_BROWSE_DEFAULT_PAGE_SIZE
+                                                                                                                                                      : items;
 
         this.facets = new ArrayList<>();
-        if (!StringUtils.isEmpty(facets)) {
+        if ( !StringUtils.isEmpty(facets) ) {
             String[] facetIds = facets.split(",");
-            for (String facetId : facetIds) {
+            for ( String facetId : facetIds ) {
                 Optional<FacetDao> optFacetDao = FacetManager.getInstance().getFacet(facetId);
-                if (optFacetDao.isPresent()) {
+                if ( optFacetDao.isPresent() ) {
                     this.facets.add(optFacetDao.get());
                 }
             }
@@ -74,9 +74,10 @@ public class Paginator {
      * @param abstractListBo the contentListBo that will be populated with the page's data.
      */
     public void getPage(AbstractListBo<? extends AbstractBo> abstractListBo) {
-        if (pagingStateUuid.isPresent()) {
+        if ( pagingStateUuid.isPresent() ) {
             getSubsequentPage(abstractListBo);
-        } else {
+        }
+        else {
             getFirstPage(abstractListBo);
         }
     }
@@ -91,26 +92,24 @@ public class Paginator {
         String queryString;
         final UUID pagingStateUuid = UUID.randomUUID();
 
-        if (hasFacets()) {
+        if ( hasFacets() ) {
             statement = paginatorHelper.prepareFacetedQuery(cassandraCatalogService.queryAccessor, this.facets.get(0)
-                    .getFacetName());
+                .getFacetName());
             queryString = paginatorHelper.getFacetedQueryString(this.facets.get(0).getFacetName());
-        } else {
+        }
+        else {
             statement = paginatorHelper.prepareFeaturedQuery(cassandraCatalogService.queryAccessor);
             queryString = paginatorHelper.getFeaturedQueryString();
         }
 
         statement.setFetchSize(items);
-        ResultSet resultSet = cassandraCatalogService
-                .mappingManager
-                .getSession()
-                .execute(statement);
+        ResultSet resultSet = cassandraCatalogService.mappingManager.getSession().execute(statement);
 
         // Populate the AbstractListBo with the results of the query
         buildAbstractListBo(resultSet, pagingStateUuid, abstractListBo);
 
         // If there is a subsequent page, then add row to paging_state table
-        if (abstractListBo.getPagingState() != null) {
+        if ( abstractListBo.getPagingState() != null ) {
             addPagingState(pagingStateUuid, queryString, resultSet);
         }
 
@@ -127,27 +126,26 @@ public class Paginator {
 
         Optional<PagingStateDao> optPagingStateDao = retrievePagingState(pagingStateUuid.get());
 
-        if (optPagingStateDao.isPresent()) {
+        if ( optPagingStateDao.isPresent() ) {
 
             PagingStateDao pagingStateDao = optPagingStateDao.get();
 
             Statement statement = new SimpleStatement(pagingStateDao.getPagingState().getQuery())
-                    .setPagingStateUnsafe(pagingStateDao.getPagingState().getPageStateBlob())
-                    .setFetchSize(pagingStateDao.getPagingState().getPageSize());
+                .setPagingStateUnsafe(pagingStateDao.getPagingState().getPageStateBlob())
+                .setFetchSize(pagingStateDao.getPagingState().getPageSize());
 
-            ResultSet resultSet = cassandraCatalogService
-                    .mappingManager
-                    .getSession()
-                    .execute(statement);
+            ResultSet resultSet = cassandraCatalogService.mappingManager.getSession().execute(statement);
 
             // Populate the AbstractListBo with the results of the query
             buildAbstractListBo(resultSet, pagingStateUuid.get(), abstractListBo);
 
-            // If there is a subsequent page, then update row in paging_state table, otherwise delete
+            // If there is a subsequent page, then update row in paging_state table, otherwise
+            // delete
             // the row
-            if (null == abstractListBo.getPagingState()) {
+            if ( null == abstractListBo.getPagingState() ) {
                 deletePagingState(pagingStateUuid);
-            } else {
+            }
+            else {
                 savePagingState(pagingStateDao, resultSet);
             }
             // TODO Queue background thread to retrieve next page
@@ -160,29 +158,28 @@ public class Paginator {
      * DON'T include the <code>pagingStateUuid</code> in the AbstractListBo. This is the flag to the
      * caller that the last page of data has been retrieved.
      *
-     * @param resultSet       the query results that should be used to build the page
+     * @param resultSet the query results that should be used to build the page
      * @param pagingStateUuid the pagingState to include in the AbstractListBo if this is NOT the
-     *                        last page of data.
-     * @param abstractListBo  the AbstractListBo that will be populated with the page's data.
+     *            last page of data.
+     * @param abstractListBo the AbstractListBo that will be populated with the page's data.
      */
     // TODO Resolve the issue with adding elements to a generic List<? extends AbstractBo>. This is
     // the reason for the SuppressWarnings annotation.
     private AbstractListBo<? extends AbstractBo> buildAbstractListBo(ResultSet resultSet, final UUID pagingStateUuid,
-                                     AbstractListBo<? extends AbstractBo> abstractListBo) {
+                                                                     AbstractListBo<? extends AbstractBo> abstractListBo) {
         // Map the results from the resultSet to our BO POJO
         Class<? extends AbstractDao> boClass;
-        if (hasFacets() ){
+        if ( hasFacets() ) {
             boClass = contentType.facetContentDaoClass;
-        } else {
+        }
+        else {
             boClass = contentType.featuredContentDaoClass;
         }
 
-        Result<? extends AbstractDao> mappedResults = cassandraCatalogService
-                .mappingManager
-                .mapper(boClass)
-                .map(resultSet);
+        Result<? extends AbstractDao> mappedResults = cassandraCatalogService.mappingManager.mapper(boClass)
+            .map(resultSet);
 
-        for (AbstractDao dao : mappedResults) {
+        for ( AbstractDao dao : mappedResults ) {
             abstractListBo.add(dao);
 
             /*
@@ -191,13 +188,13 @@ public class Paginator {
              * of results. This is a cool feature in some use cases, we don't want the Datastax
              * driver to do it in this case.
              */
-            if (resultSet.getAvailableWithoutFetching() == 0) {
+            if ( resultSet.getAvailableWithoutFetching() == 0 ) {
                 break;
             }
         }
 
         // Have we reached the end of the table?
-        if (!resultSet.isFullyFetched()) {
+        if ( !resultSet.isFullyFetched() ) {
             // If not, then include the paging state UUID in the response so the caller knows there
             // is a subsequent page.
             abstractListBo.setPagingState(pagingStateUuid);
@@ -211,9 +208,9 @@ public class Paginator {
      * subsequent page
      *
      * @param pagingStateUuid the UUID to assign to this paging state row. This is the UUID that
-     *                        will be sent to the client and expected in requests for subsequent pages.
-     * @param query           the actual query string. This is required to use the Cassandra PageState.
-     * @param resultSet       the resultSet that has just been consumed
+     *            will be sent to the client and expected in requests for subsequent pages.
+     * @param query the actual query string. This is required to use the Cassandra PageState.
+     * @param resultSet the resultSet that has just been consumed
      */
     private void addPagingState(final UUID pagingStateUuid, final String query, final ResultSet resultSet) {
 
@@ -239,16 +236,17 @@ public class Paginator {
      * rows and updating existing rows.
      *
      * @param pagingStateDao the DAO that will receive updated Cassandra page state info then be
-     *                       written to the DB
-     * @param resultSet      the current result set from which the Cassandra page state info will be
-     *                       extracted
+     *            written to the DB
+     * @param resultSet the current result set from which the Cassandra page state info will be
+     *            extracted
      */
     private void savePagingState(PagingStateDao pagingStateDao, final ResultSet resultSet) {
         // Put the Cassandra PageState into the PagingStateUdt
         byte[] cassandraPageState = resultSet.getExecutionInfo().getPagingStateUnsafe();
-        if (null == cassandraPageState) {
+        if ( null == cassandraPageState ) {
             pagingStateDao.getPagingState().setPageState(null);
-        } else {
+        }
+        else {
             ByteBuffer byteBuffer = ByteBuffer.allocate(cassandraPageState.length);
             byteBuffer.put(cassandraPageState);
             byteBuffer.flip(); // Have to do this to reset the internals of the ByteBuff to prepare
@@ -263,20 +261,20 @@ public class Paginator {
      * multiple times if the background thread has not yet populated the buffer.
      *
      * @param pagingStateUuid the paging state UUID sent to the client as a response to the query
-     *                        for the previous page
+     *            for the previous page
      * @return Optional<PagingStateDao>
      */
     private Optional<PagingStateDao> retrievePagingState(UUID pagingStateUuid) {
         PagingStateDao pagingStateDao = cassandraCatalogService.getPagingState(pagingStateUuid).toBlocking().first();
-        if (pagingStateDao != null) {
+        if ( pagingStateDao != null ) {
             return Optional.of(pagingStateDao);
         }
-        
-		return Optional.absent();
+
+        return Optional.absent();
     }
 
     private void deletePagingState(Optional<UUID> pagingStateUuid) {
-        if (pagingStateUuid.isPresent()) {
+        if ( pagingStateUuid.isPresent() ) {
             cassandraCatalogService.deletePagingState(pagingStateUuid.get());
         }
     }

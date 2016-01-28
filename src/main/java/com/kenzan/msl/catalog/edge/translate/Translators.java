@@ -35,12 +35,12 @@ public class Translators {
 
     public static AlbumList translate(AlbumListBo listBo) {
         AlbumList model = new AlbumList();
-        if (listBo != null) {
+        if ( listBo != null ) {
             PagingState pagingState = new PagingState();
             pagingState.setPagingState(null == listBo.getPagingState() ? null : listBo.getPagingState().toString());
             model.setPagingState(pagingState);
 
-            for (AlbumBo albumBo : listBo.getBoList()) {
+            for ( AlbumBo albumBo : listBo.getBoList() ) {
                 model.getAlbums().add(Translators.translate(albumBo));
             }
         }
@@ -50,7 +50,7 @@ public class Translators {
     public static AlbumInfo translate(AlbumBo bo) {
         AlbumInfo model = new AlbumInfo();
 
-        if (bo != null) {
+        if ( bo != null ) {
             model.setAlbumId(null == bo.getAlbumId() ? null : bo.getAlbumId().toString());
             model.setAlbumName(bo.getAlbumName());
             model.setArtistId(null == bo.getArtistId() ? null : bo.getArtistId().toString());
@@ -63,9 +63,10 @@ public class Translators {
             model.setImageLink(bo.getImageLink());
             model.setInMyLibrary(bo.isInMyLibrary());
             model.setFavoritesTimestamp(bo.getFavoritesTimestamp());
-            if (null == bo.getSongsList() || bo.getSongsList().isEmpty()) {
+            if ( null == bo.getSongsList() || bo.getSongsList().isEmpty() ) {
                 model.setSongsList(null);
-            } else {
+            }
+            else {
                 model.getSongsList().addAll(bo.getSongsList());
             }
         }
@@ -80,15 +81,16 @@ public class Translators {
     public static ArtistList translate(ArtistListBo listBo) {
         ArtistList model = new ArtistList();
 
-        if (listBo != null) {
+        if ( listBo != null ) {
             PagingState pagingState = new PagingState();
             pagingState.setPagingState(null == listBo.getPagingState() ? null : listBo.getPagingState().toString());
             model.setPagingState(pagingState);
 
-            if (null == listBo.getBoList() || listBo.getBoList().isEmpty()) {
+            if ( null == listBo.getBoList() || listBo.getBoList().isEmpty() ) {
                 model.setArtists(null);
-            } else {
-                for (ArtistBo artistBo : listBo.getBoList()) {
+            }
+            else {
+                for ( ArtistBo artistBo : listBo.getBoList() ) {
                     model.getArtists().add(Translators.translate(artistBo));
                 }
             }
@@ -100,7 +102,7 @@ public class Translators {
     public static ArtistInfo translate(ArtistBo bo) {
         ArtistInfo model = new ArtistInfo();
 
-        if (bo != null) {
+        if ( bo != null ) {
             model.setArtistId(null == bo.getArtistId() ? null : bo.getArtistId().toString());
             model.setArtistMbid(null == bo.getArtistMbid() ? null : bo.getArtistMbid().toString());
             model.setArtistName(bo.getArtistName());
@@ -108,14 +110,15 @@ public class Translators {
             model.setAverageRating(bo.getAverageRating());
             model.setPersonalRating(bo.getPersonalRating());
             model.setImageLink(bo.getImageLink());
-            model.setAlbumsList((null == bo.getAlbumsList() || bo.getAlbumsList().isEmpty()) ? null : bo.getAlbumsList());
+            model.setAlbumsList((null == bo.getAlbumsList() || bo.getAlbumsList().isEmpty()) ? null : bo
+                .getAlbumsList());
             model.setSongsList((null == bo.getSongsList() || bo.getSongsList().isEmpty()) ? null : bo.getSongsList());
             model.setInMyLibrary(bo.isInMyLibrary());
             model.setFavoritesTimestamp(bo.getFavoritesTimestamp());
             model
-                    .setSimilarArtistsList((null == bo.getSimilarArtistsList() || bo.getSimilarArtistsList().isEmpty())
-                            ? null
-                            : bo.getSimilarArtistsList());
+                .setSimilarArtistsList((null == bo.getSimilarArtistsList() || bo.getSimilarArtistsList().isEmpty())
+                                                                                                                   ? null
+                                                                                                                   : bo.getSimilarArtistsList());
         }
 
         return model;
@@ -128,15 +131,16 @@ public class Translators {
     public static SongList translate(SongListBo listBo) {
         SongList model = new SongList();
 
-        if (listBo != null) {
+        if ( listBo != null ) {
             PagingState pagingState = new PagingState();
             pagingState.setPagingState(null == listBo.getPagingState() ? null : listBo.getPagingState().toString());
             model.setPagingState(pagingState);
 
-            if (null == listBo.getBoList() || listBo.getBoList().isEmpty()) {
+            if ( null == listBo.getBoList() || listBo.getBoList().isEmpty() ) {
                 model.setSongs(null);
-            } else {
-                for (SongBo songBo : listBo.getBoList()) {
+            }
+            else {
+                for ( SongBo songBo : listBo.getBoList() ) {
                     model.getSongs().add(Translators.translate(songBo));
                 }
             }
@@ -148,7 +152,7 @@ public class Translators {
     public static SongInfo translate(SongBo bo) {
         SongInfo model = new SongInfo();
 
-        if (bo != null) {
+        if ( bo != null ) {
             model.setSongId(null == bo.getSongId() ? null : bo.getSongId().toString());
             model.setSongName(bo.getSongName());
             model.setGenre(bo.getGenre());
@@ -178,7 +182,7 @@ public class Translators {
     public static FacetInfo translate(FacetDao dao) {
         FacetInfo model = new FacetInfo();
 
-        if (dao != null) {
+        if ( dao != null ) {
             model.setFacetId(dao.getFacetId());
             model.setName(dao.getFacetName());
         }
@@ -187,9 +191,9 @@ public class Translators {
     }
 
     public static List<FacetInfo> translateFacetList(List<FacetDao> daoList) {
-        if (daoList != null) {
+        if ( daoList != null ) {
             List<FacetInfo> modelList = new ArrayList<>(daoList.size());
-            for (FacetDao dao : daoList) {
+            for ( FacetDao dao : daoList ) {
                 modelList.add(translate(dao));
             }
             return modelList;

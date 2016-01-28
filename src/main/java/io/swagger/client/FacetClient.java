@@ -8,7 +8,6 @@ import javax.ws.rs.core.Response;
 
 public class FacetClient {
 
-    private String baseUrl = "http://localhost:9003/msl";
     private ResteasyClient client;
 
     public FacetClient() {
@@ -17,7 +16,7 @@ public class FacetClient {
 
     public CatalogEdgeApiResponseMessage getFacets(String facets) {
         ResteasyWebTarget target;
-        target = client.target(baseUrl + "/v1/catalogedge/facet/" + facets);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/facet/" + facets);
         Response response = target.request().get();
         CatalogEdgeApiResponseMessage responseWrapper = response.readEntity(CatalogEdgeApiResponseMessage.class);
         if ( response.getStatus() != 200 ) {
@@ -28,7 +27,8 @@ public class FacetClient {
 
     public CatalogEdgeApiResponseMessage browseAlbums(String items, String facets) {
         ResteasyWebTarget target;
-        target = client.target(baseUrl + "/v1/catalogedge/browse/album?items=" + items + "&facets=" + facets);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/album?items=" + items + "&facets="
+            + facets);
         Response response = target.request().get();
         CatalogEdgeApiResponseMessage responseWrapper = response.readEntity(CatalogEdgeApiResponseMessage.class);
         if ( response.getStatus() != 200 ) {
@@ -39,7 +39,8 @@ public class FacetClient {
 
     public CatalogEdgeApiResponseMessage browseArtists(String items, String facets) {
         ResteasyWebTarget target;
-        target = client.target(baseUrl + "/v1/catalogedge/browse/artist?items=" + items + "&facets=" + facets);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/artist?items=" + items + "&facets="
+            + facets);
         Response response = target.request().get();
         CatalogEdgeApiResponseMessage responseWrapper = response.readEntity(CatalogEdgeApiResponseMessage.class);
         if ( response.getStatus() != 200 ) {
@@ -50,7 +51,8 @@ public class FacetClient {
 
     public CatalogEdgeApiResponseMessage browseSongs(String items, String facets) {
         ResteasyWebTarget target;
-        target = client.target(baseUrl + "/v1/catalogedge/browse/song?items=" + items + "&facets=" + facets);
+        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/song?items=" + items + "&facets="
+            + facets);
         Response response = target.request().get();
         CatalogEdgeApiResponseMessage responseWrapper = response.readEntity(CatalogEdgeApiResponseMessage.class);
         if ( response.getStatus() != 200 ) {

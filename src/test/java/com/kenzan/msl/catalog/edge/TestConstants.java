@@ -10,7 +10,7 @@ import java.util.*;
 
 public class TestConstants {
     private static TestConstants instance = null;
-    
+
     public final UUID USER_ID = UUID.fromString("00000000-0000-0000-0000-000000001");
     public final UUID ARTIST_ID = UUID.fromString("00000000-0000-0000-0001-000000001");
     public final UUID ARTIST_ID_2 = UUID.fromString("00000000-0000-0000-0012-000000001");
@@ -82,9 +82,9 @@ public class TestConstants {
         songsByUserDao.setFavoritesTimestamp(TIMESTAMP);
         songsByUserDaoList.add(songsByUserDao);
     }
-    
+
     public static TestConstants getInstance() {
-        if(instance == null) {
+        if ( instance == null ) {
             instance = new TestConstants();
         }
         return instance;
@@ -106,7 +106,7 @@ public class TestConstants {
         SONG_BO.setSongId(SONG_ID);
     }
 
-    private void initDaos(){
+    private void initDaos() {
         Set<String> genres = new HashSet<String>();
         genres.add("4");
         Map<UUID, String> similarArtists = new HashMap<>();
