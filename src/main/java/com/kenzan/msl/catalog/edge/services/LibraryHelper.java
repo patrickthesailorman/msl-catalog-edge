@@ -5,9 +5,9 @@ package com.kenzan.msl.catalog.edge.services;
 
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
-import com.kenzan.msl.account.client.dao.AlbumsByUserDao;
-import com.kenzan.msl.account.client.dao.ArtistsByUserDao;
-import com.kenzan.msl.account.client.dao.SongsByUserDao;
+import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
+import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
+import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.ArtistBo;
@@ -25,9 +25,9 @@ public class LibraryHelper {
      * Retrieve user library albums
      *
      * @param userId java.util.UUID
-     * @return Result<AlbumsByUserDao>
+     * @return Result<AlbumsByUserDto>
      */
-    public Result<AlbumsByUserDao> getUserAlbums(final UUID userId) {
+    public Result<AlbumsByUserDto> getUserAlbums(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapAlbumsByUser(cassandraAccountService.getAlbumsByUser(userId, Optional.absent(), Optional.absent()))
@@ -38,14 +38,14 @@ public class LibraryHelper {
      * Checks if an album is on a user library and if it's it attaches the timestamp data and
      * library flag
      *
-     * @param userAlbums Result<SongsByUserDao> userAlbums
+     * @param userAlbums Result<SongsByUserDto> userAlbums
      * @param album com.kenzan.msl.common.bo.AlbumBo
      */
-    public void processLibraryAlbumInfo(Iterable<AlbumsByUserDao> userAlbums, final AlbumBo album) {
-        for ( AlbumsByUserDao albumsByUserDao : userAlbums ) {
-            if ( albumsByUserDao.getAlbumId().equals(album.getAlbumId()) ) {
+    public void processLibraryAlbumInfo(Iterable<AlbumsByUserDto> userAlbums, final AlbumBo album) {
+        for ( AlbumsByUserDto albumsByUserDto : userAlbums ) {
+            if ( albumsByUserDto.getAlbumId().equals(album.getAlbumId()) ) {
                 album.setInMyLibrary(true);
-                album.setFavoritesTimestamp(albumsByUserDao.getFavoritesTimestamp().toString());
+                album.setFavoritesTimestamp(albumsByUserDto.getFavoritesTimestamp().toString());
             }
         }
     }
@@ -58,9 +58,9 @@ public class LibraryHelper {
      * Retrieve user library artists
      *
      * @param userId java.util.UUID
-     * @return Result<ArtistsByUserDao>
+     * @return Result<ArtistsByUserDto>
      */
-    public Result<ArtistsByUserDao> getUserArtists(final UUID userId) {
+    public Result<ArtistsByUserDto> getUserArtists(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapArtistByUser(cassandraAccountService.getArtistsByUser(userId, Optional.absent(), Optional.absent()))
@@ -71,14 +71,14 @@ public class LibraryHelper {
      * Checks if an artist is on a user library and if it's it attaches the timestamp data and
      * library flag
      *
-     * @param userArtists Result<SongsByUserDao> userArtists
+     * @param userArtists Result<SongsByUserDto> userArtists
      * @param artist com.kenzan.msl.common.bo.ArtistBo
      */
-    public void processLibraryArtistInfo(Iterable<ArtistsByUserDao> userArtists, final ArtistBo artist) {
-        for ( ArtistsByUserDao artistsByUserDao : userArtists ) {
-            if ( artistsByUserDao.getArtistId().equals(artist.getArtistId()) ) {
+    public void processLibraryArtistInfo(Iterable<ArtistsByUserDto> userArtists, final ArtistBo artist) {
+        for ( ArtistsByUserDto artistsByUserDto : userArtists ) {
+            if ( artistsByUserDto.getArtistId().equals(artist.getArtistId()) ) {
                 artist.setInMyLibrary(true);
-                artist.setFavoritesTimestamp(artistsByUserDao.getFavoritesTimestamp().toString());
+                artist.setFavoritesTimestamp(artistsByUserDto.getFavoritesTimestamp().toString());
             }
         }
     }
@@ -91,9 +91,9 @@ public class LibraryHelper {
      * Retrieve user library songs
      *
      * @param userId java.util.UUID
-     * @return Result<SongsByUserDao>
+     * @return Result<SongsByUserDto>
      */
-    public Result<SongsByUserDao> getUserSongs(final UUID userId) {
+    public Result<SongsByUserDto> getUserSongs(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
         return cassandraAccountService
             .mapSongsByUser(cassandraAccountService.getSongsByUser(userId, Optional.absent(), Optional.absent()))
@@ -104,14 +104,14 @@ public class LibraryHelper {
      * Checks if a song is on a user library and if it's it attaches the timestamp data and library
      * flag
      *
-     * @param userSongs Result<SongsByUserDao> userSongs
+     * @param userSongs Result<SongsByUserDto> userSongs
      * @param song com.kenzan.msl.common.bo.SongBo
      */
-    public void processLibrarySongInfo(Iterable<SongsByUserDao> userSongs, final SongBo song) {
-        for ( SongsByUserDao songsByUserDao : userSongs ) {
-            if ( songsByUserDao.getSongId().equals(song.getSongId()) ) {
+    public void processLibrarySongInfo(Iterable<SongsByUserDto> userSongs, final SongBo song) {
+        for ( SongsByUserDto songsByUserDto : userSongs ) {
+            if ( songsByUserDto.getSongId().equals(song.getSongId()) ) {
                 song.setInMyLibrary(true);
-                song.setFavoritesTimestamp(songsByUserDao.getFavoritesTimestamp().toString());
+                song.setFavoritesTimestamp(songsByUserDto.getFavoritesTimestamp().toString());
             }
         }
     }

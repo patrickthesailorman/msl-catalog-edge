@@ -4,7 +4,7 @@
 package com.kenzan.msl.catalog.edge.manager;
 
 import com.google.common.base.Optional;
-import com.kenzan.msl.catalog.client.dao.FacetDao;
+import com.kenzan.msl.catalog.client.dto.FacetDto;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 
 import io.swagger.model.FacetInfo;
@@ -54,7 +54,7 @@ public class FacetManager {
             return ratingFacet;
         }
 
-        Optional<FacetDao> optResponse = getFacet(facet_id);
+        Optional<FacetDto> optResponse = getFacet(facet_id);
         if ( optResponse.isPresent() ) {
             FacetInfoWithChildren responseFacet = new FacetInfoWithChildren();
             responseFacet.setFacetId(optResponse.get().getFacetId());
@@ -93,20 +93,20 @@ public class FacetManager {
      * Retrieves a specific facet from the genre or rating facets array
      *
      * @param id String
-     * @return Optional<FacetDao>
+     * @return Optional<FacetDto>
      */
-    public Optional<FacetDao> getFacet(String id) {
+    public Optional<FacetDto> getFacet(String id) {
 
-        ArrayList<FacetDao> genreFacets = getGenreFacets();
-        ArrayList<FacetDao> ratingFacets = getRatingFacets();
+        ArrayList<FacetDto> genreFacets = getGenreFacets();
+        ArrayList<FacetDto> ratingFacets = getRatingFacets();
 
-        for ( FacetDao genreFacet : genreFacets ) {
+        for ( FacetDto genreFacet : genreFacets ) {
             if ( genreFacet.getFacetId().equals(id) ) {
                 return Optional.of(genreFacet);
             }
         }
 
-        for ( FacetDao ratingFacet : ratingFacets ) {
+        for ( FacetDto ratingFacet : ratingFacets ) {
             if ( ratingFacet.getFacetId().equals(id) ) {
                 return Optional.of(ratingFacet);
             }
@@ -116,31 +116,31 @@ public class FacetManager {
     }
 
     /**
-     * Constructs an array of facetDao's corresponding to the rating facets
+     * Constructs an array of facetDto's corresponding to the rating facets
      *
-     * @return ArrayList<FacetDao>
+     * @return ArrayList<FacetDto>
      */
-    private ArrayList<FacetDao> getRatingFacets() {
+    private ArrayList<FacetDto> getRatingFacets() {
         String[] ratings = new String[4];
         for ( int i = 1; i < 5; i++ ) {
             ratings[i - 1] = i + " & UP";
         }
-        ArrayList<FacetDao> result = new ArrayList<>();
+        ArrayList<FacetDto> result = new ArrayList<>();
         for ( int i = 0; i < ratings.length; i++ ) {
-            result.add(new FacetDao(Integer.toString(i + 1), ratings[i]));
+            result.add(new FacetDto(Integer.toString(i + 1), ratings[i]));
         }
         return result;
     }
 
     /**
-     * Constructs an array of facetDao's corresponding to the genre facets
+     * Constructs an array of facetDto's corresponding to the genre facets
      *
-     * @return ArrayList<FacetDao>
+     * @return ArrayList<FacetDto>
      */
-    private ArrayList<FacetDao> getGenreFacets() {
-        ArrayList<FacetDao> result = new ArrayList<>();
+    private ArrayList<FacetDto> getGenreFacets() {
+        ArrayList<FacetDto> result = new ArrayList<>();
         for ( int i = 0; i < fc.GENRES.length; i++ ) {
-            result.add(new FacetDao(Integer.toString(i + 5), fc.GENRES[i]));
+            result.add(new FacetDto(Integer.toString(i + 5), fc.GENRES[i]));
         }
         return result;
     }

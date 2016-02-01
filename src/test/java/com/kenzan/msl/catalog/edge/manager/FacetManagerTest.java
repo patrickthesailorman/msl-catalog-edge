@@ -1,7 +1,7 @@
 package com.kenzan.msl.catalog.edge.manager;
 
 import com.google.common.base.Optional;
-import com.kenzan.msl.catalog.client.dao.FacetDao;
+import com.kenzan.msl.catalog.client.dto.FacetDto;
 import io.swagger.model.FacetInfo;
 import io.swagger.model.FacetInfoWithChildren;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class FacetManagerTest {
     @Test
     public void getRatingFacet() {
         for ( int i = 1; i < 5; i++ ) {
-            Optional<FacetDao> result = facetManager.getFacet(Integer.toString(i));
+            Optional<FacetDto> result = facetManager.getFacet(Integer.toString(i));
             assertEquals(result.get().getFacetId(), Integer.toString(i));
             assertEquals(result.get().getFacetName(), String.format("%s & UP", Integer.toString(i)));
         }
@@ -55,7 +55,7 @@ public class FacetManagerTest {
     @Test
     public void getGenreFacets() {
         for ( int i = 5; i < 30; i++ ) {
-            Optional<FacetDao> result = facetManager.getFacet(Integer.toString(i));
+            Optional<FacetDto> result = facetManager.getFacet(Integer.toString(i));
             assertEquals(result.get().getFacetId(), Integer.toString(i));
             assertNotNull(result.get().getFacetName());
         }

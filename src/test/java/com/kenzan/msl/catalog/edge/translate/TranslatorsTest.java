@@ -5,7 +5,7 @@ package com.kenzan.msl.catalog.edge.translate;
 
 import static org.junit.Assert.*;
 
-import com.kenzan.msl.catalog.client.dao.*;
+import com.kenzan.msl.catalog.client.dto.*;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
 import com.kenzan.msl.common.bo.ArtistBo;
@@ -140,21 +140,21 @@ public class TranslatorsTest {
 
         bo.setPagingState(PAGINGSTATE1_UUID);
 
-        FeaturedAlbumsDao dao1 = new FeaturedAlbumsDao();
-        dao1.setAlbumId(ALBUM1_UUID);
-        dao1.setAlbumName(ALBUM1_NAME);
-        dao1.setAlbumYear(ALBUM1_YEAR);
-        dao1.setArtistId(ARTIST1_UUID);
-        dao1.setArtistName(ARTIST1_NAME);
-        bo.add(dao1);
+        FeaturedAlbumsDto dto1 = new FeaturedAlbumsDto();
+        dto1.setAlbumId(ALBUM1_UUID);
+        dto1.setAlbumName(ALBUM1_NAME);
+        dto1.setAlbumYear(ALBUM1_YEAR);
+        dto1.setArtistId(ARTIST1_UUID);
+        dto1.setArtistName(ARTIST1_NAME);
+        bo.add(dto1);
 
-        AlbumsByFacetDao dao2 = new AlbumsByFacetDao();
-        dao2.setAlbumId(ALBUM2_UUID);
-        dao2.setAlbumName(ALBUM2_NAME);
-        dao2.setAlbumYear(ALBUM2_YEAR);
-        dao2.setArtistId(ARTIST2_UUID);
-        dao2.setArtistName(ARTIST2_NAME);
-        bo.add(dao2);
+        AlbumsByFacetDto dto2 = new AlbumsByFacetDto();
+        dto2.setAlbumId(ALBUM2_UUID);
+        dto2.setAlbumName(ALBUM2_NAME);
+        dto2.setAlbumYear(ALBUM2_YEAR);
+        dto2.setArtistId(ARTIST2_UUID);
+        dto2.setArtistName(ARTIST2_NAME);
+        bo.add(dto2);
 
         AlbumList model = Translators.translate(bo);
 
@@ -281,15 +281,15 @@ public class TranslatorsTest {
 
         bo.setPagingState(PAGINGSTATE1_UUID);
 
-        FeaturedArtistsDao dao1 = new FeaturedArtistsDao();
-        dao1.setArtistId(ARTIST1_UUID);
-        dao1.setArtistName(ARTIST1_NAME);
-        bo.add(dao1);
+        FeaturedArtistsDto dto1 = new FeaturedArtistsDto();
+        dto1.setArtistId(ARTIST1_UUID);
+        dto1.setArtistName(ARTIST1_NAME);
+        bo.add(dto1);
 
-        ArtistsByFacetDao dao2 = new ArtistsByFacetDao();
-        dao2.setArtistId(ARTIST2_UUID);
-        dao2.setArtistName(ARTIST2_NAME);
-        bo.add(dao2);
+        ArtistsByFacetDto dto2 = new ArtistsByFacetDto();
+        dto2.setArtistId(ARTIST2_UUID);
+        dto2.setArtistName(ARTIST2_NAME);
+        bo.add(dto2);
 
         ArtistList model = Translators.translate(bo);
 
@@ -416,29 +416,29 @@ public class TranslatorsTest {
 
         bo.setPagingState(PAGINGSTATE1_UUID);
 
-        FeaturedSongsDao dao1 = new FeaturedSongsDao();
-        dao1.setSongId(SONG1_UUID);
-        dao1.setSongName(SONG1_NAME);
-        dao1.setSongDuration(SONG1_DURATION);
-        dao1.setAlbumId(ALBUM1_UUID);
-        dao1.setAlbumName(ALBUM1_NAME);
-        dao1.setAlbumYear(ALBUM1_YEAR);
-        dao1.setArtistId(ARTIST1_UUID);
-        dao1.setArtistName(ARTIST1_NAME);
-        dao1.setArtistMbid(ARTIST1_MBID);
-        bo.add(dao1);
+        FeaturedSongsDto dto1 = new FeaturedSongsDto();
+        dto1.setSongId(SONG1_UUID);
+        dto1.setSongName(SONG1_NAME);
+        dto1.setSongDuration(SONG1_DURATION);
+        dto1.setAlbumId(ALBUM1_UUID);
+        dto1.setAlbumName(ALBUM1_NAME);
+        dto1.setAlbumYear(ALBUM1_YEAR);
+        dto1.setArtistId(ARTIST1_UUID);
+        dto1.setArtistName(ARTIST1_NAME);
+        dto1.setArtistMbid(ARTIST1_MBID);
+        bo.add(dto1);
 
-        SongsByFacetDao dao2 = new SongsByFacetDao();
-        dao2.setSongId(SONG2_UUID);
-        dao2.setSongName(SONG2_NAME);
-        dao2.setSongDuration(SONG2_DURATION);
-        dao2.setAlbumId(ALBUM2_UUID);
-        dao2.setAlbumName(ALBUM2_NAME);
-        dao2.setAlbumYear(ALBUM2_YEAR);
-        dao2.setArtistId(ARTIST2_UUID);
-        dao2.setArtistName(ARTIST2_NAME);
-        dao2.setArtistMbid(ARTIST2_MBID);
-        bo.add(dao2);
+        SongsByFacetDto dto2 = new SongsByFacetDto();
+        dto2.setSongId(SONG2_UUID);
+        dto2.setSongName(SONG2_NAME);
+        dto2.setSongDuration(SONG2_DURATION);
+        dto2.setAlbumId(ALBUM2_UUID);
+        dto2.setAlbumName(ALBUM2_NAME);
+        dto2.setAlbumYear(ALBUM2_YEAR);
+        dto2.setArtistId(ARTIST2_UUID);
+        dto2.setArtistName(ARTIST2_NAME);
+        dto2.setArtistMbid(ARTIST2_MBID);
+        bo.add(dto2);
 
         SongList model = Translators.translate(bo);
 

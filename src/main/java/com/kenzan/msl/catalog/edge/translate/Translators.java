@@ -3,7 +3,7 @@
  */
 package com.kenzan.msl.catalog.edge.translate;
 
-import com.kenzan.msl.catalog.client.dao.FacetDao;
+import com.kenzan.msl.catalog.client.dto.FacetDto;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
 import com.kenzan.msl.common.bo.ArtistBo;
@@ -179,22 +179,22 @@ public class Translators {
     // FACETS
     // ==========================================================================================================
 
-    public static FacetInfo translate(FacetDao dao) {
+    public static FacetInfo translate(FacetDto dto) {
         FacetInfo model = new FacetInfo();
 
-        if ( dao != null ) {
-            model.setFacetId(dao.getFacetId());
-            model.setName(dao.getFacetName());
+        if ( dto != null ) {
+            model.setFacetId(dto.getFacetId());
+            model.setName(dto.getFacetName());
         }
 
         return model;
     }
 
-    public static List<FacetInfo> translateFacetList(List<FacetDao> daoList) {
-        if ( daoList != null ) {
-            List<FacetInfo> modelList = new ArrayList<>(daoList.size());
-            for ( FacetDao dao : daoList ) {
-                modelList.add(translate(dao));
+    public static List<FacetInfo> translateFacetList(List<FacetDto> dtoList) {
+        if ( dtoList != null ) {
+            List<FacetInfo> modelList = new ArrayList<>(dtoList.size());
+            for ( FacetDto dto : dtoList ) {
+                modelList.add(translate(dto));
             }
             return modelList;
         }
