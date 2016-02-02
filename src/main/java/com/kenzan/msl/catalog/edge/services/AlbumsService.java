@@ -7,14 +7,14 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
-import com.kenzan.msl.account.client.dao.AlbumsByUserDao;
+import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
-import com.kenzan.msl.catalog.client.dao.SongsArtistByAlbumDao;
+import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
-import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
-import com.kenzan.msl.ratings.client.dao.UserRatingsDao;
+import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
+import com.kenzan.msl.ratings.client.dto.UserRatingsDto;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import rx.Observable;
 
@@ -29,7 +29,7 @@ public class AlbumsService
         Observable<ResultSet> queryResults = cassandraCatalogService
             .getSongsArtistByAlbum(albumUuid, Optional.absent());
 
-        Result<SongsArtistByAlbumDao> mappingResults = cassandraCatalogService.mapSongsArtistByAlbum(queryResults)
+        Result<SongsArtistByAlbumDto> mappingResults = cassandraCatalogService.mapSongsArtistByAlbum(queryResults)
             .toBlocking().first();
 
         if ( mappingResults == null ) {
@@ -37,21 +37,25 @@ public class AlbumsService
         }
 
         AlbumBo albumBo = new AlbumBo();
-        SongsArtistByAlbumDao songsArtistByAlbumDao = mappingResults.one();
+        SongsArtistByAlbumDto songsArtistByAlbumDto = mappingResults.one();
 
-        albumBo.setAlbumId(songsArtistByAlbumDao.getAlbumId());
-        albumBo.setAlbumName(songsArtistByAlbumDao.getAlbumName());
-        albumBo.setArtistId(songsArtistByAlbumDao.getArtistId());
-        albumBo.setArtistName(songsArtistByAlbumDao.getArtistName());
-        albumBo.setImageLink(songsArtistByAlbumDao.getImageLink());
-
-        if ( songsArtistByAlbumDao.getArtistGenres() != null && songsArtistByAlbumDao.getArtistGenres().size() > 0 ) {
-            albumBo.setGenre(songsArtistByAlbumDao.getArtistGenres().iterator().next());
+        if ( songsArtistByAlbumDto == null ) {
+            return Optional.of(albumBo);
         }
 
-        // Add the song ID from this DAO if it is not already in the list
-        if ( !albumBo.getSongsList().contains(songsArtistByAlbumDao.getSongId().toString()) ) {
-            albumBo.getSongsList().add(songsArtistByAlbumDao.getSongId().toString());
+        albumBo.setAlbumId(songsArtistByAlbumDto.getAlbumId());
+        albumBo.setAlbumName(songsArtistByAlbumDto.getAlbumName());
+        albumBo.setArtistId(songsArtistByAlbumDto.getArtistId());
+        albumBo.setArtistName(songsArtistByAlbumDto.getArtistName());
+        albumBo.setImageLink(songsArtistByAlbumDto.getImageLink());
+
+        if ( songsArtistByAlbumDto.getArtistGenres() != null && songsArtistByAlbumDto.getArtistGenres().size() > 0 ) {
+            albumBo.setGenre(songsArtistByAlbumDto.getArtistGenres().iterator().next());
+        }
+
+        // Add the song ID from this DTO if it is not already in the list
+        if ( !albumBo.getSongsList().contains(songsArtistByAlbumDto.getSongId().toString()) ) {
+            albumBo.getSongsList().add(songsArtistByAlbumDto.getSongId().toString());
         }
 
         if ( userUuid.isPresent() ) {
@@ -62,17 +66,17 @@ public class AlbumsService
         CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
 
         // Process ratings
-        AverageRatingsDao averageRatingsDao = cassandraRatingsService.getAverageRating(albumUuid, "Album").toBlocking()
+        AverageRatingsDto averageRatingsDto = cassandraRatingsService.getAverageRating(albumUuid, "Album").toBlocking()
             .first();
-        if ( null != averageRatingsDao ) {
-            albumBo.setAverageRating((int) (averageRatingsDao.getSumRating() / averageRatingsDao.getNumRating()));
+        if ( null != averageRatingsDto ) {
+            albumBo.setAverageRating((int) (averageRatingsDto.getSumRating() / averageRatingsDto.getNumRating()));
         }
 
         if ( userUuid.isPresent() ) {
-            UserRatingsDao userRatingsDao = cassandraRatingsService.getUserRating(userUuid.get(), "Album", albumUuid)
+            UserRatingsDto userRatingsDto = cassandraRatingsService.getUserRating(userUuid.get(), "Album", albumUuid)
                 .toBlocking().first();
-            if ( null != userRatingsDao ) {
-                albumBo.setPersonalRating(userRatingsDao.getRating());
+            if ( null != userRatingsDto ) {
+                albumBo.setPersonalRating(userRatingsDto.getRating());
             }
         }
 
@@ -91,7 +95,7 @@ public class AlbumsService
 
         if ( userUuid.isPresent() ) {
             LibraryHelper libraryHelper = new LibraryHelper();
-            Result<AlbumsByUserDao> userAlbums = libraryHelper.getUserAlbums(userUuid.get());
+            Result<AlbumsByUserDto> userAlbums = libraryHelper.getUserAlbums(userUuid.get());
             for ( AlbumBo albumBo : albumListBo.getBoList() ) {
                 libraryHelper.processLibraryAlbumInfo(userAlbums, albumBo);
             }
@@ -101,19 +105,19 @@ public class AlbumsService
 
         // Process ratings
         for ( AlbumBo albumBo : albumListBo.getBoList() ) {
-            AverageRatingsDao averageRatingsDao = cassandraRatingsService
+            AverageRatingsDto averageRatingsDto = cassandraRatingsService
                 .getAverageRating(albumBo.getAlbumId(), "Album").toBlocking().first();
 
-            if ( averageRatingsDao != null ) {
-                long average = averageRatingsDao.getNumRating() / averageRatingsDao.getSumRating();
+            if ( averageRatingsDto != null ) {
+                long average = averageRatingsDto.getNumRating() / averageRatingsDto.getSumRating();
                 albumBo.setAverageRating((int) average);
             }
 
             if ( userUuid.isPresent() ) {
-                UserRatingsDao userRatingsDao = cassandraRatingsService
+                UserRatingsDto userRatingsDto = cassandraRatingsService
                     .getUserRating(userUuid.get(), "Album", albumBo.getAlbumId()).toBlocking().first();
-                if ( userRatingsDao != null ) {
-                    albumBo.setPersonalRating(userRatingsDao.getRating());
+                if ( userRatingsDto != null ) {
+                    albumBo.setPersonalRating(userRatingsDto.getRating());
                 }
             }
         }

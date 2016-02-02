@@ -4,9 +4,9 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import com.kenzan.msl.account.client.dao.AlbumsByUserDao;
-import com.kenzan.msl.account.client.dao.ArtistsByUserDao;
-import com.kenzan.msl.account.client.dao.SongsByUserDao;
+import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
+import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
+import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,59 +46,59 @@ public class LibraryHelperTest {
 
     @Test
     public void testGetUserArtists() {
-        Result<ArtistsByUserDao> artistsByUserDaoResult = PowerMockito.mock(Result.class);
+        Result<ArtistsByUserDto> artistsByUserDtoResult = PowerMockito.mock(Result.class);
 
         expect(cassandraAccountService.getArtistsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
             .andReturn(observableResultSet);
 
         expect(cassandraAccountService.mapArtistByUser(observableResultSet))
-            .andReturn(Observable.just(artistsByUserDaoResult));
+            .andReturn(Observable.just(artistsByUserDtoResult));
 
         replay(cassandraAccountService);
         PowerMock.replayAll();
 
         LibraryHelper lh = new LibraryHelper();
-        Result<ArtistsByUserDao> result = lh.getUserArtists(tc.USER_ID);
-        assertEquals(result, artistsByUserDaoResult);
+        Result<ArtistsByUserDto> result = lh.getUserArtists(tc.USER_ID);
+        assertEquals(result, artistsByUserDtoResult);
     }
 
     @Test
     public void testGetUserAlbums() {
-        Result<AlbumsByUserDao> albumsByUserDaoResult = PowerMockito.mock(Result.class);
+        Result<AlbumsByUserDto> albumsByUserDtoResult = PowerMockito.mock(Result.class);
 
         expect(cassandraAccountService.getAlbumsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
             .andReturn(observableResultSet);
         expect(cassandraAccountService.mapAlbumsByUser(observableResultSet))
-            .andReturn(Observable.just(albumsByUserDaoResult));
+            .andReturn(Observable.just(albumsByUserDtoResult));
         replay(cassandraAccountService);
         PowerMock.replayAll();
 
         LibraryHelper lh = new LibraryHelper();
-        Result<AlbumsByUserDao> result = lh.getUserAlbums(tc.USER_ID);
-        assertEquals(result, albumsByUserDaoResult);
+        Result<AlbumsByUserDto> result = lh.getUserAlbums(tc.USER_ID);
+        assertEquals(result, albumsByUserDtoResult);
     }
 
     @Test
     public void testGetUserSongs() {
-        Result<SongsByUserDao> songsByUserDaoResult = PowerMockito.mock(Result.class);
+        Result<SongsByUserDto> songsByUserDtoResult = PowerMockito.mock(Result.class);
 
         expect(cassandraAccountService.getSongsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
             .andReturn(observableResultSet);
 
         expect(cassandraAccountService.mapSongsByUser(observableResultSet)).andReturn(Observable
-                                                                                          .just(songsByUserDaoResult));
+                                                                                          .just(songsByUserDtoResult));
         replay(cassandraAccountService);
         PowerMock.replayAll();
 
         LibraryHelper lh = new LibraryHelper();
-        Result<SongsByUserDao> result = lh.getUserSongs(tc.USER_ID);
-        assertEquals(result, songsByUserDaoResult);
+        Result<SongsByUserDto> result = lh.getUserSongs(tc.USER_ID);
+        assertEquals(result, songsByUserDtoResult);
     }
 
     @Test
     public void testProcessLibraryAlbumInfo() {
         LibraryHelper lh = new LibraryHelper();
-        lh.processLibraryAlbumInfo(tc.albumsByUserDaoList, tc.ALBUM_BO);
+        lh.processLibraryAlbumInfo(tc.albumsByUserDtoList, tc.ALBUM_BO);
         assertTrue(tc.ALBUM_BO.isInMyLibrary());
         assertEquals(tc.ALBUM_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
     }
@@ -106,7 +106,7 @@ public class LibraryHelperTest {
     @Test
     public void testProcessLibraryArtistInfo() {
         LibraryHelper lh = new LibraryHelper();
-        lh.processLibraryArtistInfo(tc.artistsByUserDaoList, tc.ARTIST_BO);
+        lh.processLibraryArtistInfo(tc.artistsByUserDtoList, tc.ARTIST_BO);
         assertTrue(tc.ARTIST_BO.isInMyLibrary());
         assertEquals(tc.ARTIST_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
     }
@@ -114,7 +114,7 @@ public class LibraryHelperTest {
     @Test
     public void testProcessLibrarySongInfo() {
         LibraryHelper lh = new LibraryHelper();
-        lh.processLibrarySongInfo(tc.songsByUserDaoList, tc.SONG_BO);
+        lh.processLibrarySongInfo(tc.songsByUserDtoList, tc.SONG_BO);
         assertTrue(tc.SONG_BO.isInMyLibrary());
         assertEquals(tc.SONG_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
     }

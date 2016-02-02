@@ -1,9 +1,9 @@
 package com.kenzan.msl.catalog.edge;
 
-import com.kenzan.msl.account.client.dao.AlbumsByUserDao;
-import com.kenzan.msl.account.client.dao.ArtistsByUserDao;
-import com.kenzan.msl.account.client.dao.SongsByUserDao;
-import com.kenzan.msl.catalog.client.dao.*;
+import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
+import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
+import com.kenzan.msl.account.client.dto.SongsByUserDto;
+import com.kenzan.msl.catalog.client.dto.*;
 import com.kenzan.msl.common.bo.*;
 
 import java.util.*;
@@ -28,18 +28,18 @@ public class TestConstants {
     public AlbumListBo ALBUM_LIST_BO;
     public SongListBo SONG_LIST_BO;
 
-    public List<AlbumsByUserDao> albumsByUserDaoList = new ArrayList<>();
-    public List<ArtistsByUserDao> artistsByUserDaoList = new ArrayList<>();
-    public List<SongsByUserDao> songsByUserDaoList = new ArrayList<>();
-    public PagingStateDao pagingStateDao = new PagingStateDao();
+    public List<AlbumsByUserDto> albumsByUserDtoList = new ArrayList<>();
+    public List<ArtistsByUserDto> artistsByUserDtoList = new ArrayList<>();
+    public List<SongsByUserDto> songsByUserDtoList = new ArrayList<>();
+    public PagingStateDto pagingStateDto = new PagingStateDto();
 
     public List<AlbumBo> albumBoList = new ArrayList<>();
-    public List<FeaturedAlbumsDao> featuredAlbumDaoList = new ArrayList<>();
-    public List<AlbumsByFacetDao> albumsByFacetDaoList = new ArrayList<>();
+    public List<FeaturedAlbumsDto> featuredAlbumDtoList = new ArrayList<>();
+    public List<AlbumsByFacetDto> albumsByFacetDtoList = new ArrayList<>();
 
-    public SongsArtistByAlbumDao songsArtistByAlbumDao = new SongsArtistByAlbumDao();
-    public SongsAlbumsByArtistDao songsAlbumsByArtistDao = new SongsAlbumsByArtistDao();
-    public AlbumArtistBySongDao albumArtistBySongDao = new AlbumArtistBySongDao();
+    public SongsArtistByAlbumDto songsArtistByAlbumDto = new SongsArtistByAlbumDto();
+    public SongsAlbumsByArtistDto songsAlbumsByArtistDto = new SongsAlbumsByArtistDto();
+    public AlbumArtistBySongDto albumArtistBySongDto = new AlbumArtistBySongDto();
 
     public AlbumBo ALBUM_BO;
     public ArtistBo ARTIST_BO;
@@ -50,7 +50,7 @@ public class TestConstants {
     public final String SONG_NAME = "TEST SONG NAME";
 
     private TestConstants() {
-        initDaos();
+        initDtos();
         initBos();
 
         albumBoList.add(ALBUM_BO);
@@ -59,28 +59,28 @@ public class TestConstants {
         ALBUM_LIST_BO = new AlbumListBo();
         SONG_LIST_BO = new SongListBo();
 
-        AlbumsByUserDao albumsByUserDao = new AlbumsByUserDao();
-        albumsByUserDao.setAlbumId(ALBUM_ID);
-        albumsByUserDao.setArtistId(ARTIST_ID);
-        albumsByUserDao.setUserId(USER_ID);
-        albumsByUserDao.setFavoritesTimestamp(TIMESTAMP);
-        albumsByUserDaoList.add(albumsByUserDao);
+        AlbumsByUserDto albumsByUserDto = new AlbumsByUserDto();
+        albumsByUserDto.setAlbumId(ALBUM_ID);
+        albumsByUserDto.setArtistId(ARTIST_ID);
+        albumsByUserDto.setUserId(USER_ID);
+        albumsByUserDto.setFavoritesTimestamp(TIMESTAMP);
+        albumsByUserDtoList.add(albumsByUserDto);
 
-        ArtistsByUserDao artistsByUserDao = new ArtistsByUserDao();
-        artistsByUserDao.setArtistName(ARTIST_NAME);
-        artistsByUserDao.setArtistId(ARTIST_ID);
-        artistsByUserDao.setUserId(USER_ID);
-        artistsByUserDao.setFavoritesTimestamp(TIMESTAMP);
-        artistsByUserDaoList.add(artistsByUserDao);
+        ArtistsByUserDto artistsByUserDto = new ArtistsByUserDto();
+        artistsByUserDto.setArtistName(ARTIST_NAME);
+        artistsByUserDto.setArtistId(ARTIST_ID);
+        artistsByUserDto.setUserId(USER_ID);
+        artistsByUserDto.setFavoritesTimestamp(TIMESTAMP);
+        artistsByUserDtoList.add(artistsByUserDto);
 
-        SongsByUserDao songsByUserDao = new SongsByUserDao();
-        songsByUserDao.setArtistId(ARTIST_ID);
-        songsByUserDao.setArtistName(ARTIST_NAME);
-        songsByUserDao.setUserId(USER_ID);
-        songsByUserDao.setAlbumId(ALBUM_ID);
-        songsByUserDao.setSongId(SONG_ID);
-        songsByUserDao.setFavoritesTimestamp(TIMESTAMP);
-        songsByUserDaoList.add(songsByUserDao);
+        SongsByUserDto songsByUserDto = new SongsByUserDto();
+        songsByUserDto.setArtistId(ARTIST_ID);
+        songsByUserDto.setArtistName(ARTIST_NAME);
+        songsByUserDto.setUserId(USER_ID);
+        songsByUserDto.setAlbumId(ALBUM_ID);
+        songsByUserDto.setSongId(SONG_ID);
+        songsByUserDto.setFavoritesTimestamp(TIMESTAMP);
+        songsByUserDtoList.add(songsByUserDto);
     }
 
     public static TestConstants getInstance() {
@@ -106,48 +106,48 @@ public class TestConstants {
         SONG_BO.setSongId(SONG_ID);
     }
 
-    private void initDaos() {
+    private void initDtos() {
         Set<String> genres = new HashSet<String>();
         genres.add("4");
         Map<UUID, String> similarArtists = new HashMap<>();
         similarArtists.put(ARTIST_ID_2, ARTIST_NAME);
         similarArtists.put(ARTIST_ID_3, ARTIST_NAME);
 
-        songsArtistByAlbumDao.setAlbumId(ALBUM_ID);
-        songsArtistByAlbumDao.setArtistId(ARTIST_ID);
-        songsArtistByAlbumDao.setArtistName(ARTIST_NAME);
-        songsArtistByAlbumDao.setSongName(SONG_NAME);
-        songsArtistByAlbumDao.setSongId(SONG_ID);
-        songsArtistByAlbumDao.setAlbumId(ALBUM_ID);
-        songsArtistByAlbumDao.setAlbumName(ALBUM_NAME);
-        songsArtistByAlbumDao.setAlbumYear(ALBUM_YEAR);
-        songsArtistByAlbumDao.setArtistGenres(genres);
+        songsArtistByAlbumDto.setAlbumId(ALBUM_ID);
+        songsArtistByAlbumDto.setArtistId(ARTIST_ID);
+        songsArtistByAlbumDto.setArtistName(ARTIST_NAME);
+        songsArtistByAlbumDto.setSongName(SONG_NAME);
+        songsArtistByAlbumDto.setSongId(SONG_ID);
+        songsArtistByAlbumDto.setAlbumId(ALBUM_ID);
+        songsArtistByAlbumDto.setAlbumName(ALBUM_NAME);
+        songsArtistByAlbumDto.setAlbumYear(ALBUM_YEAR);
+        songsArtistByAlbumDto.setArtistGenres(genres);
 
-        songsAlbumsByArtistDao.setArtistId(ARTIST_ID);
-        songsAlbumsByArtistDao.setArtistName(ARTIST_NAME);
-        songsAlbumsByArtistDao.setSongName(SONG_NAME);
-        songsAlbumsByArtistDao.setSongId(SONG_ID);
-        songsAlbumsByArtistDao.setArtistGenres(genres);
-        songsAlbumsByArtistDao.setAlbumId(ALBUM_ID);
-        songsAlbumsByArtistDao.setAlbumName(ALBUM_NAME);
-        songsAlbumsByArtistDao.setAlbumYear(ALBUM_YEAR);
-        songsAlbumsByArtistDao.setSongDuration(SONG_DURATION);
-        songsAlbumsByArtistDao.setSimilarArtists(similarArtists);
+        songsAlbumsByArtistDto.setArtistId(ARTIST_ID);
+        songsAlbumsByArtistDto.setArtistName(ARTIST_NAME);
+        songsAlbumsByArtistDto.setSongName(SONG_NAME);
+        songsAlbumsByArtistDto.setSongId(SONG_ID);
+        songsAlbumsByArtistDto.setArtistGenres(genres);
+        songsAlbumsByArtistDto.setAlbumId(ALBUM_ID);
+        songsAlbumsByArtistDto.setAlbumName(ALBUM_NAME);
+        songsAlbumsByArtistDto.setAlbumYear(ALBUM_YEAR);
+        songsAlbumsByArtistDto.setSongDuration(SONG_DURATION);
+        songsAlbumsByArtistDto.setSimilarArtists(similarArtists);
 
-        albumArtistBySongDao.setAlbumId(ALBUM_ID);
-        albumArtistBySongDao.setArtistId(ARTIST_ID);
-        albumArtistBySongDao.setSongId(SONG_ID);
-        albumArtistBySongDao.setSongName(SONG_NAME);
-        albumArtistBySongDao.setAlbumName(ALBUM_NAME);
-        albumArtistBySongDao.setArtistName(ARTIST_NAME);
-        albumArtistBySongDao.setAlbumYear(ALBUM_YEAR);
-        albumArtistBySongDao.setSongDuration(SONG_DURATION);
-        albumArtistBySongDao.setSimilarArtists(similarArtists);
-        albumArtistBySongDao.setArtistGenres(genres);
+        albumArtistBySongDto.setAlbumId(ALBUM_ID);
+        albumArtistBySongDto.setArtistId(ARTIST_ID);
+        albumArtistBySongDto.setSongId(SONG_ID);
+        albumArtistBySongDto.setSongName(SONG_NAME);
+        albumArtistBySongDto.setAlbumName(ALBUM_NAME);
+        albumArtistBySongDto.setArtistName(ARTIST_NAME);
+        albumArtistBySongDto.setAlbumYear(ALBUM_YEAR);
+        albumArtistBySongDto.setSongDuration(SONG_DURATION);
+        albumArtistBySongDto.setSimilarArtists(similarArtists);
+        albumArtistBySongDto.setArtistGenres(genres);
 
-        PagingStateDao.PagingStateUdt pagingStateUdt = new PagingStateDao.PagingStateUdt();
-        pagingStateDao.setUserId(USER_ID);
-        pagingStateDao.setPagingState(pagingStateUdt);
+        PagingStateDto.PagingStateUdt pagingStateUdt = new PagingStateDto.PagingStateUdt();
+        pagingStateDto.setUserId(USER_ID);
+        pagingStateDto.setPagingState(pagingStateUdt);
     }
 
 }

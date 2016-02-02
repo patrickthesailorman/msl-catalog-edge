@@ -5,11 +5,11 @@ import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
-import com.kenzan.msl.catalog.client.dao.AlbumArtistBySongDao;
+import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
 import com.kenzan.msl.common.bo.SongBo;
-import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
+import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -76,19 +76,19 @@ public class SongsServiceTest {
         expect(cassandraCatalogService.getAlbumArtistBySong(tc.SONG_ID, Optional.absent()))
             .andReturn(observableResultSet);
 
-        Result<AlbumArtistBySongDao> albumArtistBySongDaoResult = PowerMockito.mock(Result.class);
+        Result<AlbumArtistBySongDto> albumArtistBySongDtoResult = PowerMockito.mock(Result.class);
         expect(cassandraCatalogService.mapAlbumArtistBySong(observableResultSet))
-            .andReturn(Observable.just(albumArtistBySongDaoResult));
+            .andReturn(Observable.just(albumArtistBySongDtoResult));
 
-        PowerMockito.when(albumArtistBySongDaoResult.one()).thenReturn(tc.albumArtistBySongDao);
+        PowerMockito.when(albumArtistBySongDtoResult.one()).thenReturn(tc.albumArtistBySongDto);
 
         mockRatingsHelper();
 
-        AverageRatingsDao averageRatingsDao = new AverageRatingsDao();
-        averageRatingsDao.setNumRating(new Long(2));
-        averageRatingsDao.setSumRating(new Long(4));
+        AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
+        averageRatingsDto.setNumRating(new Long(2));
+        averageRatingsDto.setSumRating(new Long(4));
         expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-            .andReturn(Observable.just(averageRatingsDao));
+            .andReturn(Observable.just(averageRatingsDto));
 
         EasyMock.replay(cassandraRatingsService);
         EasyMock.replay(cassandraCatalogService);

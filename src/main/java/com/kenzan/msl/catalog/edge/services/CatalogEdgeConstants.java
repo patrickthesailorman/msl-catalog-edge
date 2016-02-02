@@ -3,8 +3,8 @@
  */
 package com.kenzan.msl.catalog.edge.services;
 
-import com.kenzan.msl.catalog.client.dao.*;
-import com.kenzan.msl.common.dao.AbstractDao;
+import com.kenzan.msl.catalog.client.dto.*;
+import com.kenzan.msl.common.dto.AbstractDto;
 
 /**
  *
@@ -18,16 +18,16 @@ public class CatalogEdgeConstants {
     public static final int MSL_BROWSE_DEFAULT_PAGE_SIZE = 25;
 
     public static enum MSL_CONTENT_TYPE {
-        ALBUM(FeaturedAlbumsDao.class, AlbumsByFacetDao.class), ARTIST(FeaturedArtistsDao.class,
-            ArtistsByFacetDao.class), SONG(FeaturedSongsDao.class, SongsByFacetDao.class);
+        ALBUM(FeaturedAlbumsDto.class, AlbumsByFacetDto.class), ARTIST(FeaturedArtistsDto.class,
+            ArtistsByFacetDto.class), SONG(FeaturedSongsDto.class, SongsByFacetDto.class);
 
-        public final Class<? extends AbstractDao> featuredContentDaoClass;
-        public final Class<? extends AbstractDao> facetContentDaoClass;
+        public final Class<? extends AbstractDto> featuredContentDtoClass;
+        public final Class<? extends AbstractDto> facetContentDtoClass;
 
-        MSL_CONTENT_TYPE( Class<? extends AbstractDao> featuredContentDaoClass,
-                          Class<? extends AbstractDao> facetContentDaoClass ) {
-            this.featuredContentDaoClass = featuredContentDaoClass;
-            this.facetContentDaoClass = facetContentDaoClass;
+        MSL_CONTENT_TYPE( Class<? extends AbstractDto> featuredContentDtoClass,
+                          Class<? extends AbstractDto> facetContentDtoClass ) {
+            this.featuredContentDtoClass = featuredContentDtoClass;
+            this.facetContentDtoClass = facetContentDtoClass;
         }
 
     }

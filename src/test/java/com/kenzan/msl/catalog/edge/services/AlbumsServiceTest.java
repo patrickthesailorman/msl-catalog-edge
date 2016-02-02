@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.mapping.Result;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
-import com.kenzan.msl.catalog.client.dao.SongsArtistByAlbumDao;
+import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
 import com.kenzan.msl.common.bo.AlbumBo;
-import com.kenzan.msl.ratings.client.dao.AverageRatingsDao;
+import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import org.easymock.EasyMock;
 import com.google.common.base.Optional;
@@ -82,19 +82,19 @@ public class AlbumsServiceTest {
         expect(cassandraCatalogService.getSongsArtistByAlbum(tc.ALBUM_ID, Optional.absent()))
             .andReturn(observableResultSet);
 
-        Result<SongsArtistByAlbumDao> songsArtistByAlbumDaoResult = PowerMockito.mock(Result.class);
+        Result<SongsArtistByAlbumDto> songsArtistByAlbumDtoResult = PowerMockito.mock(Result.class);
         expect(cassandraCatalogService.mapSongsArtistByAlbum(observableResultSet))
-            .andReturn(Observable.just(songsArtistByAlbumDaoResult));
+            .andReturn(Observable.just(songsArtistByAlbumDtoResult));
 
-        PowerMockito.when(songsArtistByAlbumDaoResult.one()).thenReturn(tc.songsArtistByAlbumDao);
+        PowerMockito.when(songsArtistByAlbumDtoResult.one()).thenReturn(tc.songsArtistByAlbumDto);
 
         mockRatingsHelper();
 
-        AverageRatingsDao averageRatingsDao = new AverageRatingsDao();
-        averageRatingsDao.setNumRating(new Long(2));
-        averageRatingsDao.setSumRating(new Long(4));
+        AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
+        averageRatingsDto.setNumRating(new Long(2));
+        averageRatingsDto.setSumRating(new Long(4));
         expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-            .andReturn(Observable.just(averageRatingsDao));
+            .andReturn(Observable.just(averageRatingsDto));
 
         EasyMock.replay(cassandraRatingsService);
         EasyMock.replay(cassandraCatalogService);
@@ -139,12 +139,12 @@ public class AlbumsServiceTest {
         mockRatingsHelper();
 
         EasyMock.expect(cassandraCatalogService.getPagingState(tc.PAGING_STATE_ID))
-            .andReturn(Observable.just(tc.pagingStateDao));
+            .andReturn(Observable.just(tc.pagingStateDto));
 
         EasyMock.expect(cassandraCatalogService.mappingManager.getSession()
                             .execute(EasyMock.anyObject(Statement.class))).andReturn(resultSet);
 
-        // expect(cassandraCatalogService.mappingManager.mapper(EasyMock.anyObject()).map(resultSet)).andReturn(tc.featuredAlbumDaoList);
+        // expect(cassandraCatalogService.mappingManager.mapper(EasyMock.anyObject()).map(resultSet)).andReturn(tc.featuredAlbumDtoList);
         expect(resultSet.getAvailableWithoutFetching()).andReturn(0);
         expect(resultSet.isFullyFetched()).andReturn(false);
 
