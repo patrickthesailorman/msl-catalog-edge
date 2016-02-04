@@ -18,7 +18,7 @@ public class AlbumClient {
     }
 
     public CatalogEdgeApiResponseMessage get(String id) {
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/catalog-edge/album" + id);
+        ResteasyWebTarget target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/album" + id);
         Response response = target.request().get();
         if ( response.getStatus() != 200 ) {
             throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -28,7 +28,7 @@ public class AlbumClient {
 
     public CatalogEdgeApiResponseMessage browse(String items) {
         ResteasyWebTarget target;
-        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/album?items=" + items);
+        target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/browse/album?items=" + items);
         Response response = target.request().get();
 
         if ( response.getStatus() != 200 ) {
