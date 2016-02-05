@@ -3,9 +3,19 @@
  */
 package com.kenzan.msl.catalog.edge.translate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
-import com.kenzan.msl.catalog.client.dto.*;
+import com.kenzan.msl.catalog.client.dto.FeaturedAlbumsDto;
+import com.kenzan.msl.catalog.client.dto.FeaturedArtistsDto;
+import com.kenzan.msl.catalog.client.dto.FeaturedSongsDto;
+import com.kenzan.msl.catalog.client.dto.AlbumsByFacetDto;
+import com.kenzan.msl.catalog.client.dto.ArtistsByFacetDto;
+import com.kenzan.msl.catalog.client.dto.SongsByFacetDto;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
 import com.kenzan.msl.common.bo.ArtistBo;
