@@ -8,11 +8,9 @@ is an example of building a swagger-enabled JAX-RS server.
 This example uses the [JAX-RS](https://jax-rs-spec.java.net/) framework.
 
 ## Before starting
-Run the build maven script to generate swagger generated code and install jars on local repository
-on /server
-
+Run the build maven script to generate swagger generated code, package local jars and instal on local repository. Run this from the `/server` directory
 ```
-mvn -f build.xml clean compile 
+mvn -f build-pom.xml install
 ```
 
 To generate sources from swagger spec
@@ -33,6 +31,11 @@ mvn clean formatter:format
 ### Install dependencies without running tests 
 ```
 mvn -P no-test clean install
+```
+
+### RPM packaging
+```
+mvn -P no-tests package && mvn rpm:rpm
 ```
 
 ##Reports
