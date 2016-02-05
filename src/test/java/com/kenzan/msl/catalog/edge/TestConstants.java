@@ -3,10 +3,27 @@ package com.kenzan.msl.catalog.edge;
 import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
-import com.kenzan.msl.catalog.client.dto.*;
-import com.kenzan.msl.common.bo.*;
+import com.kenzan.msl.catalog.client.dto.PagingStateDto;
+import com.kenzan.msl.catalog.client.dto.FeaturedAlbumsDto;
+import com.kenzan.msl.catalog.client.dto.AlbumsByFacetDto;
+import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
+import com.kenzan.msl.catalog.client.dto.SongsAlbumsByArtistDto;
+import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
+import com.kenzan.msl.common.bo.ArtistListBo;
+import com.kenzan.msl.common.bo.AlbumListBo;
+import com.kenzan.msl.common.bo.SongListBo;
+import com.kenzan.msl.common.bo.AlbumBo;
+import com.kenzan.msl.common.bo.ArtistBo;
+import com.kenzan.msl.common.bo.SongBo;
 
-import java.util.*;
+import java.util.UUID;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 
 public class TestConstants {
     private static TestConstants instance = null;

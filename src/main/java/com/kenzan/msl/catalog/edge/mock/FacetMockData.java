@@ -3,7 +3,8 @@ package com.kenzan.msl.catalog.edge.mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.swagger.model.*;
+import io.swagger.model.FacetInfoWithChildren;
+import io.swagger.model.FacetInfo;
 
 public class FacetMockData {
 

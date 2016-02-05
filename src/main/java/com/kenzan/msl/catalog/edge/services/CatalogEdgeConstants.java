@@ -3,7 +3,12 @@
  */
 package com.kenzan.msl.catalog.edge.services;
 
-import com.kenzan.msl.catalog.client.dto.*;
+import com.kenzan.msl.catalog.client.dto.FeaturedAlbumsDto;
+import com.kenzan.msl.catalog.client.dto.AlbumsByFacetDto;
+import com.kenzan.msl.catalog.client.dto.FeaturedArtistsDto;
+import com.kenzan.msl.catalog.client.dto.ArtistsByFacetDto;
+import com.kenzan.msl.catalog.client.dto.FeaturedSongsDto;
+import com.kenzan.msl.catalog.client.dto.SongsByFacetDto;
 import com.kenzan.msl.common.dto.AbstractDto;
 
 /**

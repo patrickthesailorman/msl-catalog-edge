@@ -3,7 +3,12 @@ package com.kenzan.msl.catalog.edge.services;
 import com.google.common.base.Optional;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import io.swagger.model.*;
+import io.swagger.model.AlbumList;
+import io.swagger.model.AlbumInfo;
+import io.swagger.model.ArtistList;
+import io.swagger.model.ArtistInfo;
+import io.swagger.model.SongList;
+import io.swagger.model.SongInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +22,10 @@ import rx.Observable;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ CassandraCatalogService.class })
