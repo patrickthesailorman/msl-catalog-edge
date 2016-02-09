@@ -245,6 +245,32 @@
                     <include>**/*Test.java</include>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>io.swagger.api.impl.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -289,6 +315,12 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.owlike</groupId>
+            <artifactId>genson</artifactId>
+            <version>0.99</version>
         </dependency>
 
         <!-- API -->
@@ -549,7 +581,6 @@
     </repositories>
 
     <properties>
-
         <swagger-codegen-cli-jar>../../common/swagger-codegen-cli.jar</swagger-codegen-cli-jar>
         <output-directory>../msl-catalog-edge</output-directory>
         <yaml-spec>../../msl-pages/swagger/api/swagger/swagger.yaml</yaml-spec>
