@@ -20,7 +20,7 @@ public class ArtistClient {
 
     public CatalogEdgeApiResponseMessage get(String id) {
 
-        ResteasyWebTarget target = client.target(ClientConstants.BASE_URL + "/catalog-edge/");
+        ResteasyWebTarget target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/");
         Response response = target.path("artist/" + id).request().get();
 
         if ( response.getStatus() != 200 ) {
@@ -32,7 +32,7 @@ public class ArtistClient {
 
     public CatalogEdgeApiResponseMessage browse(String items) {
         ResteasyWebTarget target;
-        target = client.target(ClientConstants.BASE_URL + "/catalog-edge/browse/artist?items=" + items);
+        target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/browse/artist?items=" + items);
         Response response = target.request().get();
 
         if ( response.getStatus() != 200 ) {
