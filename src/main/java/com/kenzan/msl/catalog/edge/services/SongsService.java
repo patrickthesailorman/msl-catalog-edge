@@ -25,6 +25,14 @@ import java.util.UUID;
 public class SongsService
     implements PaginatorHelper {
 
+    /**
+     * Get a song from the given catalog using the service
+     *
+     * @param cassandraCatalogService CassandraCatalogService
+     * @param userUuid Optional<UUID>
+     * @param songUuid java.util.UUID
+     * @return Optional<SongBo>
+     */
     public Optional<SongBo> getSong(final CassandraCatalogService cassandraCatalogService,
                                     final Optional<UUID> userUuid, final UUID songUuid) {
         Observable<ResultSet> queryResults = cassandraCatalogService.getAlbumArtistBySong(songUuid, Optional.absent());
@@ -82,6 +90,16 @@ public class SongsService
         return Optional.of(songBo);
     }
 
+    /**
+     * Get a list of songs filtered by facet and using pagination
+     *
+     * @param cassandraCatalogService CassandraCatalogService
+     * @param userUuid Optional<UUID>
+     * @param items Integer
+     * @param facets String
+     * @param pagingStateUuid Optional<UUID>
+     * @return SongListBo
+     */
     public SongListBo getSongsList(final CassandraCatalogService cassandraCatalogService,
                                    final Optional<UUID> userUuid, final Integer items, final String facets,
                                    final Optional<UUID> pagingStateUuid) {

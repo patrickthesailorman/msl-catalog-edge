@@ -12,6 +12,12 @@ public class AlbumMockData {
     public AlbumList albumList;
     private FacetMockData facetMockData = new FacetMockData();
 
+    /**
+     * Retrieves a single mocked album from it's ID
+     *
+     * @param albumId String
+     * @return AlbumInfo
+     */
     public AlbumInfo getAlbum(String albumId) {
         for ( AlbumInfo album : albumList.getAlbums() ) {
             if ( albumId.equals(album.getAlbumId()) ) {
@@ -21,6 +27,13 @@ public class AlbumMockData {
         return new AlbumInfo();
     }
 
+    /**
+     * Applies mocked facet to a list of albums
+     *
+     * @param facets String[]
+     * @param albumList List<AlbumInfo>
+     * @return List<AlbumInfo>
+     */
     private List<AlbumInfo> applyGenreFacet(String[] facets, List<AlbumInfo> albumList) {
         List<AlbumInfo> result = new ArrayList<>();
         boolean hasRatingFacet = false;
@@ -43,6 +56,13 @@ public class AlbumMockData {
         return albumList;
     }
 
+    /**
+     * Apply mocked ratings facet to the album
+     *
+     * @param facets String[]
+     * @param albumList List<AlbumInfo>
+     * @return List<AlbumInfo>
+     */
     private List<AlbumInfo> applyRatingFacet(String[] facets, List<AlbumInfo> albumList) {
         for ( String facet : facets ) {
             if ( FacetServiceFactory.isRatingFacet(facet, facetMockData.getRatingFacets()) ) {
@@ -52,6 +72,14 @@ public class AlbumMockData {
         return albumList;
     }
 
+    /**
+     * Browse through albums to get a subset matching specified filters
+     *
+     * @param pagingState String
+     * @param items Integer
+     * @param facetList String
+     * @return AlbumList
+     */
     public AlbumList browseAlbums(String pagingState, Integer items, String facetList) {
 
         List<AlbumInfo> browsedAlbums = albumList.getAlbums();

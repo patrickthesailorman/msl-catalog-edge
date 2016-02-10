@@ -33,10 +33,12 @@ import io.swagger.model.SongList;
  */
 public class Translators {
 
-    // ==========================================================================================================
-    // ALBUMS
-    // ==========================================================================================================
-
+    /**
+     * Translates an Album List BO to genuine Album List
+     *
+     * @param listBo AlbumListBo
+     * @return AlbumList
+     */
     public static AlbumList translate(AlbumListBo listBo) {
         AlbumList model = new AlbumList();
         if ( listBo != null ) {
@@ -59,6 +61,12 @@ public class Translators {
         return model;
     }
 
+    /**
+     * Translates an Album BO to genuine Album Info
+     *
+     * @param bo AlbumBo
+     * @return AlbumInfo
+     */
     public static AlbumInfo translate(AlbumBo bo) {
         AlbumInfo model = new AlbumInfo();
 
@@ -86,10 +94,12 @@ public class Translators {
         return model;
     }
 
-    // =========================================================================================================
-    // ARTISTS
-    // =========================================================================================================
-
+    /**
+     * Translates an Artist List BO to genuine Artist List
+     *
+     * @param listBo ArtistListBo
+     * @return ArtistList
+     */
     public static ArtistList translate(ArtistListBo listBo) {
         ArtistList model = new ArtistList();
 
@@ -119,6 +129,12 @@ public class Translators {
         return model;
     }
 
+    /**
+     * Translates an Artist BO to genuine Artist Info
+     *
+     * @param bo ArtistBo
+     * @return ArtistInfo
+     */
     public static ArtistInfo translate(ArtistBo bo) {
         ArtistInfo model = new ArtistInfo();
 
@@ -144,10 +160,12 @@ public class Translators {
         return model;
     }
 
-    // ===========================================================================================================
-    // SONGS
-    // ===========================================================================================================
-
+    /**
+     * Translates a Song List BO to genuine Song List
+     *
+     * @param listBo SongListBo
+     * @return SongList
+     */
     public static SongList translate(SongListBo listBo) {
         SongList model = new SongList();
 
@@ -177,6 +195,12 @@ public class Translators {
         return model;
     }
 
+    /**
+     * Translates a Song BO to genuine Song Info
+     *
+     * @param bo SongBo
+     * @return SongInfo
+     */
     public static SongInfo translate(SongBo bo) {
         SongInfo model = new SongInfo();
 
@@ -203,10 +227,12 @@ public class Translators {
         return model;
     }
 
-    // ==========================================================================================================
-    // FACETS
-    // ==========================================================================================================
-
+    /**
+     * Translates a Facet DTO to Facet Info
+     *
+     * @param dto FacetDTO
+     * @return FacetInfo
+     */
     public static FacetInfo translate(FacetDto dto) {
         FacetInfo model = new FacetInfo();
 
@@ -218,6 +244,12 @@ public class Translators {
         return model;
     }
 
+    /**
+     * Translates a Facet DTO list to Facet Info list
+     *
+     * @param dtoList List<FacetDTO>
+     * @return List<FacetInfo>
+     */
     public static List<FacetInfo> translateFacetList(List<FacetDto> dtoList) {
         if ( dtoList != null ) {
             List<FacetInfo> modelList = new ArrayList<>(dtoList.size());

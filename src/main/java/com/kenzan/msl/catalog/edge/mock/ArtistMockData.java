@@ -11,6 +11,12 @@ public class ArtistMockData {
     public ArtistList artistList;
     private FacetMockData facetMockData = new FacetMockData();
 
+    /**
+     * Retrieves a single mocked artist from it's ID
+     *
+     * @param artistId String
+     * @return ArtistInfo
+     */
     public ArtistInfo getArtist(String artistId) {
         for ( ArtistInfo artist : artistList.getArtists() ) {
             if ( artist.getArtistId().equals(artistId) ) {
@@ -20,6 +26,13 @@ public class ArtistMockData {
         return new ArtistInfo();
     }
 
+    /**
+     * Applies mocked facet to a list of Artists
+     *
+     * @param facets String[]
+     * @param artistList List<ArtistInfo>
+     * @return List<ArtistInfo>
+     */
     private List<ArtistInfo> applyGenreFacet(String[] facets, List<ArtistInfo> artistList) {
         List<ArtistInfo> result = new ArrayList<>();
         boolean hasRatingFacet = false;
@@ -42,6 +55,13 @@ public class ArtistMockData {
         return artistList;
     }
 
+    /**
+     * Apply mocked ratings facet to the artists
+     *
+     * @param facets String[]
+     * @param artistList List<ArtistInfo>
+     * @return List<ArtistInfo>
+     */
     private List<ArtistInfo> applyRatingFacet(String[] facets, List<ArtistInfo> artistList) {
         for ( String facet : facets ) {
             if ( FacetServiceFactory.isRatingFacet(facet, facetMockData.getRatingFacets()) ) {
@@ -51,6 +71,14 @@ public class ArtistMockData {
         return artistList;
     }
 
+    /**
+     * Browse through artists to get a subset matching specified filters
+     *
+     * @param pagingState String
+     * @param items Integer
+     * @param facetList String
+     * @return ArtistList
+     */
     public ArtistList browseArtists(String pagingState, Integer items, String facetList) {
         List<ArtistInfo> browsedArtists = artistList.getArtists();
 
