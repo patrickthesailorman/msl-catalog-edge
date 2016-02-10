@@ -3,6 +3,10 @@
  */
 package com.kenzan.msl.catalog.edge.translate;
 
+import com.datastax.driver.mapping.Result;
+import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
+import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
+import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.catalog.client.dto.FacetDto;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
@@ -43,6 +47,14 @@ public class Translators {
             for ( AlbumBo albumBo : listBo.getBoList() ) {
                 model.getAlbums().add(Translators.translate(albumBo));
             }
+        }
+        return model;
+    }
+
+    public static List<AlbumsByUserDto> translateAlbumsByUserDto(Result<AlbumsByUserDto> albums) {
+        List<AlbumsByUserDto> model = new ArrayList<>();
+        for ( AlbumsByUserDto album : albums ) {
+            model.add(album);
         }
         return model;
     }
@@ -99,6 +111,14 @@ public class Translators {
         return model;
     }
 
+    public static List<ArtistsByUserDto> translateArtistsByUserDto(Result<ArtistsByUserDto> artists) {
+        List<ArtistsByUserDto> model = new ArrayList<>();
+        for ( ArtistsByUserDto artist : artists ) {
+            model.add(artist);
+        }
+        return model;
+    }
+
     public static ArtistInfo translate(ArtistBo bo) {
         ArtistInfo model = new ArtistInfo();
 
@@ -146,6 +166,14 @@ public class Translators {
             }
         }
 
+        return model;
+    }
+
+    public static List<SongsByUserDto> translateSongsByUserDto(Result<SongsByUserDto> songs) {
+        List<SongsByUserDto> model = new ArrayList<>();
+        for ( SongsByUserDto song : songs ) {
+            model.add(song);
+        }
         return model;
     }
 

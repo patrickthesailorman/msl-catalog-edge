@@ -11,6 +11,7 @@ import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.bo.SongBo;
 import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
@@ -18,6 +19,7 @@ import com.kenzan.msl.ratings.client.dto.UserRatingsDto;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import rx.Observable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class SongsService
@@ -90,7 +92,8 @@ public class SongsService
 
         if ( userUuid.isPresent() ) {
             LibraryHelper libraryHelper = new LibraryHelper();
-            Result<SongsByUserDto> userSongs = libraryHelper.getUserSongs(userUuid.get());
+            List<SongsByUserDto> userSongs = Translators.translateSongsByUserDto(libraryHelper.getUserSongs(userUuid
+                .get()));
             for ( SongBo songBo : songListBo.getBoList() ) {
                 libraryHelper.processLibrarySongInfo(userSongs, songBo);
             }

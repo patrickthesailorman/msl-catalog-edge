@@ -41,7 +41,7 @@ public class LibraryHelper {
      * @param userAlbums Result<SongsByUserDto> userAlbums
      * @param album com.kenzan.msl.common.bo.AlbumBo
      */
-    public void processLibraryAlbumInfo(Iterable<AlbumsByUserDto> userAlbums, final AlbumBo album) {
+    public void processLibraryAlbumInfo(final Iterable<AlbumsByUserDto> userAlbums, final AlbumBo album) {
         for ( AlbumsByUserDto albumsByUserDto : userAlbums ) {
             if ( albumsByUserDto.getAlbumId().equals(album.getAlbumId()) ) {
                 album.setInMyLibrary(true);
