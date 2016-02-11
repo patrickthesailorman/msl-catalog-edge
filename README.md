@@ -13,12 +13,14 @@ Run the build maven script to generate swagger generated code, package local jar
 mvn -f build-pom.xml install
 ```
 
+## Useful commands 
+
 To generate sources from swagger spec
 ```
 mvn -P build clean generate-sources
 ```
 
-To run the server, please execute the following:
+To run the server on port `9003`, execute the following:
 ```
 mvn -P dev clean jetty:run
 ```
@@ -43,13 +45,19 @@ mvn -P no-tests package && mvn rpm:rpm
 ```
 mvn site
 ```
-report gets generated under /target/site/index.html
+report gets generated under `/target/site/index.html`
  
 ###Cobertura
 ```
 mvn cobertura:cobertura
 ```
-report gets generated under /target/site/cobertura/index.html
+report gets generated under `/target/site/cobertura/index.html`
+
+###EclEmma 
+```
+mvn package
+```
+report gets generated under `/target/site/jacoco`
 
 ## Some dependencies required installation before running
 - msl-models
