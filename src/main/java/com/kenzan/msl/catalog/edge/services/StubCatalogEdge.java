@@ -19,7 +19,7 @@ import rx.Observable;
 /**
  * Implementation of the CatalogEdge interface that mocks the data it returns.
  *
- * @author billschwanitz
+ * @author kenzan
  */
 public class StubCatalogEdge
     implements CatalogEdge {
