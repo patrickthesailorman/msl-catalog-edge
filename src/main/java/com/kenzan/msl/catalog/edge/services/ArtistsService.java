@@ -25,6 +25,14 @@ import java.util.UUID;
 public class ArtistsService
     implements PaginatorHelper {
 
+    /**
+     * Get an artist from the given catalog using the service
+     *
+     * @param cassandraCatalogService CassandraCatalogService
+     * @param userUuid Optional<UUID>
+     * @param artistUuid java.util.UUID
+     * @return Optional<ArtistBo>
+     */
     public Optional<ArtistBo> getArtist(final CassandraCatalogService cassandraCatalogService,
                                         final Optional<UUID> userUuid, final UUID artistUuid) {
 
@@ -94,6 +102,16 @@ public class ArtistsService
         return Optional.of(artistBo);
     }
 
+    /**
+     * Get a list of artists filtered by facet and using pagination
+     *
+     * @param cassandraCatalogService CassandraCatalogService
+     * @param userUuid Optional<UUID>
+     * @param items Integer
+     * @param facets String
+     * @param pagingStateUuid Optional<UUID>
+     * @return ArtistListBo
+     */
     public ArtistListBo getArtistsList(final CassandraCatalogService cassandraCatalogService,
                                        final Optional<UUID> userUuid, final Integer items, final String facets,
                                        final Optional<UUID> pagingStateUuid) {

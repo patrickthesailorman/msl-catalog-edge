@@ -18,6 +18,12 @@ public class SongClient {
         client = new ResteasyClientBuilder().build();
     }
 
+    /**
+     * Fetch a Song from its ID
+     *
+     * @param id String
+     * @return CatalogEdgeApiResponseMessage
+     */
     public CatalogEdgeApiResponseMessage get(String id) {
 
         ResteasyWebTarget target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/");
@@ -30,6 +36,12 @@ public class SongClient {
         return response.readEntity(CatalogEdgeApiResponseMessage.class);
     }
 
+    /**
+     * Browse through the songs using query items
+     *
+     * @param items String
+     * @return CatalogEdgeApiResponseMessage
+     */
     public CatalogEdgeApiResponseMessage browse(String items) {
         WebTarget target;
         target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/browse/song?items=" + items);
