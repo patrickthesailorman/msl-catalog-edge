@@ -29,7 +29,7 @@ import io.swagger.model.SongInfo;
 import io.swagger.model.SongList;
 
 /**
- * @author billschwanitz
+ * @author kenzan
  */
 public class Translators {
 

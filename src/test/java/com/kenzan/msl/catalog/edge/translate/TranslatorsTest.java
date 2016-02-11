@@ -38,7 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * @author billschwanitz
+ * @author kenzan
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TranslatorsTest {

@@ -14,7 +14,7 @@ import com.kenzan.msl.common.dto.AbstractDto;
 /**
  *
  *
- * @author billschwanitz
+ * @author kenzan
  */
 public class CatalogEdgeConstants {
 
