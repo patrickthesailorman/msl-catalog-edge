@@ -16,7 +16,7 @@ public class FacetClient {
 
     /**
      * Get stored facets
-     *
+     * 
      * @param facets String
      * @return CatalogEdgeApiResponseMessage
      */
@@ -33,7 +33,7 @@ public class FacetClient {
 
     /**
      * Browse through the albums using query items and facet to filter
-     *
+     * 
      * @param items String
      * @param facets String
      * @return CatalogEdgeApiResponseMessage
@@ -52,7 +52,7 @@ public class FacetClient {
 
     /**
      * Browse through the artists using query items and facet to filter
-     *
+     * 
      * @param items String
      * @param facets String
      * @return CatalogEdgeApiResponseMessage
@@ -71,7 +71,7 @@ public class FacetClient {
 
     /**
      * Browse through the songs using query items and facet to filter
-     *
+     * 
      * @param items String
      * @param facets String
      * @return CatalogEdgeApiResponseMessage

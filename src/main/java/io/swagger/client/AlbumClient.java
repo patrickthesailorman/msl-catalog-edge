@@ -19,7 +19,7 @@ public class AlbumClient {
 
     /**
      * Fetch an Album from its ID
-     *
+     * 
      * @param id String
      * @return CatalogEdgeApiResponseMessage
      */
@@ -34,7 +34,7 @@ public class AlbumClient {
 
     /**
      * Browse through the albums using query items
-     *
+     * 
      * @param items String
      * @return CatalogEdgeApiResponseMessage
      */
