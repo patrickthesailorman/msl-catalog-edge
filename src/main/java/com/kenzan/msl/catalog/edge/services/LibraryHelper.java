@@ -41,7 +41,7 @@ public class LibraryHelper {
         for ( AlbumsByUserDto albumsByUserDto : userAlbums ) {
             if ( albumsByUserDto.getAlbumId().equals(album.getAlbumId()) ) {
                 album.setInMyLibrary(true);
-                album.setFavoritesTimestamp(albumsByUserDto.getFavoritesTimestamp().toString());
+                album.setFavoritesTimestamp(Long.toString(albumsByUserDto.getFavoritesTimestamp().getTime()));
             }
         }
     }
@@ -70,7 +70,7 @@ public class LibraryHelper {
         for ( ArtistsByUserDto artistsByUserDto : userArtists ) {
             if ( artistsByUserDto.getArtistId().equals(artist.getArtistId()) ) {
                 artist.setInMyLibrary(true);
-                artist.setFavoritesTimestamp(artistsByUserDto.getFavoritesTimestamp().toString());
+                artist.setFavoritesTimestamp(Long.toString(artistsByUserDto.getFavoritesTimestamp().getTime()));
             }
         }
     }
@@ -99,7 +99,7 @@ public class LibraryHelper {
         for ( SongsByUserDto songsByUserDto : userSongs ) {
             if ( songsByUserDto.getSongId().equals(song.getSongId()) ) {
                 song.setInMyLibrary(true);
-                song.setFavoritesTimestamp(songsByUserDto.getFavoritesTimestamp().toString());
+                song.setFavoritesTimestamp(Long.toString(songsByUserDto.getFavoritesTimestamp().getTime()));
             }
         }
     }

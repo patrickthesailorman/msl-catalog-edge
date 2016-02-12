@@ -20,7 +20,7 @@ public class ArtistClient {
 
     /**
      * Fetch an Artist from its ID
-     *
+     * 
      * @param id String
      * @return CatalogEdgeApiResponseMessage
      */
@@ -38,7 +38,7 @@ public class ArtistClient {
 
     /**
      * Browse through the artists using query items
-     *
+     * 
      * @param items String
      * @return CatalogEdgeApiResponseMessage
      */

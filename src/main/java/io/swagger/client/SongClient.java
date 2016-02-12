@@ -20,7 +20,7 @@ public class SongClient {
 
     /**
      * Fetch a Song from its ID
-     *
+     * 
      * @param id String
      * @return CatalogEdgeApiResponseMessage
      */
@@ -38,7 +38,7 @@ public class SongClient {
 
     /**
      * Browse through the songs using query items
-     *
+     * 
      * @param items String
      * @return CatalogEdgeApiResponseMessage
      */
