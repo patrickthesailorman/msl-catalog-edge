@@ -20,7 +20,7 @@ public class ClientConstants {
 
     private ClientConstants() {
         String configUrl = "file://" + System.getProperty("user.dir");
-        configUrl += "/../msl-catalog-edge-config/archaius-config.properties";
+        configUrl += "/../msl-catalog-edge-config/edge-config.properties";
         String additionalUrlsProperty = "archaius.configurationSource.additionalUrls";
         System.setProperty(additionalUrlsProperty, configUrl);
 
