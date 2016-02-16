@@ -100,7 +100,7 @@ public class LibraryHelperTest {
         LibraryHelper lh = new LibraryHelper();
         lh.processLibraryAlbumInfo(tc.albumsByUserDtoList, tc.ALBUM_BO);
         assertTrue(tc.ALBUM_BO.isInMyLibrary());
-        assertEquals(tc.ALBUM_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
+        assertEquals(tc.ALBUM_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class LibraryHelperTest {
         LibraryHelper lh = new LibraryHelper();
         lh.processLibraryArtistInfo(tc.artistsByUserDtoList, tc.ARTIST_BO);
         assertTrue(tc.ARTIST_BO.isInMyLibrary());
-        assertEquals(tc.ARTIST_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
+        assertEquals(tc.ARTIST_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class LibraryHelperTest {
         LibraryHelper lh = new LibraryHelper();
         lh.processLibrarySongInfo(tc.songsByUserDtoList, tc.SONG_BO);
         assertTrue(tc.SONG_BO.isInMyLibrary());
-        assertEquals(tc.SONG_BO.getFavoritesTimestamp(), tc.TIMESTAMP.toString());
+        assertEquals(tc.SONG_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
     }
 
 }

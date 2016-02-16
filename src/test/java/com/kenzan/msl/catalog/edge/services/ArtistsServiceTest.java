@@ -89,7 +89,7 @@ public class ArtistsServiceTest {
         averageRatingsDto.setNumRating(new Long(2));
         averageRatingsDto.setSumRating(new Long(4));
         expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-            .andReturn(Observable.just(averageRatingsDto));
+            .andReturn(Observable.just(Optional.of(averageRatingsDto)));
 
         EasyMock.replay(cassandraRatingsService);
         EasyMock.replay(cassandraCatalogService);
