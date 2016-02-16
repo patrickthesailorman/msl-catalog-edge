@@ -1,6 +1,7 @@
-package io.swagger.api.impl;
+package com.kenzan.msl.catalog.edge;
 
 import io.swagger.api.CatalogEdgeApi;
+import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
