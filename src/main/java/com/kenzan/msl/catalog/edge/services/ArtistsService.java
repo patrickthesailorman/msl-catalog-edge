@@ -85,17 +85,19 @@ public class ArtistsService
         CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
 
         // Process ratings
-        AverageRatingsDto averageRatingsDto = cassandraRatingsService.getAverageRating(artistUuid, "Artist")
+        Optional<AverageRatingsDto> averageRatingsDto = cassandraRatingsService.getAverageRating(artistUuid, "Artist")
             .toBlocking().first();
-        if ( null != averageRatingsDto ) {
-            artistBo.setAverageRating((int) (averageRatingsDto.getSumRating() / averageRatingsDto.getNumRating()));
+
+        if ( averageRatingsDto.isPresent() ) {
+            artistBo.setAverageRating((int) (averageRatingsDto.get().getSumRating() / averageRatingsDto.get()
+                .getNumRating()));
         }
 
         if ( userUuid.isPresent() ) {
-            UserRatingsDto userRatingsDto = cassandraRatingsService.getUserRating(userUuid.get(), "Artist", artistUuid)
-                .toBlocking().first();
-            if ( null != userRatingsDto ) {
-                artistBo.setPersonalRating(userRatingsDto.getRating());
+            Optional<UserRatingsDto> userRatingsDto = cassandraRatingsService
+                .getUserRating(userUuid.get(), "Artist", artistUuid).toBlocking().first();
+            if ( userRatingsDto.isPresent() ) {
+                artistBo.setPersonalRating(userRatingsDto.get().getRating());
             }
         }
 
@@ -133,20 +135,20 @@ public class ArtistsService
 
         // Process ratings
         for ( ArtistBo artistBo : artistListBo.getBoList() ) {
-            AverageRatingsDto averageRatingsDto = cassandraRatingsService
+            Optional<AverageRatingsDto> averageRatingsDto = cassandraRatingsService
                 .getAverageRating(artistBo.getArtistId(), "Artist").toBlocking().first();
 
-            if ( averageRatingsDto != null ) {
-                long average = averageRatingsDto.getNumRating() / averageRatingsDto.getSumRating();
+            if ( averageRatingsDto.isPresent() ) {
+                long average = averageRatingsDto.get().getNumRating() / averageRatingsDto.get().getSumRating();
                 artistBo.setAverageRating((int) average);
             }
 
             if ( userUuid.isPresent() ) {
-                UserRatingsDto userRatingsDto = cassandraRatingsService
+                Optional<UserRatingsDto> userRatingsDto = cassandraRatingsService
                     .getUserRating(userUuid.get(), "Artist", artistBo.getArtistId()).toBlocking().first();
 
-                if ( userRatingsDto != null ) {
-                    artistBo.setPersonalRating(userRatingsDto.getRating());
+                if ( userRatingsDto.isPresent() ) {
+                    artistBo.setPersonalRating(userRatingsDto.get().getRating());
                 }
             }
         }
