@@ -35,9 +35,9 @@ mvn clean formatter:format
 mvn -P no-test clean install
 ```
 
-### RPM packaging
+### RPM && JAR packaging  
 ```
-mvn -P no-tests package && mvn rpm:rpm
+mvn -P no-tests package
 ```
 
 ##Reports
