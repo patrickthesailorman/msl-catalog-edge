@@ -20,42 +20,40 @@ import netflix.karyon.jersey.blocking.KaryonJerseyModule;
 
 @ArchaiusBootstrap
 @KaryonBootstrap(name = "msl-catalog-edge")
-@Modules(include = {
-        ShutdownModule.class,
-        KaryonWebAdminModule.class, // Uncomment this to enable WebAdmin
-        //KaryonEurekaModule.class, // Uncomment this to enable Eureka client.
-        KaryonServoModule.class
-})
+@Modules(include = { ShutdownModule.class, KaryonWebAdminModule.class, // Uncomment this to enable
+                                                                       // WebAdmin
+    // KaryonEurekaModule.class, // Uncomment this to enable Eureka client.
+    KaryonServoModule.class })
 public class Main {
 
     /**
      * Runs jetty server to expose jersey API
+     * 
      * @param args String array
-     * @throws Exception
+     * @throws Exception if server doesnt start
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)
+        throws Exception {
 
         Server jettyServer = new Server(9003);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.addFilter(CatalogEdgeApiOriginFilter.class,  "/*",
-                EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(CatalogEdgeApiOriginFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
         jettyServer.setHandler(context);
 
         ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/*");
         jerseyServlet.setInitOrder(0);
 
-        jerseyServlet.setInitParameter(
-                "jersey.config.server.provider.classnames",
-                CatalogEdgeApi.class.getCanonicalName()
-        );
+        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames",
+                                       CatalogEdgeApi.class.getCanonicalName());
 
         try {
 
             jettyServer.start();
             jettyServer.join();
 
-        } finally {
+        }
+        finally {
             jettyServer.destroy();
         }
     }

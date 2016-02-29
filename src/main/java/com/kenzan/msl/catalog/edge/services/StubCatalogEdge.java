@@ -34,15 +34,15 @@ public class StubCatalogEdge
 
     /**
      * Get browsing data for albums in the catalog.
-     * <p/>
+     *
      * This is a paginated query - it returns data one page at a time. The first page is retrieved
      * by passing <code>null</code> as the <code>pagingState</code>. Subsequent pages are retrieved
      * by passing the <code>pagingState</code> that accompanied the previously retrieved page.
-     * <p/>
+     *
      * The page size is determined by the <code>items</code> parameter when retrieving the first
      * page. This value is used for all subsequent pages, (the <code>items</code> parameter is
      * ignored when retrieving subsequent pages).
-     * <p/>
+     *
      * Data can be filtered using the <code>facets</code> parameter when retrieving the first page.
      * This value is used for all subsequent pages, (the <code>facets</code> parameter is ignored
      * when retrieving subsequent pages).
@@ -57,7 +57,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable<AlbumList>
+     * @return Observable.AlbumList
      */
     public Observable<AlbumList> browseAlbums(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(albumMockData.browseAlbums(pagingState, items, facets));
@@ -67,7 +67,7 @@ public class StubCatalogEdge
      * Get data on an album in the catalog.
      *
      * @param albumId Specifies the UUID of the album to retrieve.
-     * @return Observable<AlbumInfo>
+     * @return Observable.AlbumInfo
      */
     public Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId) {
         return Observable.just(Optional.of(albumMockData.getAlbum(albumId)));
@@ -79,15 +79,15 @@ public class StubCatalogEdge
 
     /**
      * Get browsing data for artists in the catalog.
-     * <p/>
+     *
      * This is a paginated query - it returns data one page at a time. The first page is retrieved
      * by passing <code>null</code> as the <code>pagingState</code>. Subsequent pages are retrieved
      * by passing the <code>pagingState</code> that accompanied the previously retrieved page.
-     * <p/>
+     *
      * The page size is determined by the <code>items</code> parameter when retrieving the first
      * page. This value is used for all subsequent pages, (the <code>items</code> parameter is
      * ignored when retrieving subsequent pages).
-     * <p/>
+     *
      * Data can be filtered using the <code>facets</code> parameter when retrieving the first page.
      * This value is used for all subsequent pages, (the <code>facets</code> parameter is ignored
      * when retrieving subsequent pages).
@@ -102,7 +102,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable<ArtistList>
+     * @return Observable.ArtistList
      */
     public Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(artistMockData.browseArtists(pagingState, items, facets));
@@ -113,7 +113,7 @@ public class StubCatalogEdge
      *
      * @param artistId Specifies the UUID of the artist to retrieve.
      * @param userId Specifies the UUID of the authenticated user
-     * @return Observable<ArtistInfo>
+     * @return Observable.ArtistInfo
      */
     public Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId) {
         return Observable.just(Optional.of(artistMockData.getArtist(artistId)));
@@ -125,15 +125,15 @@ public class StubCatalogEdge
 
     /**
      * Get browsing data for songs in the catalog.
-     * <p/>
+     *
      * This is a paginated query - it returns data one page at a time. The first page is retrieved
      * by passing <code>null</code> as the <code>pagingState</code>. Subsequent pages are retrieved
      * by passing the <code>pagingState</code> that accompanied the previously retrieved page.
-     * <p/>
+     *
      * The page size is determined by the <code>items</code> parameter when retrieving the first
      * page. This value is used for all subsequent pages, (the <code>items</code> parameter is
      * ignored when retrieving subsequent pages).
-     * <p/>
+     *
      * Data can be filtered using the <code>facets</code> parameter when retrieving the first page.
      * This value is used for all subsequent pages, (the <code>facets</code> parameter is ignored
      * when retrieving subsequent pages).
@@ -148,7 +148,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable<SongList>
+     * @return Observable.SongList
      */
     public Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(songMockData.browseSongs(pagingState, items, facets));
@@ -159,7 +159,7 @@ public class StubCatalogEdge
      *
      * @param songId Specifies the UUID of the song to retrieve.
      * @param userId Specifies the UUID of the authenticated user
-     * @return Observable<SongInfo>
+     * @return Observable.SongInfo
      */
     public Observable<Optional<SongInfo>> getSong(String songId, String userId) {
         return Observable.just(Optional.of(songMockData.getSong(songId)));

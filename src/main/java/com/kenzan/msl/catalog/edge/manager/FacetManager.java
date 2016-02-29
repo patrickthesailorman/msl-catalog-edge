@@ -93,7 +93,7 @@ public class FacetManager {
      * Retrieves a specific facet from the genre or rating facets array
      *
      * @param id String
-     * @return Optional<FacetDto>
+     * @return Optional.FacetDto
      */
     public Optional<FacetDto> getFacet(String id) {
 

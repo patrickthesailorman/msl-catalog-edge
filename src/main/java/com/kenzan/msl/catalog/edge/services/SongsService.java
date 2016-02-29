@@ -29,9 +29,9 @@ public class SongsService
      * Get a song from the given catalog using the service
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional UUID
      * @param songUuid java.util.UUID
-     * @return Optional<SongBo>
+     * @return Optional SongBo
      */
     public Optional<SongBo> getSong(final CassandraCatalogService cassandraCatalogService,
                                     final Optional<UUID> userUuid, final UUID songUuid) {
@@ -95,10 +95,10 @@ public class SongsService
      * Get a list of songs filtered by facet and using pagination
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional UUID
      * @param items Integer
      * @param facets String
-     * @param pagingStateUuid Optional<UUID>
+     * @param pagingStateUuid Optional UUID
      * @return SongListBo
      */
     public SongListBo getSongsList(final CassandraCatalogService cassandraCatalogService,

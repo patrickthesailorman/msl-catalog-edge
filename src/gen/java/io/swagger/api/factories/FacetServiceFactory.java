@@ -12,8 +12,8 @@ public class FacetServiceFactory {
 
     /**
      * Checks if facet is type rating facet
-     * @param facet_id
-     * @param ratingFacets
+     * @param facet_id String
+     * @param ratingFacets List.FacetInfoWithChildren
      * @return boolean
      */
     public static boolean isRatingFacet(String facet_id, List<FacetInfoWithChildren> ratingFacets) {
@@ -68,9 +68,9 @@ public class FacetServiceFactory {
 
     /**
      * Checks if rating fits in a specified facet category
-     * @param rating
-     * @param facet_id
-     * @return
+     * @param rating Integer
+     * @param facet_id String
+     * @return boolean
      */
     private static boolean fitsInRating(Integer rating, String facet_id) {
         switch (Integer.parseInt(facet_id)) {
