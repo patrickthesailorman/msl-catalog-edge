@@ -29,9 +29,9 @@ public class AlbumsService
      * Get an album from the given catalog using the service
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional.UUID
      * @param albumUuid java.util.UUID
-     * @return Optional<AlbumBo>
+     * @return Optional.AlbumBo
      */
     public Optional<AlbumBo> getAlbum(final CassandraCatalogService cassandraCatalogService,
                                       final Optional<UUID> userUuid, final UUID albumUuid) {
@@ -99,10 +99,10 @@ public class AlbumsService
      * Get a list of albums filtered by facet and using pagination
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional.UUID
      * @param items Integer
      * @param facets String
-     * @param pagingStateUuid Optional<UUID>
+     * @param pagingStateUuid Optional.UUID
      * @return AlbumListBo
      */
     public AlbumListBo getAlbumsList(final CassandraCatalogService cassandraCatalogService,

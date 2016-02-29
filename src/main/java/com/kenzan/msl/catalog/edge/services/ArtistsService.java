@@ -29,9 +29,9 @@ public class ArtistsService
      * Get an artist from the given catalog using the service
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional.UUID
      * @param artistUuid java.util.UUID
-     * @return Optional<ArtistBo>
+     * @return Optional.ArtistBo
      */
     public Optional<ArtistBo> getArtist(final CassandraCatalogService cassandraCatalogService,
                                         final Optional<UUID> userUuid, final UUID artistUuid) {
@@ -108,10 +108,10 @@ public class ArtistsService
      * Get a list of artists filtered by facet and using pagination
      *
      * @param cassandraCatalogService CassandraCatalogService
-     * @param userUuid Optional<UUID>
+     * @param userUuid Optional.UUID
      * @param items Integer
      * @param facets String
-     * @param pagingStateUuid Optional<UUID>
+     * @param pagingStateUuid Optional.UUID
      * @return ArtistListBo
      */
     public ArtistListBo getArtistsList(final CassandraCatalogService cassandraCatalogService,
