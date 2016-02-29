@@ -247,8 +247,8 @@ public class Translators {
     /**
      * Translates a Facet DTO list to Facet Info list
      *
-     * @param dtoList List.FacetDTO
-     * @return List.FacetInfo
+     * @param dtoList List&lt;FacetDto&gt;
+     * @return List&lt;FacetInfo&gt;
      */
     public static List<FacetInfo> translateFacetList(List<FacetDto> dtoList) {
         if ( dtoList != null ) {

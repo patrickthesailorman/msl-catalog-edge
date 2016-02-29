@@ -87,7 +87,7 @@ public class CatalogEdgeService
      *
      * @param albumId Specifies the UUID of the album to retrieve.
      * @param userId Specifies the UUID of the authenticated user.
-     * @return Observable.Optional.AlbumInfo
+     * @return Observable&lt;Optional&lt;AlbumInfo&gt;&gt;
      */
     public Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId) {
         UUID albumUuid = UUID.fromString(albumId);
@@ -130,7 +130,7 @@ public class CatalogEdgeService
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable.ArtistList
+     * @return Observable&lt;ArtistList&gt;
      */
     public Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets, String userId) {
         Optional<UUID> pagingStateUuid = StringUtils.isEmpty(pagingState) ? Optional.absent() : Optional.of(UUID
@@ -147,7 +147,7 @@ public class CatalogEdgeService
      *
      * @param artistId Specifies the UUID of the artist to retrieve.
      * @param userId Specifies the UUID of the authenticated user
-     * @return Observable.Optional.ArtistInfo
+     * @return Observable&lt;Optional&lt;ArtistInfo&gt;&gt;
      */
     public Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId) {
         UUID artistUuid = UUID.fromString(artistId);
@@ -191,7 +191,7 @@ public class CatalogEdgeService
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable.SongList
+     * @return Observable&lt;SongList&gt;
      */
     public Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId) {
         Optional<UUID> pagingStateUuid = StringUtils.isEmpty(pagingState) ? Optional.absent() : Optional.of(UUID
@@ -208,7 +208,7 @@ public class CatalogEdgeService
      *
      * @param songId Specifies the UUID of the song to retrieve.
      * @param userId Specifies the UUID of the authenticated user.
-     * @return Observable.Optional.SongInfo
+     * @return Observable&lt;Optional&lt;SongInfo&gt;&gt;
      */
     public Observable<Optional<SongInfo>> getSong(String songId, String userId) {
         UUID songUuid = UUID.fromString(songId);

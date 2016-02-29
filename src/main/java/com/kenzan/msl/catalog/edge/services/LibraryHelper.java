@@ -21,7 +21,7 @@ public class LibraryHelper {
      * Retrieve user library albums
      *
      * @param userId java.util.UUID
-     * @return Result AlbumsByUserDto
+     * @return Result&lt;AlbumsByUserDto&gt;
      */
     public Result<AlbumsByUserDto> getUserAlbums(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
@@ -34,7 +34,7 @@ public class LibraryHelper {
      * Checks if an album is on a user library and if it's it attaches the timestamp data and
      * library flag
      *
-     * @param userAlbums Result SongsByUserDto userAlbums
+     * @param userAlbums Result&lt;SongsByUserDto&gt; userAlbums
      * @param album com.kenzan.msl.common.bo.AlbumBo
      */
     public void processLibraryAlbumInfo(final Iterable<AlbumsByUserDto> userAlbums, final AlbumBo album) {
@@ -50,7 +50,7 @@ public class LibraryHelper {
      * Retrieve user library artists
      *
      * @param userId java.util.UUID
-     * @return Result ArtistsByUserDto
+     * @return Result&lt;ArtistsByUserDto&gt;
      */
     public Result<ArtistsByUserDto> getUserArtists(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
@@ -63,7 +63,7 @@ public class LibraryHelper {
      * Checks if an artist is on a user library and if it's it attaches the timestamp data and
      * library flag
      *
-     * @param userArtists Result SongsByUserDto userArtists
+     * @param userArtists Result&lt;SongsByUserDto&gt; userArtists
      * @param artist com.kenzan.msl.common.bo.ArtistBo
      */
     public void processLibraryArtistInfo(Iterable<ArtistsByUserDto> userArtists, final ArtistBo artist) {
@@ -79,7 +79,7 @@ public class LibraryHelper {
      * Retrieve user library songs
      *
      * @param userId java.util.UUID
-     * @return Result SongsByUserDto
+     * @return Result&lt;SongsByUserDto&gt;
      */
     public Result<SongsByUserDto> getUserSongs(final UUID userId) {
         CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
@@ -92,7 +92,7 @@ public class LibraryHelper {
      * Checks if a song is on a user library and if it's it attaches the timestamp data and library
      * flag
      *
-     * @param userSongs Result SongsByUserDto userSongs
+     * @param userSongs Result&lt;SongsByUserDto&gt; userSongs
      * @param song com.kenzan.msl.common.bo.SongBo
      */
     public void processLibrarySongInfo(Iterable<SongsByUserDto> userSongs, final SongBo song) {
