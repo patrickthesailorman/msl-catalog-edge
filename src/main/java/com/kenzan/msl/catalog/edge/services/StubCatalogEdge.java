@@ -57,7 +57,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable.AlbumList
+     * @return Observable&lt;AlbumList&gt;
      */
     public Observable<AlbumList> browseAlbums(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(albumMockData.browseAlbums(pagingState, items, facets));
@@ -67,7 +67,7 @@ public class StubCatalogEdge
      * Get data on an album in the catalog.
      *
      * @param albumId Specifies the UUID of the album to retrieve.
-     * @return Observable.AlbumInfo
+     * @return Observable&lt;AlbumInfo&gt;
      */
     public Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId) {
         return Observable.just(Optional.of(albumMockData.getAlbum(albumId)));
@@ -102,7 +102,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable.ArtistList
+     * @return Observable&lt;ArtistList&gt;
      */
     public Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(artistMockData.browseArtists(pagingState, items, facets));
@@ -113,7 +113,7 @@ public class StubCatalogEdge
      *
      * @param artistId Specifies the UUID of the artist to retrieve.
      * @param userId Specifies the UUID of the authenticated user
-     * @return Observable.ArtistInfo
+     * @return Observable&lt;ArtistInfo&gt;
      */
     public Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId) {
         return Observable.just(Optional.of(artistMockData.getArtist(artistId)));
@@ -148,7 +148,7 @@ public class StubCatalogEdge
      *            Pass null or an empty string to not filter.
      * @param userId Specifies a user UUID identifying the currently logged-in user. Will be null
      *            for unauthenticated requests.
-     * @return Observable.SongList
+     * @return Observable&lt;SongList&gt;
      */
     public Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId) {
         return Observable.just(songMockData.browseSongs(pagingState, items, facets));
@@ -159,7 +159,7 @@ public class StubCatalogEdge
      *
      * @param songId Specifies the UUID of the song to retrieve.
      * @param userId Specifies the UUID of the authenticated user
-     * @return Observable.SongInfo
+     * @return Observable&lt;SongInfo&gt;
      */
     public Observable<Optional<SongInfo>> getSong(String songId, String userId) {
         return Observable.just(Optional.of(songMockData.getSong(songId)));

@@ -93,7 +93,7 @@ public class FacetManager {
      * Retrieves a specific facet from the genre or rating facets array
      *
      * @param id String
-     * @return Optional.FacetDto
+     * @return Optional&lt;FacetDto&gt;
      */
     public Optional<FacetDto> getFacet(String id) {
 
@@ -118,7 +118,7 @@ public class FacetManager {
     /**
      * Constructs an array of facetDto's corresponding to the rating facets
      *
-     * @return ArrayList<FacetDto>
+     * @return ArrayList&lt;FacetDto&gt;
      */
     private ArrayList<FacetDto> getRatingFacets() {
         String[] ratings = new String[4];
@@ -135,7 +135,7 @@ public class FacetManager {
     /**
      * Constructs an array of facetDto's corresponding to the genre facets
      *
-     * @return ArrayList<FacetDto>
+     * @return ArrayList&lt;FacetDto&gt;
      */
     private ArrayList<FacetDto> getGenreFacets() {
         ArrayList<FacetDto> result = new ArrayList<>();
