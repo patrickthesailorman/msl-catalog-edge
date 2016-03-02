@@ -143,7 +143,7 @@ public class ArtistsService implements PaginatorHelper {
 
       if (averageRatingsDto.isPresent()) {
         long average =
-            averageRatingsDto.get().getNumRating() / averageRatingsDto.get().getSumRating();
+            averageRatingsDto.get().getSumRating() / averageRatingsDto.get().getNumRating();
         artistBo.setAverageRating((int) average);
       }
 
