@@ -36,135 +36,138 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ CassandraRatingsService.class, CassandraAccountService.class, CassandraCatalogService.class })
+@PrepareForTest({CassandraRatingsService.class, CassandraAccountService.class,
+    CassandraCatalogService.class})
 public class ArtistsServiceTest {
 
-    private TestConstants tc = TestConstants.getInstance();
+  private TestConstants tc = TestConstants.getInstance();
 
-    private CassandraCatalogService cassandraCatalogService;
+  private CassandraCatalogService cassandraCatalogService;
 
-    private CassandraRatingsService cassandraRatingsService;
-    private CassandraAccountService cassandraAccountService;
-    private Observable<ResultSet> observableResultSet;
+  private CassandraRatingsService cassandraRatingsService;
+  private CassandraAccountService cassandraAccountService;
+  private Observable<ResultSet> observableResultSet;
 
-    @Mock
-    private LibraryHelper libraryhelper;
-    @Mock
-    private QueryAccessor queryAccessor;
-    @InjectMocks
-    private ArtistsService artistsService = new ArtistsService();
+  @Mock
+  private LibraryHelper libraryhelper;
+  @Mock
+  private QueryAccessor queryAccessor;
+  @InjectMocks
+  private ArtistsService artistsService = new ArtistsService();
 
-    @Before
-    public void init()
-        throws Exception {
-        ResultSet resultSet = createMock(ResultSet.class);
-        observableResultSet = Observable.just(resultSet);
-        queryAccessor = mock(QueryAccessor.class);
+  @Before
+  public void init() throws Exception {
+    ResultSet resultSet = createMock(ResultSet.class);
+    observableResultSet = Observable.just(resultSet);
+    queryAccessor = mock(QueryAccessor.class);
 
-        PowerMock.mockStatic(CassandraCatalogService.class);
-        cassandraCatalogService = createMock(CassandraCatalogService.class);
+    PowerMock.mockStatic(CassandraCatalogService.class);
+    cassandraCatalogService = createMock(CassandraCatalogService.class);
 
-        PowerMock.mockStatic(CassandraAccountService.class);
-        cassandraAccountService = createMock(CassandraAccountService.class);
-        PowerMock.expectNew(CassandraAccountService.class).andReturn(cassandraAccountService);
+    PowerMock.mockStatic(CassandraAccountService.class);
+    cassandraAccountService = createMock(CassandraAccountService.class);
+    PowerMock.expectNew(CassandraAccountService.class).andReturn(cassandraAccountService);
 
-        expect(CassandraAccountService.getInstance()).andReturn(cassandraAccountService).anyTimes();
-    }
+    expect(CassandraAccountService.getInstance()).andReturn(cassandraAccountService).anyTimes();
+  }
 
-    @Test
-    public void testGetArtist()
-        throws Exception {
-        expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ALBUM_ID, Optional.absent()))
-            .andReturn(observableResultSet);
+  @Test
+  public void testGetArtist() throws Exception {
+    expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ALBUM_ID, Optional.absent()))
+        .andReturn(observableResultSet);
 
-        Result<SongsAlbumsByArtistDto> songsAlbumsByArtistDtoResult = PowerMockito.mock(Result.class);
-        expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet))
-            .andReturn(Observable.just(songsAlbumsByArtistDtoResult));
+    Result<SongsAlbumsByArtistDto> songsAlbumsByArtistDtoResult = PowerMockito.mock(Result.class);
+    expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet)).andReturn(
+        Observable.just(songsAlbumsByArtistDtoResult));
 
-        PowerMockito.when(songsAlbumsByArtistDtoResult.one()).thenReturn(tc.songsAlbumsByArtistDto);
+    PowerMockito.when(songsAlbumsByArtistDtoResult.one()).thenReturn(tc.songsAlbumsByArtistDto);
 
-        mockRatingsHelper();
+    mockRatingsHelper();
 
-        AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
-        averageRatingsDto.setNumRating(new Long(2));
-        averageRatingsDto.setSumRating(new Long(4));
-        expect(cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class), EasyMock.anyString()))
-            .andReturn(Observable.just(Optional.of(averageRatingsDto)));
+    AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
+    averageRatingsDto.setNumRating(new Long(2));
+    averageRatingsDto.setSumRating(new Long(4));
+    expect(
+        cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class),
+            EasyMock.anyString())).andReturn(Observable.just(Optional.of(averageRatingsDto)));
 
-        EasyMock.replay(cassandraRatingsService);
-        EasyMock.replay(cassandraCatalogService);
-        EasyMock.replay(cassandraAccountService);
-        PowerMock.replayAll();
+    EasyMock.replay(cassandraRatingsService);
+    EasyMock.replay(cassandraCatalogService);
+    EasyMock.replay(cassandraAccountService);
+    PowerMock.replayAll();
 
-        /* *************************************************** */
+    /* *************************************************** */
 
-        Optional<ArtistBo> results = artistsService.getArtist(cassandraCatalogService, Optional.absent(), tc.ALBUM_ID);
-        assertNotNull(results);
-        assertTrue(results.isPresent());
-        assertEquals(results.get().getArtistId(), tc.ARTIST_ID);
-        assertEquals(results.get().getArtistName(), tc.ARTIST_NAME);
-        assertEquals(results.get().getAverageRating(), new Integer(2));
-    }
+    Optional<ArtistBo> results =
+        artistsService.getArtist(cassandraCatalogService, Optional.absent(), tc.ALBUM_ID);
+    assertNotNull(results);
+    assertTrue(results.isPresent());
+    assertEquals(results.get().getArtistId(), tc.ARTIST_ID);
+    assertEquals(results.get().getArtistName(), tc.ARTIST_NAME);
+    assertEquals(results.get().getAverageRating(), new Integer(2));
+  }
 
-    @Test
-    public void testGetNullArtist() {
-        expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ARTIST_ID, Optional.absent()))
-            .andReturn(observableResultSet);
-        expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet)).andReturn(Observable.just(null));
+  @Test
+  public void testGetNullArtist() {
+    expect(cassandraCatalogService.getSongsAlbumsByArtist(tc.ARTIST_ID, Optional.absent()))
+        .andReturn(observableResultSet);
+    expect(cassandraCatalogService.mapSongsAlbumsByArtist(observableResultSet)).andReturn(
+        Observable.just(null));
 
-        EasyMock.replay(cassandraCatalogService);
-        EasyMock.replay(cassandraAccountService);
-        PowerMock.replayAll();
+    EasyMock.replay(cassandraCatalogService);
+    EasyMock.replay(cassandraAccountService);
+    PowerMock.replayAll();
 
-        Optional<ArtistBo> result = artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID),
-                                                             tc.ARTIST_ID);
-        assertEquals(result, Optional.absent());
-    }
+    Optional<ArtistBo> result =
+        artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ARTIST_ID);
+    assertEquals(result, Optional.absent());
+  }
 
-    @Test
-    @Ignore
-    public void testGetArtistList() {
-        artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS,
-                                      Optional.of(tc.PAGING_STATE_ID));
-    }
+  @Test
+  @Ignore
+  public void testGetArtistList() {
+    artistsService.getArtistsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS,
+        Optional.of(tc.PAGING_STATE_ID));
+  }
 
-    // ================================================================================================================
-    // PAGINATION HELPER METHODS
-    // ================================================================================================================
+  // ================================================================================================================
+  // PAGINATION HELPER METHODS
+  // ================================================================================================================
 
-    @Test
-    public void testPrepareFacetedQuery() {
-        artistsService.prepareFacetedQuery(queryAccessor, "~");
-        verify(queryAccessor, atLeastOnce()).artistsByFacet("~");
-    }
+  @Test
+  public void testPrepareFacetedQuery() {
+    artistsService.prepareFacetedQuery(queryAccessor, "~");
+    verify(queryAccessor, atLeastOnce()).artistsByFacet("~");
+  }
 
-    @Test
-    public void testPrepareFeaturedQuery() {
-        artistsService.prepareFeaturedQuery(queryAccessor);
-        verify(queryAccessor, atLeastOnce()).featuredArtists();
-    }
+  @Test
+  public void testPrepareFeaturedQuery() {
+    artistsService.prepareFeaturedQuery(queryAccessor);
+    verify(queryAccessor, atLeastOnce()).featuredArtists();
+  }
 
-    @Test
-    public void testGetFacetedQueryString() {
-        String returned = artistsService.getFacetedQueryString("~");
-        String expected = "SELECT * FROM artists_by_facet WHERE facet_name = '~' AND content_type = 'Artist'";
-        assertEquals(expected, returned);
-    }
+  @Test
+  public void testGetFacetedQueryString() {
+    String returned = artistsService.getFacetedQueryString("~");
+    String expected =
+        "SELECT * FROM artists_by_facet WHERE facet_name = '~' AND content_type = 'Artist'";
+    assertEquals(expected, returned);
+  }
 
-    @Test
-    public void testGetFeaturedQueryString() {
-        String returned = artistsService.getFeaturedQueryString();
-        String expected = "SELECT * FROM featured_artists WHERE hotness_bucket = 'Hotness01' AND content_type = 'Artist'";
-        assertEquals(expected, returned);
-    }
+  @Test
+  public void testGetFeaturedQueryString() {
+    String returned = artistsService.getFeaturedQueryString();
+    String expected =
+        "SELECT * FROM featured_artists WHERE hotness_bucket = 'Hotness01' AND content_type = 'Artist'";
+    assertEquals(expected, returned);
+  }
 
-    private void mockRatingsHelper()
-        throws Exception {
-        PowerMock.mockStatic(CassandraRatingsService.class);
-        cassandraRatingsService = createMock(CassandraRatingsService.class);
-        PowerMock.expectNew(CassandraRatingsService.class).andReturn(cassandraRatingsService);
+  private void mockRatingsHelper() throws Exception {
+    PowerMock.mockStatic(CassandraRatingsService.class);
+    cassandraRatingsService = createMock(CassandraRatingsService.class);
+    PowerMock.expectNew(CassandraRatingsService.class).andReturn(cassandraRatingsService);
 
-        expect(CassandraRatingsService.getInstance()).andReturn(cassandraRatingsService).anyTimes();
-    }
+    expect(CassandraRatingsService.getInstance()).andReturn(cassandraRatingsService).anyTimes();
+  }
 
 }

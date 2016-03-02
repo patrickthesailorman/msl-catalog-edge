@@ -14,46 +14,47 @@ import rx.Observable;
 
 public interface CatalogEdge {
 
-    // ==========================================================================================================
-    // ALBUMS
-    // =================================================================================================================
+  // ==========================================================================================================
+  // ALBUMS
+  // =================================================================================================================
 
-    /*
-     * Get browsing data for albums in the catalog.
-     */
-    Observable<AlbumList> browseAlbums(String pagingState, Integer items, String facets, String userId);
+  /*
+   * Get browsing data for albums in the catalog.
+   */
+  Observable<AlbumList> browseAlbums(String pagingState, Integer items, String facets, String userId);
 
-    /*
-     * Get data on an album in the catalog.
-     */
-    Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId);
+  /*
+   * Get data on an album in the catalog.
+   */
+  Observable<Optional<AlbumInfo>> getAlbum(String albumId, String userId);
 
-    // =========================================================================================================
-    // ARTISTS
-    // =================================================================================================================
+  // =========================================================================================================
+  // ARTISTS
+  // =================================================================================================================
 
-    /*
-     * Get browsing data for artists in the catalog.
-     */
-    Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets, String userId);
+  /*
+   * Get browsing data for artists in the catalog.
+   */
+  Observable<ArtistList> browseArtists(String pagingState, Integer items, String facets,
+      String userId);
 
-    /*
-     * Get data on an artist in the catalog.
-     */
-    Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId);
+  /*
+   * Get data on an artist in the catalog.
+   */
+  Observable<Optional<ArtistInfo>> getArtist(String artistId, String userId);
 
-    // ===========================================================================================================
-    // SONGS
-    // =================================================================================================================
+  // ===========================================================================================================
+  // SONGS
+  // =================================================================================================================
 
-    /*
-     * Get browsing data for songs in the catalog.
-     */
-    Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId);
+  /*
+   * Get browsing data for songs in the catalog.
+   */
+  Observable<SongList> browseSongs(String pagingState, Integer items, String facets, String userId);
 
-    /*
-     * Get data on a song in the catalog.
-     */
-    Observable<Optional<SongInfo>> getSong(String songId, String userId);
+  /*
+   * Get data on a song in the catalog.
+   */
+  Observable<Optional<SongInfo>> getSong(String songId, String userId);
 
 }

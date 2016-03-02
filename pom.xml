@@ -189,30 +189,11 @@
                 <artifactId>formatter-maven-plugin</artifactId>
                 <version>${formatter-maven-plugin.version}</version>
                 <configuration>
-                    <configFile>${project.basedir}/src/main/resources/maven-styles.xml</configFile>
+                    <configFile>${project.basedir}/../../common/styleguide/eclipse-java-google-style.xml</configFile>
                     <compilerSource>1.8</compilerSource>
                     <compilerCompliance>1.8</compilerCompliance>
                     <compilerTargetPlatform>1.8</compilerTargetPlatform>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-                <artifactId>maven-java-formatter-plugin</artifactId>
-                <version>${maven-java-formatter-plugin.version}</version>
-                <configuration>
-                    <configFile>${project.basedir}/src/main/resources/maven-styles.xml</configFile>
-                    <compilerSource>1.8</compilerSource>
-                    <compilerCompliance>1.8</compilerCompliance>
-                    <compilerTargetPlatform>1.8</compilerTargetPlatform>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- TESTING -->
@@ -621,12 +602,6 @@
             <version>${formatter-maven-plugin.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-            <artifactId>maven-java-formatter-plugin</artifactId>
-            <version>${maven-java-formatter-plugin.version}</version>
-        </dependency>
-
         <!-- MSL -->
         <dependency>
             <groupId>msl.server</groupId>
@@ -703,7 +678,6 @@
         <easymock.version>3.2</easymock.version>
 
         <formatter-maven-plugin.version>0.5.2</formatter-maven-plugin.version>
-        <maven-java-formatter-plugin.version>0.4</maven-java-formatter-plugin.version>
         <karyon.version>2.7.5</karyon.version>
         <karyon-governator.version>1.9.3</karyon-governator.version>
 
