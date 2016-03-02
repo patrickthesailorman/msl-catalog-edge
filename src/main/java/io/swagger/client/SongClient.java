@@ -12,46 +12,49 @@ import javax.ws.rs.core.Response;
 
 public class SongClient {
 
-    private ResteasyClient client;
+  private ResteasyClient client;
 
-    public SongClient() {
-        client = new ResteasyClientBuilder().build();
+  public SongClient() {
+    client = new ResteasyClientBuilder().build();
+  }
+
+  /**
+   * Fetch a Song from its ID
+   * 
+   * @param id String
+   * @return CatalogEdgeApiResponseMessage
+   */
+  public CatalogEdgeApiResponseMessage get(String id) {
+
+    ResteasyWebTarget target =
+        client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/");
+    Response response = target.path("song/" + id).request().get();
+
+    if (response.getStatus() != 200) {
+      throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     }
 
-    /**
-     * Fetch a Song from its ID
-     * 
-     * @param id String
-     * @return CatalogEdgeApiResponseMessage
-     */
-    public CatalogEdgeApiResponseMessage get(String id) {
+    return response.readEntity(CatalogEdgeApiResponseMessage.class);
+  }
 
-        ResteasyWebTarget target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/");
-        Response response = target.path("song/" + id).request().get();
+  /**
+   * Browse through the songs using query items
+   * 
+   * @param items String
+   * @return CatalogEdgeApiResponseMessage
+   */
+  public CatalogEdgeApiResponseMessage browse(String items) {
+    WebTarget target;
+    target =
+        client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/browse/song?items="
+            + items);
+    Response response = target.request().get();
 
-        if ( response.getStatus() != 200 ) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-
-        return response.readEntity(CatalogEdgeApiResponseMessage.class);
+    if (response.getStatus() != 200) {
+      throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
     }
 
-    /**
-     * Browse through the songs using query items
-     * 
-     * @param items String
-     * @return CatalogEdgeApiResponseMessage
-     */
-    public CatalogEdgeApiResponseMessage browse(String items) {
-        WebTarget target;
-        target = client.target(ClientConstants.getInstance().BASE_URL + "/catalog-edge/browse/song?items=" + items);
-        Response response = target.request().get();
-
-        if ( response.getStatus() != 200 ) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-
-        return response.readEntity(CatalogEdgeApiResponseMessage.class);
-    }
+    return response.readEntity(CatalogEdgeApiResponseMessage.class);
+  }
 
 }

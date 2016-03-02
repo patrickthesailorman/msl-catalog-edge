@@ -18,22 +18,22 @@ import com.kenzan.msl.common.dto.AbstractDto;
  */
 public class CatalogEdgeConstants {
 
-    public static final int MSL_BROWSE_MIN_PAGE_SIZE = 1;
-    public static final int MSL_BROWSE_MAX_PAGE_SIZE = 100;
-    public static final int MSL_BROWSE_DEFAULT_PAGE_SIZE = 25;
+  public static final int MSL_BROWSE_MIN_PAGE_SIZE = 1;
+  public static final int MSL_BROWSE_MAX_PAGE_SIZE = 100;
+  public static final int MSL_BROWSE_DEFAULT_PAGE_SIZE = 25;
 
-    public static enum MSL_CONTENT_TYPE {
-        ALBUM(FeaturedAlbumsDto.class, AlbumsByFacetDto.class), ARTIST(FeaturedArtistsDto.class,
-            ArtistsByFacetDto.class), SONG(FeaturedSongsDto.class, SongsByFacetDto.class);
+  public static enum MSL_CONTENT_TYPE {
+    ALBUM(FeaturedAlbumsDto.class, AlbumsByFacetDto.class), ARTIST(FeaturedArtistsDto.class,
+        ArtistsByFacetDto.class), SONG(FeaturedSongsDto.class, SongsByFacetDto.class);
 
-        public final Class<? extends AbstractDto> featuredContentDtoClass;
-        public final Class<? extends AbstractDto> facetContentDtoClass;
+    public final Class<? extends AbstractDto> featuredContentDtoClass;
+    public final Class<? extends AbstractDto> facetContentDtoClass;
 
-        MSL_CONTENT_TYPE( Class<? extends AbstractDto> featuredContentDtoClass,
-                          Class<? extends AbstractDto> facetContentDtoClass ) {
-            this.featuredContentDtoClass = featuredContentDtoClass;
-            this.facetContentDtoClass = facetContentDtoClass;
-        }
-
+    MSL_CONTENT_TYPE(Class<? extends AbstractDto> featuredContentDtoClass,
+        Class<? extends AbstractDto> facetContentDtoClass) {
+      this.featuredContentDtoClass = featuredContentDtoClass;
+      this.facetContentDtoClass = facetContentDtoClass;
     }
+
+  }
 }
