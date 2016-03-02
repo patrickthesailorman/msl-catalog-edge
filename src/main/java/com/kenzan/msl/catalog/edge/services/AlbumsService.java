@@ -134,7 +134,7 @@ public class AlbumsService implements PaginatorHelper {
 
       if (averageRatingsDto.isPresent()) {
         long average =
-            averageRatingsDto.get().getNumRating() / averageRatingsDto.get().getSumRating();
+            averageRatingsDto.get().getSumRating() / averageRatingsDto.get().getNumRating();
         albumBo.setAverageRating((int) average);
       }
 

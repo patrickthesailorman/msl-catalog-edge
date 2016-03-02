@@ -129,7 +129,7 @@ public class SongsService implements PaginatorHelper {
 
       if (averageRatingsDto.isPresent()) {
         long average =
-            averageRatingsDto.get().getNumRating() / averageRatingsDto.get().getSumRating();
+            averageRatingsDto.get().getSumRating() / averageRatingsDto.get().getNumRating();
         songBo.setAverageRating((int) average);
       }
 
