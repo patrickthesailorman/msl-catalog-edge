@@ -15,9 +15,9 @@ mvn -f build-pom.xml install
 
 ## Useful commands 
 
-To generate sources from swagger spec
+To generate sources from swagger spec and download dependencies
 ```
-mvn -P build clean generate-sources
+mvn -P build clean generate-sources install
 ```
 
 To run the server on port `9003`, execute the following:
@@ -25,27 +25,25 @@ To run the server on port `9003`, execute the following:
 mvn -P dev clean jetty:run
 ```
 
-To format code
+Once server is running you can verify its working by going to the browser and hit: http://msl.kenzanlabs.com:9003/catalog-edge/browse/album
+**make sure cassandra is running before starting server**
+
+To format code to comply with style-guide
 ```
 mvn clean formatter:format
 ```
 
 ### Install dependencies without running tests 
 ```
-mvn -P no-test clean install
+mvn -P no-tests clean install
 ```
 
-### RPM && JAR packaging  
+### JAR packaging  
 ```
 mvn -P no-tests package
 ```
 
 ##Reports
-###Surefire reports:
-```
-mvn site
-```
-report gets generated under `/target/site/index.html`
  
 ###Cobertura
 ```
@@ -58,9 +56,3 @@ report gets generated under `/target/site/cobertura/index.html`
 mvn package
 ```
 report gets generated under `/target/site/jacoco`
-
-## Some dependencies required installation before running
-- msl-models
-- msl-account-data-client
-- msl-catalog-data-client
-- msl-ratings-data-client
