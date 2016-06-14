@@ -1,8 +1,12 @@
 package io.swagger.api.impl;
 
 import com.google.common.base.Optional;
+import com.kenzan.msl.account.client.services.CassandraAccountService;
+import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.Main;
 import com.kenzan.msl.catalog.edge.manager.FacetManager;
 import com.kenzan.msl.catalog.edge.services.*;
+import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import io.swagger.api.*;
 
 import io.swagger.model.AlbumInfo;
@@ -23,10 +27,22 @@ import javax.ws.rs.core.Response;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JaxRSServerCodegen", date = "2016-01-25T12:48:08.000-06:00")
 public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
+
+    private final CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final CassandraCatalogService cassandraCatalogService = CassandraCatalogService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final LibraryHelper libraryHelper = new LibraryHelper(cassandraAccountService);
+
     private CatalogEdge catalogEdge = new CatalogEdgeService(
-            new AlbumsService(),
-            new ArtistsService(),
-            new SongsService()
+            new AlbumsService(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new ArtistsService(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new SongsService(cassandraCatalogService, cassandraRatingsService, libraryHelper)
     );
 
     @Override
@@ -178,5 +194,5 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         return Response.ok().entity(new CatalogEdgeApiResponseMessage(CatalogEdgeApiResponseMessage.OK, "success", optSongInfo.get())).build();
     }
-  
+
 }

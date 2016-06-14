@@ -8,6 +8,7 @@ import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +26,8 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ResultSet.class, CassandraAccountService.class})
-public class LibraryHelperTest {
+public class LibraryHelperTest extends TestConstants {
 
-  private TestConstants tc = TestConstants.getInstance();
   private CassandraAccountService cassandraAccountService;
   private Observable<ResultSet> observableResultSet;
 
@@ -40,15 +40,15 @@ public class LibraryHelperTest {
     cassandraAccountService = createMock(CassandraAccountService.class);
     PowerMock.expectNew(CassandraAccountService.class).andReturn(cassandraAccountService);
 
-    expect(CassandraAccountService.getInstance()).andReturn(cassandraAccountService).anyTimes();
+    expect(CassandraAccountService.getInstance(EasyMock.anyObject())).andReturn(
+        cassandraAccountService).anyTimes();
   }
 
   @Test
   public void testGetUserArtists() {
     Result<ArtistsByUserDto> artistsByUserDtoResult = PowerMockito.mock(Result.class);
 
-    expect(
-        cassandraAccountService.getArtistsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
+    expect(cassandraAccountService.getArtistsByUser(USER_ID, Optional.absent(), Optional.absent()))
         .andReturn(observableResultSet);
 
     expect(cassandraAccountService.mapArtistByUser(observableResultSet)).andReturn(
@@ -57,8 +57,8 @@ public class LibraryHelperTest {
     replay(cassandraAccountService);
     PowerMock.replayAll();
 
-    LibraryHelper lh = new LibraryHelper();
-    Result<ArtistsByUserDto> result = lh.getUserArtists(tc.USER_ID);
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    Result<ArtistsByUserDto> result = lh.getUserArtists(USER_ID);
     assertEquals(result, artistsByUserDtoResult);
   }
 
@@ -66,16 +66,15 @@ public class LibraryHelperTest {
   public void testGetUserAlbums() {
     Result<AlbumsByUserDto> albumsByUserDtoResult = PowerMockito.mock(Result.class);
 
-    expect(
-        cassandraAccountService.getAlbumsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
+    expect(cassandraAccountService.getAlbumsByUser(USER_ID, Optional.absent(), Optional.absent()))
         .andReturn(observableResultSet);
     expect(cassandraAccountService.mapAlbumsByUser(observableResultSet)).andReturn(
         Observable.just(albumsByUserDtoResult));
     replay(cassandraAccountService);
     PowerMock.replayAll();
 
-    LibraryHelper lh = new LibraryHelper();
-    Result<AlbumsByUserDto> result = lh.getUserAlbums(tc.USER_ID);
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    Result<AlbumsByUserDto> result = lh.getUserAlbums(USER_ID);
     assertEquals(result, albumsByUserDtoResult);
   }
 
@@ -83,7 +82,7 @@ public class LibraryHelperTest {
   public void testGetUserSongs() {
     Result<SongsByUserDto> songsByUserDtoResult = PowerMockito.mock(Result.class);
 
-    expect(cassandraAccountService.getSongsByUser(tc.USER_ID, Optional.absent(), Optional.absent()))
+    expect(cassandraAccountService.getSongsByUser(USER_ID, Optional.absent(), Optional.absent()))
         .andReturn(observableResultSet);
 
     expect(cassandraAccountService.mapSongsByUser(observableResultSet)).andReturn(
@@ -91,33 +90,33 @@ public class LibraryHelperTest {
     replay(cassandraAccountService);
     PowerMock.replayAll();
 
-    LibraryHelper lh = new LibraryHelper();
-    Result<SongsByUserDto> result = lh.getUserSongs(tc.USER_ID);
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    Result<SongsByUserDto> result = lh.getUserSongs(USER_ID);
     assertEquals(result, songsByUserDtoResult);
   }
 
   @Test
   public void testProcessLibraryAlbumInfo() {
-    LibraryHelper lh = new LibraryHelper();
-    lh.processLibraryAlbumInfo(tc.albumsByUserDtoList, tc.ALBUM_BO);
-    assertTrue(tc.ALBUM_BO.isInMyLibrary());
-    assertEquals(tc.ALBUM_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    lh.processLibraryAlbumInfo(albumsByUserDtoList, ALBUM_BO);
+    assertTrue(ALBUM_BO.isInMyLibrary());
+    assertEquals(ALBUM_BO.getFavoritesTimestamp(), Long.toString(TIMESTAMP.getTime()));
   }
 
   @Test
   public void testProcessLibraryArtistInfo() {
-    LibraryHelper lh = new LibraryHelper();
-    lh.processLibraryArtistInfo(tc.artistsByUserDtoList, tc.ARTIST_BO);
-    assertTrue(tc.ARTIST_BO.isInMyLibrary());
-    assertEquals(tc.ARTIST_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    lh.processLibraryArtistInfo(artistsByUserDtoList, ARTIST_BO);
+    assertTrue(ARTIST_BO.isInMyLibrary());
+    assertEquals(ARTIST_BO.getFavoritesTimestamp(), Long.toString(TIMESTAMP.getTime()));
   }
 
   @Test
   public void testProcessLibrarySongInfo() {
-    LibraryHelper lh = new LibraryHelper();
-    lh.processLibrarySongInfo(tc.songsByUserDtoList, tc.SONG_BO);
-    assertTrue(tc.SONG_BO.isInMyLibrary());
-    assertEquals(tc.SONG_BO.getFavoritesTimestamp(), Long.toString(tc.TIMESTAMP.getTime()));
+    LibraryHelper lh = new LibraryHelper(cassandraAccountService);
+    lh.processLibrarySongInfo(songsByUserDtoList, SONG_BO);
+    assertTrue(SONG_BO.isInMyLibrary());
+    assertEquals(SONG_BO.getFavoritesTimestamp(), Long.toString(TIMESTAMP.getTime()));
   }
 
 }

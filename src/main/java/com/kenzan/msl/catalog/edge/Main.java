@@ -1,5 +1,7 @@
 package com.kenzan.msl.catalog.edge;
 
+import com.google.common.base.Optional;
+import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
 import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
@@ -15,24 +17,33 @@ import netflix.karyon.servo.KaryonServoModule;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
+import java.util.HashMap;
+
 import netflix.adminresources.resources.KaryonWebAdminModule;
 import netflix.karyon.jersey.blocking.KaryonJerseyModule;
 
 @ArchaiusBootstrap
 @KaryonBootstrap(name = "msl-catalog-edge")
 @Modules(include = {ShutdownModule.class, KaryonWebAdminModule.class, // Uncomment this to enable
-                                                                      // WebAdmin
+    // WebAdmin
     // KaryonEurekaModule.class, // Uncomment this to enable Eureka client.
     KaryonServoModule.class})
 public class Main {
 
+  public static HashMap archaiusProperties = new HashMap<String, Optional<String>>();
+
   /**
    * Runs jetty server to expose jersey API
-   * 
+   *
    * @param args String array
    * @throws Exception if server doesn't start
    */
   public static void main(String[] args) throws Exception {
+
+    archaiusProperties.put("region",
+        Optional.fromNullable(System.getProperty("archaius.deployment.region")));
+    archaiusProperties.put("domainName",
+        Optional.fromNullable(System.getProperty("archaius.deployment.domainName")));
 
     Server jettyServer = new Server(9003);
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -47,7 +58,6 @@ public class Main {
         CatalogEdgeApi.class.getCanonicalName());
 
     try {
-
       jettyServer.start();
       jettyServer.join();
 

@@ -3,173 +3,160 @@ package com.kenzan.msl.catalog.edge.services;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
-import com.kenzan.msl.account.client.services.CassandraAccountService;
+import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
+import com.kenzan.msl.catalog.edge.translate.Translators;
+import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.SongBo;
-import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
+import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.easymock.PowerMock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import rx.Observable;
 
-import java.util.UUID;
-
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({CassandraRatingsService.class, CassandraAccountService.class,
-    CassandraCatalogService.class})
-public class SongsServiceTest {
-  private TestConstants tc = TestConstants.getInstance();
-
-  private CassandraCatalogService cassandraCatalogService;
-
-  private CassandraRatingsService cassandraRatingsService;
-  private CassandraAccountService cassandraAccountService;
-  private Observable<ResultSet> observableResultSet;
+@RunWith(MockitoJUnitRunner.class)
+public class SongsServiceTest extends TestConstants {
 
   @Mock
-  private LibraryHelper libraryhelper;
+  private Result<AlbumArtistBySongDto> albumArtistBySongDtos;
+  @Mock
+  private Result<SongsByUserDto> songsByUserDtos;
+  @Mock
+  private SongListBo songListBo;
   @Mock
   private QueryAccessor queryAccessor;
+  @Mock
+  private Paginator paginator;
+  @Mock
+  private ResultSet resultSet;
+
+  @Mock
+  private CassandraCatalogService cassandraCatalogService;
+  @Mock
+  private CassandraRatingsService cassandraRatingsService;
+  @Mock
+  private LibraryHelper libraryHelper;
   @InjectMocks
-  private SongsService songsService = new SongsService();
+  private SongsService songsService;
 
   @Before
   public void init() throws Exception {
-    ResultSet resultSet = createMock(ResultSet.class);
-    observableResultSet = Observable.just(resultSet);
-    queryAccessor = mock(QueryAccessor.class);
-
-    PowerMock.mockStatic(CassandraCatalogService.class);
-    cassandraCatalogService = createMock(CassandraCatalogService.class);
-
-    PowerMock.mockStatic(CassandraAccountService.class);
-    cassandraAccountService = createMock(CassandraAccountService.class);
-    PowerMock.expectNew(CassandraAccountService.class).andReturn(cassandraAccountService);
-
-    expect(CassandraAccountService.getInstance()).andReturn(cassandraAccountService).anyTimes();
+    PowerMockito.mockStatic(Translators.class);
   }
 
   @Test
-  public void testGetSong() throws Exception {
-    expect(cassandraCatalogService.getAlbumArtistBySong(tc.SONG_ID, Optional.absent())).andReturn(
-        observableResultSet);
+  public void getArtistTest() {
+    Mockito.when(cassandraCatalogService.getAlbumArtistBySong(SONG_ID, Optional.absent()))
+        .thenReturn(Observable.just(resultSet));
+    Mockito.when(cassandraCatalogService.mapAlbumArtistBySong(anyObject())).thenReturn(
+        Observable.just(albumArtistBySongDtos));
+    Mockito.when(albumArtistBySongDtos.one()).thenReturn(albumArtistBySongDto);
 
-    Result<AlbumArtistBySongDto> albumArtistBySongDtoResult = PowerMockito.mock(Result.class);
-    expect(cassandraCatalogService.mapAlbumArtistBySong(observableResultSet)).andReturn(
-        Observable.just(albumArtistBySongDtoResult));
+    Mockito.when(libraryHelper.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
+    Mockito
+        .when(cassandraRatingsService.getAverageRating(SONG_ID, ContentType.SONG.value))
+        .thenReturn(
+            Observable.just(Optional.of(getMockAverageRatingsDto(SONG_ID, ContentType.SONG.value))));
+    Mockito.when(cassandraRatingsService.getUserRating(USER_ID, ContentType.SONG.value, SONG_ID))
+        .thenReturn(
+            Observable.just(Optional.of(getMockUserRatings(SONG_ID, ContentType.SONG.value))));
 
-    PowerMockito.when(albumArtistBySongDtoResult.one()).thenReturn(tc.albumArtistBySongDto);
+    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
 
-    mockRatingsHelper();
-
-    AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
-    averageRatingsDto.setNumRating(new Long(2));
-    averageRatingsDto.setSumRating(new Long(4));
-    expect(
-        cassandraRatingsService.getAverageRating(EasyMock.anyObject(UUID.class),
-            EasyMock.anyString())).andReturn(Observable.just(Optional.of(averageRatingsDto)));
-
-    EasyMock.replay(cassandraRatingsService);
-    EasyMock.replay(cassandraCatalogService);
-    EasyMock.replay(cassandraAccountService);
-    PowerMock.replayAll();
-
-    /* *************************************************** */
-
-    Optional<SongBo> results =
-        songsService.getSong(cassandraCatalogService, Optional.absent(), tc.SONG_ID);
-    assertNotNull(results);
-    assertTrue(results.isPresent());
-    assertEquals(results.get().getArtistId(), tc.ARTIST_ID);
-    assertEquals(results.get().getAlbumId(), tc.ALBUM_ID);
-    assertEquals(results.get().getSongId(), tc.SONG_ID);
-    assertEquals(results.get().getAlbumName(), tc.ALBUM_NAME);
-    assertEquals(results.get().getArtistName(), tc.ARTIST_NAME);
-    assertEquals(results.get().getSongName(), tc.SONG_NAME);
-    assertEquals(results.get().getAverageRating(), new Integer(2));
+    Mockito.verify(libraryHelper, times(1)).processLibrarySongInfo(anyObject(), anyObject());
+    assertTrue(response.get().getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
+    assertEquals(response.get().getPersonalRating(), Integer.valueOf(10));
   }
 
   @Test
-  public void testGetNullSong() {
-    expect(cassandraCatalogService.getAlbumArtistBySong(tc.SONG_ID, Optional.absent())).andReturn(
-        observableResultSet);
-    expect(cassandraCatalogService.mapAlbumArtistBySong(observableResultSet)).andReturn(
+  public void getArtistTestEmptyMappingResults() {
+    Mockito.when(cassandraCatalogService.getAlbumArtistBySong(SONG_ID, Optional.absent()))
+        .thenReturn(Observable.just(resultSet));
+    Mockito.when(cassandraCatalogService.mapAlbumArtistBySong(anyObject())).thenReturn(
         Observable.just(null));
+    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
+    assertFalse(response.isPresent());
+  }
 
-    EasyMock.replay(cassandraCatalogService);
-    EasyMock.replay(cassandraAccountService);
-    PowerMock.replayAll();
-
-    Optional<SongBo> result =
-        songsService.getSong(cassandraCatalogService, Optional.of(tc.USER_ID), tc.SONG_ID);
-    assertEquals(result, Optional.absent());
+  @Test
+  public void getAlbumTestEmptyMappingResults2() {
+    Mockito.when(cassandraCatalogService.getAlbumArtistBySong(SONG_ID, Optional.absent()))
+        .thenReturn(Observable.just(resultSet));
+    Mockito.when(cassandraCatalogService.mapAlbumArtistBySong(anyObject())).thenReturn(
+        Observable.just(albumArtistBySongDtos));
+    Mockito.when(albumArtistBySongDtos.one()).thenReturn(null);
+    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
+    assertFalse(response.isPresent());
   }
 
   @Test
   @Ignore
-  public void testGetSongList() {
-    songsService.getSongsList(cassandraCatalogService, Optional.absent(), tc.ITEMS, tc.FACETS,
-        Optional.of(tc.PAGING_STATE_ID));
+  public void getSongsListTest() throws Exception {
+    PowerMockito.whenNew(SongListBo.class).withAnyArguments().thenReturn(songListBo);
+    Mockito.when(songListBo.getBoList()).thenReturn(songBoList);
+
+    PowerMockito.whenNew(Paginator.class).withAnyArguments().thenReturn(paginator);
+
+    Mockito.when(libraryHelper.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
+
+    PowerMockito.when(Translators.translateSongsByUserDto(songsByUserDtos)).thenReturn(
+        songsByUserDtoList);
+
+    Mockito.when(cassandraRatingsService.getAverageRating(ALBUM_ID, ContentType.SONG.value))
+        .thenReturn(
+            Observable.just(Optional
+                .of(getMockAverageRatingsDto(ARTIST_ID, ContentType.SONG.value))));
+    Mockito.when(cassandraRatingsService.getUserRating(USER_ID, ContentType.SONG.value, ALBUM_ID))
+        .thenReturn(
+            Observable.just(Optional.of(getMockUserRatings(ARTIST_ID, ContentType.SONG.value))));
+
+    SongListBo result = songsService.getSongsList(Optional.of(USER_ID), 10, "", Optional.absent());
+    Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
+
+    for (SongBo songBo : result.getBoList()) {
+      assertTrue(songBo.getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
+      assertEquals(songBo.getPersonalRating(), Integer.valueOf(10));
+    }
   }
 
-  // ================================================================================================================
-  // PAGINATION HELPER METHODS
-  // ================================================================================================================
-
   @Test
-  public void testPrepareFacetedQuery() {
-    songsService.prepareFacetedQuery(queryAccessor, "~");
-    verify(queryAccessor, atLeastOnce()).songsByFacet("~");
+  public void prepareFacetedQueryTest() {
+    songsService.prepareFacetedQuery(queryAccessor, FACETS);
+    Mockito.verify(queryAccessor, times(1)).songsByFacet(FACETS);
   }
 
   @Test
-  public void testPrepareFeaturedQuery() {
+  public void prepareFeaturedQueryTest() {
     songsService.prepareFeaturedQuery(queryAccessor);
-    verify(queryAccessor, atLeastOnce()).featuredSongs();
+    Mockito.verify(queryAccessor, times(1)).featuredSongs();
   }
 
   @Test
-  public void testGetFacetedQueryString() {
-    String returned = songsService.getFacetedQueryString("~");
-    String expected =
-        "SELECT * FROM songs_by_facet WHERE facet_name = '~' AND content_type = 'Song'";
-    assertEquals(expected, returned);
+  public void getFacetedQueryStringTest() {
+    String response = songsService.getFacetedQueryString(FACETS);
+    assertTrue(response.contains(FACETS));
   }
 
   @Test
-  public void testGetFeaturedQueryString() {
-    String returned = songsService.getFeaturedQueryString();
-    String expected =
-        "SELECT * FROM featured_songs WHERE hotness_bucket = 'Hotness01' AND content_type = 'Song'";
-    assertEquals(expected, returned);
-  }
-
-  private void mockRatingsHelper() throws Exception {
-    PowerMock.mockStatic(CassandraRatingsService.class);
-    cassandraRatingsService = createMock(CassandraRatingsService.class);
-    PowerMock.expectNew(CassandraRatingsService.class).andReturn(cassandraRatingsService);
-
-    expect(CassandraRatingsService.getInstance()).andReturn(cassandraRatingsService).anyTimes();
+  public void getFeaturedQueryStringTest() {
+    String response = songsService.getFeaturedQueryString();
+    assertFalse(response.isEmpty());
   }
 }

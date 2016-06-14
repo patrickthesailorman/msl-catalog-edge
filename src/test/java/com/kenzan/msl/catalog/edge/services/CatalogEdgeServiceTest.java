@@ -9,6 +9,7 @@ import io.swagger.model.ArtistList;
 import io.swagger.model.ArtistInfo;
 import io.swagger.model.SongList;
 import io.swagger.model.SongInfo;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +30,8 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CassandraCatalogService.class})
-public class CatalogEdgeServiceTest {
+public class CatalogEdgeServiceTest extends TestConstants {
 
-  private TestConstants tc = TestConstants.getInstance();
   private CassandraCatalogService cassandraCatalogService;
 
   @Mock
@@ -48,7 +48,8 @@ public class CatalogEdgeServiceTest {
     PowerMock.mockStatic(CassandraCatalogService.class);
     cassandraCatalogService = createMock(CassandraCatalogService.class);
     PowerMock.expectNew(CassandraCatalogService.class).andReturn(cassandraCatalogService);
-    expect(CassandraCatalogService.getInstance()).andReturn(cassandraCatalogService).anyTimes();
+    expect(CassandraCatalogService.getInstance(EasyMock.anyObject())).andReturn(
+        cassandraCatalogService).anyTimes();
   }
 
   // ==========================================================================================================
@@ -58,8 +59,8 @@ public class CatalogEdgeServiceTest {
   @Test
   public void testBrowseAlbums() {
     Mockito.when(
-        albumsService.getAlbumsList(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ITEMS,
-            tc.FACETS, Optional.of(tc.PAGING_STATE_ID))).thenReturn(tc.ALBUM_LIST_BO);
+        albumsService.getAlbumsList(Optional.of(USER_ID), ITEMS, FACETS,
+            Optional.of(PAGING_STATE_ID))).thenReturn(ALBUM_LIST_BO);
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -67,17 +68,16 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<AlbumList> results =
-        catalogEdgeService.browseAlbums(tc.PAGING_STATE_ID.toString(), tc.ITEMS, tc.FACETS,
-            tc.USER_ID.toString());
+        catalogEdgeService.browseAlbums(PAGING_STATE_ID.toString(), ITEMS, FACETS,
+            USER_ID.toString());
     assertNotNull(results.toBlocking().first().getAlbums());
     assertEquals(results.toBlocking().first().getAlbums().size(), 0);
   }
 
   @Test
   public void testGetAlbum() {
-    Mockito.when(
-        albumsService.getAlbum(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ALBUM_ID))
-        .thenReturn(Optional.of(tc.ALBUM_BO));
+    Mockito.when(albumsService.getAlbum(Optional.of(USER_ID), ALBUM_ID)).thenReturn(
+        Optional.of(ALBUM_BO));
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -86,17 +86,16 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<AlbumInfo>> results =
-        catalogEdgeService.getAlbum(tc.ALBUM_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getAlbum(ALBUM_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
-    assertEquals(results.toBlocking().first().get().getArtistId(), tc.ARTIST_ID.toString());
-    assertEquals(results.toBlocking().first().get().getAlbumId(), tc.ALBUM_ID.toString());
+    assertEquals(results.toBlocking().first().get().getArtistId(), ARTIST_ID.toString());
+    assertEquals(results.toBlocking().first().get().getAlbumId(), ALBUM_ID.toString());
   }
 
   @Test
   public void testGetNullAlbum() {
-    Mockito.when(
-        albumsService.getAlbum(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ALBUM_ID))
-        .thenReturn(Optional.absent());
+    Mockito.when(albumsService.getAlbum(Optional.of(USER_ID), ALBUM_ID)).thenReturn(
+        Optional.absent());
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -105,7 +104,7 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<AlbumInfo>> results =
-        catalogEdgeService.getAlbum(tc.ALBUM_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getAlbum(ALBUM_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
     assertFalse(results.toBlocking().first().isPresent());
   }
@@ -117,8 +116,8 @@ public class CatalogEdgeServiceTest {
   @Test
   public void testBrowseArtists() {
     Mockito.when(
-        artistsService.getArtistsList(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ITEMS,
-            tc.FACETS, Optional.of(tc.PAGING_STATE_ID))).thenReturn(tc.ARTIST_LIST_BO);
+        artistsService.getArtistsList(Optional.of(USER_ID), ITEMS, FACETS,
+            Optional.of(PAGING_STATE_ID))).thenReturn(ARTIST_LIST_BO);
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -126,17 +125,16 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<ArtistList> results =
-        catalogEdgeService.browseArtists(tc.PAGING_STATE_ID.toString(), tc.ITEMS, tc.FACETS,
-            tc.USER_ID.toString());
+        catalogEdgeService.browseArtists(PAGING_STATE_ID.toString(), ITEMS, FACETS,
+            USER_ID.toString());
     assertNotNull(results.toBlocking().first());
     assertNull(results.toBlocking().first().getArtists());
   }
 
   @Test
   public void testGetArtist() {
-    Mockito.when(
-        artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ARTIST_ID))
-        .thenReturn(Optional.of(tc.ARTIST_BO));
+    Mockito.when(artistsService.getArtist(Optional.of(USER_ID), ARTIST_ID)).thenReturn(
+        Optional.of(ARTIST_BO));
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -145,17 +143,16 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<ArtistInfo>> results =
-        catalogEdgeService.getArtist(tc.ARTIST_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getArtist(ARTIST_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
-    assertEquals(results.toBlocking().first().get().getArtistId(), tc.ARTIST_ID.toString());
-    assertEquals(results.toBlocking().first().get().getArtistName(), tc.ARTIST_NAME);
+    assertEquals(results.toBlocking().first().get().getArtistId(), ARTIST_ID.toString());
+    assertEquals(results.toBlocking().first().get().getArtistName(), ARTIST_NAME);
   }
 
   @Test
   public void testGetNullArtist() {
-    Mockito.when(
-        artistsService.getArtist(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ARTIST_ID))
-        .thenReturn(Optional.absent());
+    Mockito.when(artistsService.getArtist(Optional.of(USER_ID), ARTIST_ID)).thenReturn(
+        Optional.absent());
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -164,7 +161,7 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<ArtistInfo>> results =
-        catalogEdgeService.getArtist(tc.ARTIST_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getArtist(ARTIST_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
     assertFalse(results.toBlocking().first().isPresent());
   }
@@ -175,9 +172,10 @@ public class CatalogEdgeServiceTest {
 
   @Test
   public void testBrowseSongs() {
-    Mockito.when(
-        songsService.getSongsList(cassandraCatalogService, Optional.of(tc.USER_ID), tc.ITEMS,
-            tc.FACETS, Optional.of(tc.PAGING_STATE_ID))).thenReturn(tc.SONG_LIST_BO);
+    Mockito
+        .when(
+            songsService.getSongsList(Optional.of(USER_ID), ITEMS, FACETS,
+                Optional.of(PAGING_STATE_ID))).thenReturn(SONG_LIST_BO);
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -185,17 +183,16 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<SongList> results =
-        catalogEdgeService.browseSongs(tc.PAGING_STATE_ID.toString(), tc.ITEMS, tc.FACETS,
-            tc.USER_ID.toString());
+        catalogEdgeService.browseSongs(PAGING_STATE_ID.toString(), ITEMS, FACETS,
+            USER_ID.toString());
     assertNotNull(results.toBlocking().first());
     assertNull(results.toBlocking().first().getSongs());
   }
 
   @Test
   public void testGetSong() {
-    Mockito
-        .when(songsService.getSong(cassandraCatalogService, Optional.of(tc.USER_ID), tc.SONG_ID))
-        .thenReturn(Optional.of(tc.SONG_BO));
+    Mockito.when(songsService.getSong(Optional.of(USER_ID), SONG_ID)).thenReturn(
+        Optional.of(SONG_BO));
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -204,19 +201,17 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<SongInfo>> results =
-        catalogEdgeService.getSong(tc.SONG_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getSong(SONG_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
-    assertEquals(results.toBlocking().first().get().getArtistId(), tc.ARTIST_ID.toString());
-    assertEquals(results.toBlocking().first().get().getArtistName(), tc.ARTIST_NAME);
-    assertEquals(results.toBlocking().first().get().getAlbumId(), tc.ALBUM_ID.toString());
-    assertEquals(results.toBlocking().first().get().getSongId(), tc.SONG_ID.toString());
+    assertEquals(results.toBlocking().first().get().getArtistId(), ARTIST_ID.toString());
+    assertEquals(results.toBlocking().first().get().getArtistName(), ARTIST_NAME);
+    assertEquals(results.toBlocking().first().get().getAlbumId(), ALBUM_ID.toString());
+    assertEquals(results.toBlocking().first().get().getSongId(), SONG_ID.toString());
   }
 
   @Test
   public void testGetNullSong() {
-    Mockito
-        .when(songsService.getSong(cassandraCatalogService, Optional.of(tc.USER_ID), tc.SONG_ID))
-        .thenReturn(Optional.absent());
+    Mockito.when(songsService.getSong(Optional.of(USER_ID), SONG_ID)).thenReturn(Optional.absent());
     PowerMock.replayAll();
 
     /* *********************************** */
@@ -225,7 +220,7 @@ public class CatalogEdgeServiceTest {
         new CatalogEdgeService(albumsService, artistsService, songsService);
 
     Observable<Optional<SongInfo>> results =
-        catalogEdgeService.getSong(tc.SONG_ID.toString(), tc.USER_ID.toString());
+        catalogEdgeService.getSong(SONG_ID.toString(), USER_ID.toString());
     assertNotNull(results.toBlocking().first());
     assertFalse(results.toBlocking().first().isPresent());
   }

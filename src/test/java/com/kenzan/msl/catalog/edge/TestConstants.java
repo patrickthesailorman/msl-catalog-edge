@@ -15,6 +15,8 @@ import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.ArtistBo;
 import com.kenzan.msl.common.bo.SongBo;
+import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
+import com.kenzan.msl.ratings.client.dto.UserRatingsDto;
 
 import java.util.UUID;
 import java.util.Date;
@@ -26,7 +28,6 @@ import java.util.Set;
 import java.util.HashSet;
 
 public class TestConstants {
-  private static TestConstants instance = null;
 
   public final UUID USER_ID = UUID.fromString("00000000-0000-0000-0000-000000001");
   public final UUID ARTIST_ID = UUID.fromString("00000000-0000-0000-0001-000000001");
@@ -51,12 +52,16 @@ public class TestConstants {
   public PagingStateDto pagingStateDto = new PagingStateDto();
 
   public List<AlbumBo> albumBoList = new ArrayList<>();
+  public List<ArtistBo> artistBoList = new ArrayList<>();
+  public List<SongBo> songBoList = new ArrayList<>();
   public List<FeaturedAlbumsDto> featuredAlbumDtoList = new ArrayList<>();
   public List<AlbumsByFacetDto> albumsByFacetDtoList = new ArrayList<>();
 
   public SongsArtistByAlbumDto songsArtistByAlbumDto = new SongsArtistByAlbumDto();
   public SongsAlbumsByArtistDto songsAlbumsByArtistDto = new SongsAlbumsByArtistDto();
   public AlbumArtistBySongDto albumArtistBySongDto = new AlbumArtistBySongDto();
+
+  public AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
 
   public AlbumBo ALBUM_BO;
   public ArtistBo ARTIST_BO;
@@ -66,11 +71,13 @@ public class TestConstants {
   public final String ALBUM_NAME = "SOME ALBUM NAME";
   public final String SONG_NAME = "TEST SONG NAME";
 
-  private TestConstants() {
+  public TestConstants() {
     initDtos();
     initBos();
 
     albumBoList.add(ALBUM_BO);
+    artistBoList.add(ARTIST_BO);
+    songBoList.add(SONG_BO);
 
     ARTIST_LIST_BO = new ArtistListBo();
     ALBUM_LIST_BO = new AlbumListBo();
@@ -100,13 +107,6 @@ public class TestConstants {
     songsByUserDtoList.add(songsByUserDto);
   }
 
-  public static TestConstants getInstance() {
-    if (instance == null) {
-      instance = new TestConstants();
-    }
-    return instance;
-  }
-
   private void initBos() {
     ALBUM_BO = new AlbumBo();
     ALBUM_BO.setAlbumId(ALBUM_ID);
@@ -124,7 +124,7 @@ public class TestConstants {
   }
 
   private void initDtos() {
-    Set<String> genres = new HashSet<String>();
+    Set<String> genres = new HashSet<>();
     genres.add("4");
     Map<UUID, String> similarArtists = new HashMap<>();
     similarArtists.put(ARTIST_ID_2, ARTIST_NAME);
@@ -165,6 +165,24 @@ public class TestConstants {
     PagingStateDto.PagingStateUdt pagingStateUdt = new PagingStateDto.PagingStateUdt();
     pagingStateDto.setUserId(USER_ID);
     pagingStateDto.setPagingState(pagingStateUdt);
+  }
+
+  public AverageRatingsDto getMockAverageRatingsDto(UUID contentId, String contentType) {
+    AverageRatingsDto averageRatingsDto = new AverageRatingsDto();
+    averageRatingsDto.setContentId(contentId);
+    averageRatingsDto.setContentType(contentType);
+    averageRatingsDto.setNumRating(Long.valueOf(123));
+    averageRatingsDto.setSumRating(Long.valueOf(123));
+    return averageRatingsDto;
+  }
+
+  public UserRatingsDto getMockUserRatings(UUID contentId, String contentType) {
+    UserRatingsDto userRatingsDto = new UserRatingsDto();
+    userRatingsDto.setContentType(contentType);
+    userRatingsDto.setContentUuid(contentId);
+    userRatingsDto.setUserId(USER_ID);
+    userRatingsDto.setRating(10);
+    return userRatingsDto;
   }
 
 }

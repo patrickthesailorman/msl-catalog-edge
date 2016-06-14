@@ -9,6 +9,7 @@ import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
+import com.kenzan.msl.catalog.edge.Main;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.ArtistBo;
 import com.kenzan.msl.common.bo.SongBo;
@@ -17,6 +18,12 @@ import java.util.UUID;
 
 public class LibraryHelper {
 
+  private final CassandraAccountService cassandraAccountService;
+
+  public LibraryHelper(final CassandraAccountService cassandraAccountService) {
+    this.cassandraAccountService = cassandraAccountService;
+  }
+
   /**
    * Retrieve user library albums
    *
@@ -24,7 +31,6 @@ public class LibraryHelper {
    * @return Result&lt;AlbumsByUserDto&gt;
    */
   public Result<AlbumsByUserDto> getUserAlbums(final UUID userId) {
-    CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
     return cassandraAccountService
         .mapAlbumsByUser(
             cassandraAccountService.getAlbumsByUser(userId, Optional.absent(), Optional.absent()))
@@ -56,7 +62,6 @@ public class LibraryHelper {
    * @return Result&lt;ArtistsByUserDto&gt;
    */
   public Result<ArtistsByUserDto> getUserArtists(final UUID userId) {
-    CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
     return cassandraAccountService
         .mapArtistByUser(
             cassandraAccountService.getArtistsByUser(userId, Optional.absent(), Optional.absent()))
@@ -87,7 +92,6 @@ public class LibraryHelper {
    * @return Result&lt;SongsByUserDto&gt;
    */
   public Result<SongsByUserDto> getUserSongs(final UUID userId) {
-    CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance();
     return cassandraAccountService
         .mapSongsByUser(
             cassandraAccountService.getSongsByUser(userId, Optional.absent(), Optional.absent()))

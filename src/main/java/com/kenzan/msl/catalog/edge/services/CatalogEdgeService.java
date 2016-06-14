@@ -10,6 +10,7 @@ import com.kenzan.msl.common.bo.ArtistBo;
 import com.kenzan.msl.common.bo.SongBo;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import io.swagger.model.AlbumInfo;
@@ -31,14 +32,12 @@ public class CatalogEdgeService implements CatalogEdge {
   private AlbumsService albumsService;
   private ArtistsService artistsService;
   private SongsService songsService;
-  private CassandraCatalogService cassandraCatalogService;
 
-  public CatalogEdgeService(AlbumsService _albumsService, ArtistsService _artistsService,
-      SongsService _songsService) {
-    albumsService = _albumsService;
-    artistsService = _artistsService;
-    songsService = _songsService;
-    cassandraCatalogService = CassandraCatalogService.getInstance();
+  public CatalogEdgeService(final AlbumsService albumsService, final ArtistsService artistsService,
+      final SongsService songsService) {
+    this.albumsService = albumsService;
+    this.artistsService = artistsService;
+    this.songsService = songsService;
   }
 
   // ==========================================================================================================
@@ -79,8 +78,8 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         StringUtils.isEmpty(userId) ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    return Observable.just(Translators.translate(albumsService.getAlbumsList(
-        cassandraCatalogService, userUuid, items, facets, pagingStateUuid)));
+    return Observable.just(Translators.translate(albumsService.getAlbumsList(userUuid, items,
+        facets, pagingStateUuid)));
   }
 
   /**
@@ -95,8 +94,7 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         null == userId ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    Optional<AlbumBo> optAlbumBo =
-        albumsService.getAlbum(cassandraCatalogService, userUuid, albumUuid);
+    Optional<AlbumBo> optAlbumBo = albumsService.getAlbum(userUuid, albumUuid);
 
     if (!optAlbumBo.isPresent()) {
       return Observable.just(Optional.absent());
@@ -142,8 +140,8 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         StringUtils.isEmpty(userId) ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    return Observable.just(Translators.translate(artistsService.getArtistsList(
-        cassandraCatalogService, userUuid, items, facets, pagingStateUuid)));
+    return Observable.just(Translators.translate(artistsService.getArtistsList(userUuid, items,
+        facets, pagingStateUuid)));
   }
 
   /**
@@ -158,8 +156,7 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         null == userId ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    Optional<ArtistBo> optArtistBo =
-        artistsService.getArtist(cassandraCatalogService, userUuid, artistUuid);
+    Optional<ArtistBo> optArtistBo = artistsService.getArtist(userUuid, artistUuid);
 
     if (optArtistBo.isPresent()) {
       return Observable.just(Optional.of(Translators.translate(optArtistBo.get())));
@@ -206,8 +203,8 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         StringUtils.isEmpty(userId) ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    return Observable.just(Translators.translate(songsService.getSongsList(cassandraCatalogService,
-        userUuid, items, facets, pagingStateUuid)));
+    return Observable.just(Translators.translate(songsService.getSongsList(userUuid, items, facets,
+        pagingStateUuid)));
   }
 
   /**
@@ -222,7 +219,7 @@ public class CatalogEdgeService implements CatalogEdge {
     Optional<UUID> userUuid =
         null == userId ? Optional.absent() : Optional.of(UUID.fromString(userId));
 
-    Optional<SongBo> optSongBo = songsService.getSong(cassandraCatalogService, userUuid, songUuid);
+    Optional<SongBo> optSongBo = songsService.getSong(userUuid, songUuid);
 
     if (optSongBo.isPresent()) {
       return Observable.just(Optional.of(Translators.translate(optSongBo.get())));
