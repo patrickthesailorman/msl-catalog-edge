@@ -13,7 +13,7 @@
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://repo.kenzan-devops.com/repository/snapshots</url>
+            <url>http://repo.kenzan-devops.com/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -21,7 +21,7 @@
         <repository>
             <id>kenzan-public</id>
             <url>
-                http://repo.kenzan-devops.com/nexus/content/groups/public/
+                http://repo.kenzan-devops.com/repository/maven-public/
             </url>
         </repository>
         <repository>
@@ -42,11 +42,11 @@
         </pluginRepository>
         <pluginRepository>
             <id>snapshots</id>
-            <url>http://repo.kenzan-devops.com/repository/snapshots</url>
+            <url>http://repo.kenzan-devops.com/repository/maven-snapshots</url>
         </pluginRepository>
         <pluginRepository>
             <id>releases</id>
-            <url>http://repo.kenzan-devops.com/repository/releases</url>
+            <url>http://repo.kenzan-devops.com/repository/maven-releases</url>
         </pluginRepository>
     </pluginRepositories>
 
