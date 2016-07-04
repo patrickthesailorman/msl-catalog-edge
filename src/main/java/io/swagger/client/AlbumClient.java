@@ -4,11 +4,11 @@ import io.swagger.api.impl.CatalogEdgeApiResponseMessage;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * @author kenzan
+ */
 public class AlbumClient {
 
   private ResteasyClient client;

@@ -452,9 +452,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-governator</artifactId>
-            <version>${karyon.version}</version>
+            <groupId>com.netflix.governator</groupId>
+            <artifactId>governator-core</artifactId>
+            <version>1.12.4</version>
         </dependency>
 
         <dependency>
@@ -597,21 +597,29 @@
             <groupId>msl.server</groupId>
             <artifactId>msl-common</artifactId>
             <version>${msl-server.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../msl-server-common/target/swagger-jaxrs-server-1.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-account-data-client</artifactId>
             <version>${msl-server.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../msl-account-data-client/target/msl-account-data-client-1.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-catalog-data-client</artifactId>
             <version>${msl-server.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../msl-catalog-data-client/target/msl-catalog-data-client-1.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-ratings-data-client</artifactId>
             <version>${msl-server.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../msl-ratings-data-client/target/msl-ratings-data-client-1.0.0.jar</systemPath>
         </dependency>
 
     </dependencies>

@@ -8,6 +8,7 @@ import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.account.client.services.CassandraAccountService;
+import com.kenzan.msl.catalog.edge.services.impl.LibraryHelper;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;

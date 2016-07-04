@@ -1,7 +1,6 @@
 package com.kenzan.msl.catalog.edge;
 
 import com.google.common.base.Optional;
-import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
 import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
@@ -10,9 +9,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import com.netflix.governator.annotations.Modules;
-import netflix.karyon.KaryonBootstrap;
 import netflix.karyon.archaius.ArchaiusBootstrap;
-import netflix.karyon.ShutdownModule;
 import netflix.karyon.servo.KaryonServoModule;
 
 import javax.servlet.DispatcherType;
@@ -20,11 +17,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 
 import netflix.adminresources.resources.KaryonWebAdminModule;
-import netflix.karyon.jersey.blocking.KaryonJerseyModule;
 
 @ArchaiusBootstrap
-@KaryonBootstrap(name = "msl-catalog-edge")
-@Modules(include = {ShutdownModule.class, KaryonWebAdminModule.class, // Uncomment this to enable
+@Modules(include = {KaryonWebAdminModule.class, // Uncomment this to enable
     // WebAdmin
     // KaryonEurekaModule.class, // Uncomment this to enable Eureka client.
     KaryonServoModule.class})

@@ -1,16 +1,37 @@
-package com.kenzan.msl.catalog.edge.mock;
+package com.kenzan.msl.catalog.edge.services.stub;
 
+import com.google.common.base.Optional;
+import com.kenzan.msl.catalog.edge.services.AlbumService;
+import com.kenzan.msl.catalog.edge.translate.Translators;
+import com.kenzan.msl.common.bo.AlbumBo;
+import com.kenzan.msl.common.bo.AlbumListBo;
 import io.swagger.api.factories.FacetServiceFactory;
 import io.swagger.model.AlbumInfo;
 import io.swagger.model.AlbumList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class AlbumMockData {
+/**
+ * @author kenzan
+ */
+public class StubAlbumService implements AlbumService {
 
-  public AlbumList albumList;
-  private FacetMockData facetMockData = new FacetMockData();
+  private final AlbumList albumList;
+  private final FacetMockData facetMockData = new FacetMockData();
+
+  @Override
+  public Optional<AlbumBo> getAlbum(final Optional<UUID> userUuid, final UUID albumUuid) {
+    AlbumInfo result = getAlbum(albumUuid.toString());
+    return result != null ? Optional.of(Translators.translate(result)) : Optional.absent();
+  }
+
+  @Override
+  public AlbumListBo getAlbumsList(final Optional<UUID> userUuid, final Integer items,
+      final String facets, final Optional<UUID> pagingStateUuid) {
+    return Translators.translate(browseAlbums(null, items, facets));
+  }
 
   /**
    * Retrieves a single mocked album from it's ID
@@ -18,7 +39,7 @@ public class AlbumMockData {
    * @param albumId String
    * @return AlbumInfo
    */
-  public AlbumInfo getAlbum(String albumId) {
+  private AlbumInfo getAlbum(String albumId) {
     for (AlbumInfo album : albumList.getAlbums()) {
       if (albumId.equals(album.getAlbumId())) {
         return album;
@@ -81,7 +102,7 @@ public class AlbumMockData {
    * @param facetList String
    * @return AlbumList
    */
-  public AlbumList browseAlbums(String pagingState, Integer items, String facetList) {
+  private AlbumList browseAlbums(String pagingState, Integer items, String facetList) {
 
     List<AlbumInfo> browsedAlbums = albumList.getAlbums();
 
@@ -112,7 +133,7 @@ public class AlbumMockData {
     return results;
   }
 
-  public AlbumMockData() {
+  public StubAlbumService() {
 
     this.albumList = new AlbumList();
     List<AlbumInfo> albums = new ArrayList<>();

@@ -8,6 +8,9 @@ import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
+import com.kenzan.msl.catalog.edge.services.impl.LibraryHelper;
+import com.kenzan.msl.catalog.edge.services.impl.Paginator;
+import com.kenzan.msl.catalog.edge.services.impl.SongsServiceImpl;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.SongBo;
@@ -32,7 +35,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SongsServiceTest extends TestConstants {
+public class SongsServiceImplTest extends TestConstants {
 
   @Mock
   private Result<AlbumArtistBySongDto> albumArtistBySongDtos;
@@ -54,7 +57,7 @@ public class SongsServiceTest extends TestConstants {
   @Mock
   private LibraryHelper libraryHelper;
   @InjectMocks
-  private SongsService songsService;
+  private SongsServiceImpl songsServiceImpl;
 
   @Before
   public void init() throws Exception {
@@ -78,7 +81,7 @@ public class SongsServiceTest extends TestConstants {
         .thenReturn(
             Observable.just(Optional.of(getMockUserRatings(SONG_ID, ContentType.SONG.value))));
 
-    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
+    Optional<SongBo> response = songsServiceImpl.getSong(Optional.of(USER_ID), SONG_ID);
 
     Mockito.verify(libraryHelper, times(1)).processLibrarySongInfo(anyObject(), anyObject());
     assertTrue(response.get().getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
@@ -91,7 +94,7 @@ public class SongsServiceTest extends TestConstants {
         .thenReturn(Observable.just(resultSet));
     Mockito.when(cassandraCatalogService.mapAlbumArtistBySong(anyObject())).thenReturn(
         Observable.just(null));
-    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
+    Optional<SongBo> response = songsServiceImpl.getSong(Optional.of(USER_ID), SONG_ID);
     assertFalse(response.isPresent());
   }
 
@@ -102,7 +105,7 @@ public class SongsServiceTest extends TestConstants {
     Mockito.when(cassandraCatalogService.mapAlbumArtistBySong(anyObject())).thenReturn(
         Observable.just(albumArtistBySongDtos));
     Mockito.when(albumArtistBySongDtos.one()).thenReturn(null);
-    Optional<SongBo> response = songsService.getSong(Optional.of(USER_ID), SONG_ID);
+    Optional<SongBo> response = songsServiceImpl.getSong(Optional.of(USER_ID), SONG_ID);
     assertFalse(response.isPresent());
   }
 
@@ -127,7 +130,8 @@ public class SongsServiceTest extends TestConstants {
         .thenReturn(
             Observable.just(Optional.of(getMockUserRatings(ARTIST_ID, ContentType.SONG.value))));
 
-    SongListBo result = songsService.getSongsList(Optional.of(USER_ID), 10, "", Optional.absent());
+    SongListBo result =
+        songsServiceImpl.getSongsList(Optional.of(USER_ID), 10, "", Optional.absent());
     Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
 
     for (SongBo songBo : result.getBoList()) {
@@ -138,25 +142,25 @@ public class SongsServiceTest extends TestConstants {
 
   @Test
   public void prepareFacetedQueryTest() {
-    songsService.prepareFacetedQuery(queryAccessor, FACETS);
+    songsServiceImpl.prepareFacetedQuery(queryAccessor, FACETS);
     Mockito.verify(queryAccessor, times(1)).songsByFacet(FACETS);
   }
 
   @Test
   public void prepareFeaturedQueryTest() {
-    songsService.prepareFeaturedQuery(queryAccessor);
+    songsServiceImpl.prepareFeaturedQuery(queryAccessor);
     Mockito.verify(queryAccessor, times(1)).featuredSongs();
   }
 
   @Test
   public void getFacetedQueryStringTest() {
-    String response = songsService.getFacetedQueryString(FACETS);
+    String response = songsServiceImpl.getFacetedQueryString(FACETS);
     assertTrue(response.contains(FACETS));
   }
 
   @Test
   public void getFeaturedQueryStringTest() {
-    String response = songsService.getFeaturedQueryString();
+    String response = songsServiceImpl.getFeaturedQueryString();
     assertFalse(response.isEmpty());
   }
 }

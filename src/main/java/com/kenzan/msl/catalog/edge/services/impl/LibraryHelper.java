@@ -1,7 +1,7 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
@@ -16,6 +16,9 @@ import com.kenzan.msl.common.bo.SongBo;
 
 import java.util.UUID;
 
+/**
+ * @author kenzan
+ */
 public class LibraryHelper {
 
   private final CassandraAccountService cassandraAccountService;

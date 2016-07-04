@@ -6,6 +6,7 @@ import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.Main;
 import com.kenzan.msl.catalog.edge.manager.FacetManager;
 import com.kenzan.msl.catalog.edge.services.*;
+import com.kenzan.msl.catalog.edge.services.impl.*;
 import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import io.swagger.api.*;
 
@@ -39,10 +40,10 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
     private final LibraryHelper libraryHelper = new LibraryHelper(cassandraAccountService);
 
-    private CatalogEdge catalogEdge = new CatalogEdgeService(
-            new AlbumsService(cassandraCatalogService, cassandraRatingsService, libraryHelper),
-            new ArtistsService(cassandraCatalogService, cassandraRatingsService, libraryHelper),
-            new SongsService(cassandraCatalogService, cassandraRatingsService, libraryHelper)
+    private CatalogEdgeService catalogEdgeService = new CatalogEdgeServiceImpl(
+            new AlbumsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new ArtistsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new SongsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper)
     );
 
     @Override
@@ -55,7 +56,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<AlbumInfo> optAlbumInfo;
         try {
-            optAlbumInfo = catalogEdge.getAlbum(albumId, null).toBlocking().first();
+            optAlbumInfo = catalogEdgeService.getAlbum(albumId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -83,7 +84,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<ArtistInfo> optArtistInfo;
         try {
-            optArtistInfo = catalogEdge.getArtist(artistId, null).toBlocking().first();
+            optArtistInfo = catalogEdgeService.getArtist(artistId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -106,7 +107,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         AlbumList albumList;
         try {
-            albumList = catalogEdge.browseAlbums(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            albumList = catalogEdgeService.browseAlbums(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -125,7 +126,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         ArtistList artistList;
         try {
-            artistList = catalogEdge.browseArtists(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            artistList = catalogEdgeService.browseArtists(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -144,7 +145,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         SongList songList;
         try {
-            songList = catalogEdge.browseSongs(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            songList = catalogEdgeService.browseSongs(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -178,7 +179,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<SongInfo> optSongInfo;
         try {
-            optSongInfo = catalogEdge.getSong(songId, null).toBlocking().first();
+            optSongInfo = catalogEdgeService.getSong(songId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse();

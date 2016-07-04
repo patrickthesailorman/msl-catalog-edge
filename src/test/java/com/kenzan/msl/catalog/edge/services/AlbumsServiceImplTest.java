@@ -8,6 +8,9 @@ import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
 import com.kenzan.msl.catalog.edge.TestConstants;
+import com.kenzan.msl.catalog.edge.services.impl.AlbumsServiceImpl;
+import com.kenzan.msl.catalog.edge.services.impl.LibraryHelper;
+import com.kenzan.msl.catalog.edge.services.impl.Paginator;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.AlbumBo;
@@ -32,7 +35,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AlbumsServiceTest extends TestConstants {
+public class AlbumsServiceImplTest extends TestConstants {
 
 
   @Mock
@@ -55,7 +58,7 @@ public class AlbumsServiceTest extends TestConstants {
   @Mock
   private LibraryHelper libraryHelper;
   @InjectMocks
-  private AlbumsService albumsService;
+  private AlbumsServiceImpl albumsServiceImpl;
 
   @Before
   public void init() throws Exception {
@@ -79,7 +82,7 @@ public class AlbumsServiceTest extends TestConstants {
         .thenReturn(
             Observable.just(Optional.of(getMockUserRatings(ALBUM_ID, ContentType.ALBUM.value))));
 
-    Optional<AlbumBo> response = albumsService.getAlbum(Optional.of(USER_ID), ALBUM_ID);
+    Optional<AlbumBo> response = albumsServiceImpl.getAlbum(Optional.of(USER_ID), ALBUM_ID);
 
     Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
     assertTrue(response.get().getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
@@ -92,7 +95,7 @@ public class AlbumsServiceTest extends TestConstants {
         .thenReturn(Observable.just(resultSet));
     Mockito.when(cassandraCatalogService.mapSongsArtistByAlbum(anyObject())).thenReturn(
         Observable.just(null));
-    Optional<AlbumBo> response = albumsService.getAlbum(Optional.of(USER_ID), ALBUM_ID);
+    Optional<AlbumBo> response = albumsServiceImpl.getAlbum(Optional.of(USER_ID), ALBUM_ID);
     assertFalse(response.isPresent());
   }
 
@@ -103,7 +106,7 @@ public class AlbumsServiceTest extends TestConstants {
     Mockito.when(cassandraCatalogService.mapSongsArtistByAlbum(anyObject())).thenReturn(
         Observable.just(songsArtistByAlbumDtos));
     Mockito.when(songsArtistByAlbumDtos.one()).thenReturn(null);
-    Optional<AlbumBo> response = albumsService.getAlbum(Optional.of(USER_ID), ALBUM_ID);
+    Optional<AlbumBo> response = albumsServiceImpl.getAlbum(Optional.of(USER_ID), ALBUM_ID);
     assertFalse(response.isPresent());
   }
 
@@ -130,7 +133,7 @@ public class AlbumsServiceTest extends TestConstants {
             Observable.just(Optional.of(getMockUserRatings(ALBUM_ID, ContentType.ALBUM.value))));
 
     AlbumListBo result =
-        albumsService.getAlbumsList(Optional.of(USER_ID), 10, "", Optional.absent());
+        albumsServiceImpl.getAlbumsList(Optional.of(USER_ID), 10, "", Optional.absent());
     Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
 
     for (AlbumBo albumBo : result.getBoList()) {
@@ -141,25 +144,25 @@ public class AlbumsServiceTest extends TestConstants {
 
   @Test
   public void prepareFacetedQueryTest() {
-    albumsService.prepareFacetedQuery(queryAccessor, FACETS);
+    albumsServiceImpl.prepareFacetedQuery(queryAccessor, FACETS);
     Mockito.verify(queryAccessor, times(1)).albumsByFacet(FACETS);
   }
 
   @Test
   public void prepareFeaturedQueryTest() {
-    albumsService.prepareFeaturedQuery(queryAccessor);
+    albumsServiceImpl.prepareFeaturedQuery(queryAccessor);
     Mockito.verify(queryAccessor, times(1)).featuredAlbums();
   }
 
   @Test
   public void getFacetedQueryStringTest() {
-    String response = albumsService.getFacetedQueryString(FACETS);
+    String response = albumsServiceImpl.getFacetedQueryString(FACETS);
     assertTrue(response.contains(FACETS));
   }
 
   @Test
   public void getFeaturedQueryStringTest() {
-    String response = albumsService.getFeaturedQueryString();
+    String response = albumsServiceImpl.getFeaturedQueryString();
     assertFalse(response.isEmpty());
   }
 

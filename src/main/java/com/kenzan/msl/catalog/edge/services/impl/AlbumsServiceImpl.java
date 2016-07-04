@@ -1,7 +1,7 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
@@ -11,6 +11,8 @@ import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.services.AlbumService;
+import com.kenzan.msl.catalog.edge.services.PaginatorHelper;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.AlbumBo;
@@ -23,13 +25,16 @@ import rx.Observable;
 import java.util.List;
 import java.util.UUID;
 
-public class AlbumsService implements PaginatorHelper {
+/**
+ * @author kenzan
+ */
+public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
   private final CassandraCatalogService cassandraCatalogService;
   private final CassandraRatingsService cassandraRatingsService;
   private final LibraryHelper libraryHelper;
 
-  public AlbumsService(final CassandraCatalogService cassandraCatalogService,
+  public AlbumsServiceImpl(final CassandraCatalogService cassandraCatalogService,
       final CassandraRatingsService cassandraRatingsService, final LibraryHelper libraryHelper) {
     this.cassandraCatalogService = cassandraCatalogService;
     this.cassandraRatingsService = cassandraRatingsService;
@@ -43,6 +48,7 @@ public class AlbumsService implements PaginatorHelper {
    * @param albumUuid java.util.UUID
    * @return Optional&lt;AlbumBo&gt;
    */
+  @Override
   public Optional<AlbumBo> getAlbum(final Optional<UUID> userUuid, final UUID albumUuid) {
 
     Observable<ResultSet> queryResults =
@@ -113,6 +119,7 @@ public class AlbumsService implements PaginatorHelper {
    * @param pagingStateUuid Optional&lt;UUID&gt;
    * @return AlbumListBo
    */
+  @Override
   public AlbumListBo getAlbumsList(final Optional<UUID> userUuid, final Integer items,
       final String facets, final Optional<UUID> pagingStateUuid) {
 

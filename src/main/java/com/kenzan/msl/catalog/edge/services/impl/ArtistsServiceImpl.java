@@ -1,7 +1,7 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
@@ -11,6 +11,8 @@ import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.SongsAlbumsByArtistDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.services.ArtistService;
+import com.kenzan.msl.catalog.edge.services.PaginatorHelper;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.ArtistBo;
@@ -23,13 +25,16 @@ import rx.Observable;
 import java.util.List;
 import java.util.UUID;
 
-public class ArtistsService implements PaginatorHelper {
+/**
+ * @author kenzan
+ */
+public class ArtistsServiceImpl implements ArtistService, PaginatorHelper {
 
   private final CassandraCatalogService cassandraCatalogService;
   private final CassandraRatingsService cassandraRatingsService;
   private final LibraryHelper libraryHelper;
 
-  public ArtistsService(final CassandraCatalogService cassandraCatalogService,
+  public ArtistsServiceImpl(final CassandraCatalogService cassandraCatalogService,
       final CassandraRatingsService cassandraRatingsService, final LibraryHelper libraryHelper) {
     this.cassandraCatalogService = cassandraCatalogService;
     this.cassandraRatingsService = cassandraRatingsService;
@@ -43,6 +48,7 @@ public class ArtistsService implements PaginatorHelper {
    * @param artistUuid java.util.UUID
    * @return Optional&lt;ArtistBo&gt;
    */
+  @Override
   public Optional<ArtistBo> getArtist(final Optional<UUID> userUuid, final UUID artistUuid) {
 
     Observable<ResultSet> queryResults =
@@ -124,6 +130,7 @@ public class ArtistsService implements PaginatorHelper {
    * @param pagingStateUuid Optional&lt;UUID&gt;
    * @return ArtistListBo
    */
+  @Override
   public ArtistListBo getArtistsList(final Optional<UUID> userUuid, final Integer items,
       final String facets, final Optional<UUID> pagingStateUuid) {
     ArtistListBo artistListBo = new ArtistListBo();

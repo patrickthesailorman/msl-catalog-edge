@@ -1,13 +1,14 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
+import com.kenzan.msl.catalog.edge.services.PaginatorHelper;
 import com.kenzan.msl.common.dto.AbstractDto;
 import com.kenzan.msl.catalog.client.dto.FacetDto;
 import com.kenzan.msl.catalog.client.dto.PagingStateDto;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Handle paginated browse queries of any content (Album, Artist, Song).
+ * @author kenzan Handle paginated browse queries of any content (Album, Artist, Song).
  */
 public class Paginator {
   private final CatalogEdgeConstants.MSL_CONTENT_TYPE contentType;

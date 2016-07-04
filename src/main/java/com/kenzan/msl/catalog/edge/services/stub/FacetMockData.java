@@ -1,4 +1,4 @@
-package com.kenzan.msl.catalog.edge.mock;
+package com.kenzan.msl.catalog.edge.services.stub;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,6 +10,9 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * @author kenzan
+ */
 public class SongClient {
 
   private ResteasyClient client;
