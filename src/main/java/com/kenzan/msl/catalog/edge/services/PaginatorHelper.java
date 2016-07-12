@@ -6,12 +6,16 @@ package com.kenzan.msl.catalog.edge.services;
 import com.datastax.driver.core.Statement;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 
+/**
+ * @author kenzan
+ */
 public interface PaginatorHelper {
-  public Statement prepareFacetedQuery(final QueryAccessor queryAccessor, final String facetName);
 
-  public Statement prepareFeaturedQuery(final QueryAccessor queryAccessor);
+  Statement prepareFacetedQuery(final QueryAccessor queryAccessor, final String facetName);
 
-  public String getFacetedQueryString(final String facetName);
+  Statement prepareFeaturedQuery(final QueryAccessor queryAccessor);
 
-  public String getFeaturedQueryString();
+  String getFacetedQueryString(final String facetName);
+
+  String getFeaturedQueryString();
 }

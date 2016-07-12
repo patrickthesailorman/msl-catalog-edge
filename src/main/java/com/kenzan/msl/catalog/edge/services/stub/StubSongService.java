@@ -1,16 +1,37 @@
-package com.kenzan.msl.catalog.edge.mock;
+package com.kenzan.msl.catalog.edge.services.stub;
 
+import com.google.common.base.Optional;
+import com.kenzan.msl.catalog.edge.services.SongService;
+import com.kenzan.msl.catalog.edge.translate.Translators;
+import com.kenzan.msl.common.bo.SongBo;
+import com.kenzan.msl.common.bo.SongListBo;
 import io.swagger.api.factories.FacetServiceFactory;
 import io.swagger.model.SongInfo;
 import io.swagger.model.SongList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class SongMockData {
+/**
+ * @author kenzan
+ */
+public class StubSongService implements SongService {
 
-  public SongList songList;
-  private FacetMockData facetMockData = new FacetMockData();
+  private final SongList songList;
+  private final FacetMockData facetMockData = new FacetMockData();
+
+  @Override
+  public Optional<SongBo> getSong(final Optional<UUID> userUuid, final UUID songUuid) {
+    SongInfo result = getSong(songUuid.toString());
+    return result != null ? Optional.of(Translators.translate(result)) : Optional.absent();
+  }
+
+  @Override
+  public SongListBo getSongsList(final Optional<UUID> userUuid, final Integer items,
+      final String facets, final Optional<UUID> pagingStateUuid) {
+    return Translators.translate(browseSongs(null, items, facets));
+  }
 
   /**
    * Retrieves a single mocked song from it's ID
@@ -18,13 +39,13 @@ public class SongMockData {
    * @param songId String
    * @return SongInfo
    */
-  public SongInfo getSong(String songId) {
+  private SongInfo getSong(String songId) {
     for (SongInfo song : songList.getSongs()) {
       if (songId.equals(song.getSongId())) {
         return song;
       }
     }
-    return new SongInfo();
+    return null;
   }
 
   /**
@@ -81,7 +102,7 @@ public class SongMockData {
    * @param facetList String
    * @return SongList
    */
-  public SongList browseSongs(String pagingState, Integer items, String facetList) {
+  private SongList browseSongs(String pagingState, Integer items, String facetList) {
     List<SongInfo> browsedSongs = songList.getSongs();
 
     if (pagingState != null && !pagingState.isEmpty()) {
@@ -112,7 +133,7 @@ public class SongMockData {
     return results;
   }
 
-  public SongMockData() {
+  public StubSongService() {
 
     this.songList = new SongList();
     List<SongInfo> songs = new ArrayList<>();

@@ -1,15 +1,41 @@
-package com.kenzan.msl.catalog.edge.mock;
+package com.kenzan.msl.catalog.edge.services.stub;
 
+import com.google.common.base.Optional;
+import com.kenzan.msl.catalog.edge.services.ArtistService;
+import com.kenzan.msl.catalog.edge.translate.Translators;
+import com.kenzan.msl.common.bo.ArtistBo;
+import com.kenzan.msl.common.bo.ArtistListBo;
 import io.swagger.api.factories.FacetServiceFactory;
 import io.swagger.model.ArtistList;
 import io.swagger.model.ArtistInfo;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class ArtistMockData {
+/**
+ * @author kenzan
+ */
+public class StubArtistService implements ArtistService {
 
-  public ArtistList artistList;
-  private FacetMockData facetMockData = new FacetMockData();
+  private final ArtistList artistList;
+  private final FacetMockData facetMockData = new FacetMockData();
+
+  @Override
+  public Optional<ArtistBo> getArtist(final Optional<UUID> userUuid, final UUID artistUuid) {
+    ArtistInfo partialResult = getArtist(artistUuid.toString());
+    if (partialResult != null) {
+      return Optional.of(Translators.translate(partialResult));
+    } else {
+      return Optional.absent();
+    }
+  }
+
+  @Override
+  public ArtistListBo getArtistsList(final Optional<UUID> userUuid, final Integer items,
+      final String facets, final Optional<UUID> pagingStateUuid) {
+    return Translators.translate(browseArtists(null, items, facets));
+  }
 
   /**
    * Retrieves a single mocked artist from it's ID
@@ -17,13 +43,13 @@ public class ArtistMockData {
    * @param artistId String
    * @return ArtistInfo
    */
-  public ArtistInfo getArtist(String artistId) {
+  private ArtistInfo getArtist(String artistId) {
     for (ArtistInfo artist : artistList.getArtists()) {
       if (artist.getArtistId().equals(artistId)) {
         return artist;
       }
     }
-    return new ArtistInfo();
+    return null;
   }
 
   /**
@@ -80,7 +106,7 @@ public class ArtistMockData {
    * @param facetList String
    * @return ArtistList
    */
-  public ArtistList browseArtists(String pagingState, Integer items, String facetList) {
+  private ArtistList browseArtists(String pagingState, Integer items, String facetList) {
     List<ArtistInfo> browsedArtists = artistList.getArtists();
 
     if (pagingState != null && !pagingState.isEmpty()) {
@@ -110,7 +136,7 @@ public class ArtistMockData {
     return results;
   }
 
-  public ArtistMockData() {
+  public StubArtistService() {
     this.artistList = new ArtistList();
     List<ArtistInfo> artists = new ArrayList<>();
 

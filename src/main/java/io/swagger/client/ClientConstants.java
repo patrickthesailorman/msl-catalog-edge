@@ -3,6 +3,9 @@ package io.swagger.client;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.config.DynamicStringProperty;
 
+/**
+ * @author kenzan
+ */
 public class ClientConstants {
 
   private static final String DEFAULT_BASE_URL = "http://msl.kenzanlabs.com:9003";

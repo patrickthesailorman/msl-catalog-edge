@@ -1,8 +1,13 @@
 package io.swagger.api.impl;
 
 import com.google.common.base.Optional;
+import com.kenzan.msl.account.client.services.CassandraAccountService;
+import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.Main;
 import com.kenzan.msl.catalog.edge.manager.FacetManager;
 import com.kenzan.msl.catalog.edge.services.*;
+import com.kenzan.msl.catalog.edge.services.impl.*;
+import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
 import io.swagger.api.*;
 
 import io.swagger.model.AlbumInfo;
@@ -23,10 +28,22 @@ import javax.ws.rs.core.Response;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JaxRSServerCodegen", date = "2016-01-25T12:48:08.000-06:00")
 public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
-    private CatalogEdge catalogEdge = new CatalogEdgeService(
-            new AlbumsService(),
-            new ArtistsService(),
-            new SongsService()
+
+    private final CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final CassandraCatalogService cassandraCatalogService = CassandraCatalogService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final CassandraAccountService cassandraAccountService = CassandraAccountService.getInstance(Optional
+            .fromNullable(Main.archaiusProperties));
+
+    private final LibraryHelper libraryHelper = new LibraryHelper(cassandraAccountService);
+
+    private CatalogEdgeService catalogEdgeService = new CatalogEdgeServiceImpl(
+            new AlbumsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new ArtistsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper),
+            new SongsServiceImpl(cassandraCatalogService, cassandraRatingsService, libraryHelper)
     );
 
     @Override
@@ -39,7 +56,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<AlbumInfo> optAlbumInfo;
         try {
-            optAlbumInfo = catalogEdge.getAlbum(albumId, null).toBlocking().first();
+            optAlbumInfo = catalogEdgeService.getAlbum(albumId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -67,7 +84,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<ArtistInfo> optArtistInfo;
         try {
-            optArtistInfo = catalogEdge.getArtist(artistId, null).toBlocking().first();
+            optArtistInfo = catalogEdgeService.getArtist(artistId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -90,7 +107,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         AlbumList albumList;
         try {
-            albumList = catalogEdge.browseAlbums(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            albumList = catalogEdgeService.browseAlbums(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -109,7 +126,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         ArtistList artistList;
         try {
-            artistList = catalogEdge.browseArtists(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            artistList = catalogEdgeService.browseArtists(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -128,7 +145,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         SongList songList;
         try {
-            songList = catalogEdge.browseSongs(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            songList = catalogEdgeService.browseSongs(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -162,7 +179,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         Optional<SongInfo> optSongInfo;
         try {
-            optSongInfo = catalogEdge.getSong(songId, null).toBlocking().first();
+            optSongInfo = catalogEdgeService.getSong(songId, null).toBlocking().first();
         } catch (Exception e) {
             e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse();
@@ -178,5 +195,5 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
         return Response.ok().entity(new CatalogEdgeApiResponseMessage(CatalogEdgeApiResponseMessage.OK, "success", optSongInfo.get())).build();
     }
-  
+
 }

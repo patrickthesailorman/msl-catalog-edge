@@ -1,7 +1,7 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
@@ -11,7 +11,10 @@ import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
 import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.edge.services.PaginatorHelper;
+import com.kenzan.msl.catalog.edge.services.SongService;
 import com.kenzan.msl.catalog.edge.translate.Translators;
+import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.SongBo;
 import com.kenzan.msl.common.bo.SongListBo;
 import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
@@ -22,18 +25,30 @@ import rx.Observable;
 import java.util.List;
 import java.util.UUID;
 
-public class SongsService implements PaginatorHelper {
+/**
+ * @author kenzan
+ */
+public class SongsServiceImpl implements SongService, PaginatorHelper {
+
+  private final CassandraCatalogService cassandraCatalogService;
+  private final CassandraRatingsService cassandraRatingsService;
+  private final LibraryHelper libraryHelper;
+
+  public SongsServiceImpl(final CassandraCatalogService cassandraCatalogService,
+      final CassandraRatingsService cassandraRatingsService, final LibraryHelper libraryHelper) {
+    this.cassandraCatalogService = cassandraCatalogService;
+    this.cassandraRatingsService = cassandraRatingsService;
+    this.libraryHelper = libraryHelper;
+  }
 
   /**
    * Get a song from the given catalog using the service
    *
-   * @param cassandraCatalogService CassandraCatalogService
    * @param userUuid Optional&lt;UUID&gt;
    * @param songUuid java.util.UUID
    * @return Optional&lt;SongBo&gt;
    */
-  public Optional<SongBo> getSong(final CassandraCatalogService cassandraCatalogService,
-      final Optional<UUID> userUuid, final UUID songUuid) {
+  public Optional<SongBo> getSong(final Optional<UUID> userUuid, final UUID songUuid) {
     Observable<ResultSet> queryResults =
         cassandraCatalogService.getAlbumArtistBySong(songUuid, Optional.absent());
 
@@ -48,7 +63,7 @@ public class SongsService implements PaginatorHelper {
     AlbumArtistBySongDto albumArtistBySongDto = mappingResults.one();
 
     if (albumArtistBySongDto == null) {
-      return Optional.of(songBo);
+      return Optional.absent();
     }
 
     songBo.setSongId(albumArtistBySongDto.getSongId());
@@ -67,15 +82,13 @@ public class SongsService implements PaginatorHelper {
     }
 
     if (userUuid.isPresent()) {
-      LibraryHelper libraryHelper = new LibraryHelper();
       libraryHelper.processLibrarySongInfo(libraryHelper.getUserSongs(userUuid.get()), songBo);
     }
 
-    CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
-
     // Process ratings
     Optional<AverageRatingsDto> averageRatingsDto =
-        cassandraRatingsService.getAverageRating(songUuid, "Song").toBlocking().first();
+        cassandraRatingsService.getAverageRating(songUuid, ContentType.SONG.value).toBlocking()
+            .first();
     if (averageRatingsDto.isPresent()) {
       songBo.setAverageRating((int) (averageRatingsDto.get().getSumRating() / averageRatingsDto
           .get().getNumRating()));
@@ -83,8 +96,8 @@ public class SongsService implements PaginatorHelper {
 
     if (userUuid.isPresent()) {
       Optional<UserRatingsDto> userRatingsDto =
-          cassandraRatingsService.getUserRating(userUuid.get(), "Song", songUuid).toBlocking()
-              .first();
+          cassandraRatingsService.getUserRating(userUuid.get(), ContentType.SONG.value, songUuid)
+              .toBlocking().first();
       if (userRatingsDto.isPresent()) {
         songBo.setPersonalRating(userRatingsDto.get().getRating());
       }
@@ -96,23 +109,20 @@ public class SongsService implements PaginatorHelper {
   /**
    * Get a list of songs filtered by facet and using pagination
    *
-   * @param cassandraCatalogService CassandraCatalogService
    * @param userUuid Optional&lt;UUID&gt;
    * @param items Integer
    * @param facets String
    * @param pagingStateUuid Optional&lt;UUID&gt;
    * @return SongListBo
    */
-  public SongListBo getSongsList(final CassandraCatalogService cassandraCatalogService,
-      final Optional<UUID> userUuid, final Integer items, final String facets,
-      final Optional<UUID> pagingStateUuid) {
+  public SongListBo getSongsList(final Optional<UUID> userUuid, final Integer items,
+      final String facets, final Optional<UUID> pagingStateUuid) {
     SongListBo songListBo = new SongListBo();
 
     new Paginator(CatalogEdgeConstants.MSL_CONTENT_TYPE.SONG, cassandraCatalogService, this,
         pagingStateUuid, items, facets).getPage(songListBo);
 
     if (userUuid.isPresent()) {
-      LibraryHelper libraryHelper = new LibraryHelper();
       List<SongsByUserDto> userSongs =
           Translators.translateSongsByUserDto(libraryHelper.getUserSongs(userUuid.get()));
       for (SongBo songBo : songListBo.getBoList()) {
@@ -120,12 +130,11 @@ public class SongsService implements PaginatorHelper {
       }
     }
 
-    CassandraRatingsService cassandraRatingsService = CassandraRatingsService.getInstance();
-
     // Process ratings
     for (SongBo songBo : songListBo.getBoList()) {
       Optional<AverageRatingsDto> averageRatingsDto =
-          cassandraRatingsService.getAverageRating(songBo.getSongId(), "Song").toBlocking().first();
+          cassandraRatingsService.getAverageRating(songBo.getSongId(), ContentType.SONG.value)
+              .toBlocking().first();
 
       if (averageRatingsDto.isPresent()) {
         long average =
@@ -135,7 +144,8 @@ public class SongsService implements PaginatorHelper {
 
       if (userUuid.isPresent()) {
         Optional<UserRatingsDto> userRatingsDto =
-            cassandraRatingsService.getUserRating(userUuid.get(), "Song", songBo.getSongId())
+            cassandraRatingsService
+                .getUserRating(userUuid.get(), ContentType.SONG.value, songBo.getSongId())
                 .toBlocking().first();
         if (userRatingsDto.isPresent()) {
           songBo.setPersonalRating(userRatingsDto.get().getRating());

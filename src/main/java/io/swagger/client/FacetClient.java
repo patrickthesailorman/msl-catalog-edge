@@ -6,6 +6,9 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import javax.ws.rs.core.Response;
 
+/**
+ * @author kenzan
+ */
 public class FacetClient {
 
   private ResteasyClient client;

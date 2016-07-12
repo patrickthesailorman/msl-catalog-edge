@@ -4,6 +4,7 @@
 package com.kenzan.msl.catalog.edge.translate;
 
 import com.datastax.driver.mapping.Result;
+import com.google.common.base.Optional;
 import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
@@ -17,6 +18,7 @@ import com.kenzan.msl.common.bo.SongListBo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import io.swagger.model.AlbumInfo;
@@ -258,5 +260,107 @@ public class Translators {
       return modelList;
     }
     return new ArrayList<>();
+  }
+
+  /**
+   * Translates ArtistInfo into ArtistBo
+   *
+   * @param artistInfo ArtistInfo
+   * @return ArtistBo
+   */
+  public static ArtistBo translate(ArtistInfo artistInfo) {
+    ArtistBo result = new ArtistBo();
+    result.setArtistId(UUID.fromString(artistInfo.getArtistId()));
+    result.setArtistName(artistInfo.getArtistName());
+    result.setArtistMbid(UUID.fromString(artistInfo.getArtistMbid()));
+
+    result.setAlbumsList(artistInfo.getAlbumsList());
+    result.setSongsList(artistInfo.getSongsList());
+    result.setSimilarArtistsList(artistInfo.getSimilarArtistsList());
+
+    result.setAverageRating(artistInfo.getAverageRating());
+    result.setPersonalRating(artistInfo.getPersonalRating());
+
+    result.setImageLink(artistInfo.getImageLink());
+    result.setGenre(artistInfo.getGenre());
+
+    result.setInMyLibrary(artistInfo.getInMyLibrary());
+    result.setFavoritesTimestamp(artistInfo.getFavoritesTimestamp());
+    return result;
+  }
+
+  /**
+   * Translates AlbumInfo into AlbumBo
+   *
+   * @param albumInfo AlbumInfo
+   * @return AlbumBo
+   */
+  public static AlbumBo translate(AlbumInfo albumInfo) {
+    AlbumBo result = new AlbumBo();
+    result.setArtistId(UUID.fromString(albumInfo.getArtistId()));
+    result.setArtistName(albumInfo.getArtistName());
+    result.setArtistMbid(UUID.fromString(albumInfo.getArtistMbid()));
+
+    result.setAlbumId(UUID.fromString(albumInfo.getAlbumId()));
+    result.setAlbumName(albumInfo.getAlbumName());
+
+    result.setSongsList(albumInfo.getSongsList());
+
+    result.setAverageRating(albumInfo.getAverageRating());
+    result.setPersonalRating(albumInfo.getPersonalRating());
+
+    result.setImageLink(albumInfo.getImageLink());
+    result.setGenre(albumInfo.getGenre());
+    result.setInMyLibrary(albumInfo.getInMyLibrary());
+    result.setFavoritesTimestamp(albumInfo.getFavoritesTimestamp());
+    return result;
+  }
+
+  /**
+   * Translates SongInfo into SongBo
+   *
+   * @param songInfo SongInfo
+   * @return SongBo
+   */
+  public static SongBo translate(SongInfo songInfo) {
+    SongBo result = new SongBo();
+    result.setArtistId(UUID.fromString(songInfo.getArtistId()));
+    result.setArtistName(songInfo.getArtistName());
+    result.setArtistMbid(UUID.fromString(songInfo.getArtistMbid()));
+
+    result.setAlbumId(UUID.fromString(songInfo.getAlbumId()));
+    result.setAlbumName(songInfo.getAlbumName());
+
+    result.setSongId(UUID.fromString(songInfo.getSongId()));
+    result.setSongName(songInfo.getSongName());
+
+    result.setSongHotttnesss(songInfo.getSongHotttnesss());
+
+    result.setAverageRating(songInfo.getAverageRating());
+    result.setPersonalRating(songInfo.getPersonalRating());
+
+    result.setImageLink(songInfo.getImageLink());
+    result.setGenre(songInfo.getGenre());
+    result.setInMyLibrary(songInfo.getInMyLibrary());
+    result.setFavoritesTimestamp(songInfo.getFavoritesTimestamp());
+    return result;
+  }
+
+  public static AlbumListBo translate(AlbumList albumList) {
+    AlbumListBo albumListBo = new AlbumListBo();
+    // TODO
+    return albumListBo;
+  }
+
+  public static ArtistListBo translate(ArtistList artistList) {
+    ArtistListBo artistListBo = new ArtistListBo();
+    // TODO
+    return artistListBo;
+  }
+
+  public static SongListBo translate(SongList songList) {
+    SongListBo songListBo = new SongListBo();
+    // TODO
+    return songListBo;
   }
 }

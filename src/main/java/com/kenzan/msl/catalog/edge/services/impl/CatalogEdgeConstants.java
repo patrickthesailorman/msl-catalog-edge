@@ -1,7 +1,7 @@
 /*
  * Copyright 2015, Kenzan, All rights reserved.
  */
-package com.kenzan.msl.catalog.edge.services;
+package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.kenzan.msl.catalog.client.dto.FeaturedAlbumsDto;
 import com.kenzan.msl.catalog.client.dto.AlbumsByFacetDto;
@@ -12,8 +12,6 @@ import com.kenzan.msl.catalog.client.dto.SongsByFacetDto;
 import com.kenzan.msl.common.dto.AbstractDto;
 
 /**
- *
- *
  * @author kenzan
  */
 public class CatalogEdgeConstants {

@@ -11,6 +11,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * @author kenzan
+ */
 public class FacetManagerTest {
 
   private FacetManager facetManager = FacetManager.getInstance();
