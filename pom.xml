@@ -4,7 +4,7 @@
     <groupId>msl-catalog-edge</groupId>
     <artifactId>msl-catalog-edge</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
     <distributionManagement>
         <repository>
@@ -661,7 +661,7 @@
         <karyon.version>2.7.5</karyon.version>
         <karyon-governator.version>1.9.3</karyon-governator.version>
 
-        <msl-server.version>1.0.0</msl-server.version>
+        <msl-server.version>1.1.0</msl-server.version>
 
     </properties>
 
