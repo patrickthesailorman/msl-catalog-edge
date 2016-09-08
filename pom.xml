@@ -233,7 +233,7 @@
                 <artifactId>formatter-maven-plugin</artifactId>
                 <version>${formatter-maven-plugin.version}</version>
                 <configuration>
-                    <configFile>${project.basedir}/../../common/styleguide/eclipse-java-google-style.xml</configFile>
+                    <configFile>${project.basedir}/../styleguide/eclipse-java-google-style.xml</configFile>
                     <compilerSource>1.8</compilerSource>
                     <compilerCompliance>1.8</compilerCompliance>
                     <compilerTargetPlatform>1.8</compilerTargetPlatform>
