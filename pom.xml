@@ -146,6 +146,17 @@
                                 <idleTimeout>60000</idleTimeout>
                             </httpConnector>
                             <webXml>override-web.xml</webXml>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>archaius.configurationSource.additionalUrls</name>
+                                    <value>
+                                        ${catalog.data.client.config},
+                                        ${ratings.data.client.config},
+                                        ${account.data.client.config},
+                                        ${catalog.edge.config}
+                                    </value>
+                                </systemProperty>
+                            </systemProperties>
                         </configuration>
                         <executions>
                             <execution>
@@ -663,6 +674,10 @@
 
         <msl-server.version>1.1.0</msl-server.version>
 
+        <catalog.data.client.config>file:../msl-catalog-data-client-config/data-client-config.properties</catalog.data.client.config>
+        <ratings.data.client.config>file:../msl-ratings-data-client-config/data-client-config.properties</ratings.data.client.config>
+        <account.data.client.config>file:../msl-account-data-client-config/data-client-config.properties</account.data.client.config>
+        <catalog.edge.config>file:../msl-catalog-edge-config/edge-config.properties</catalog.edge.config>
     </properties>
 
 </project>
