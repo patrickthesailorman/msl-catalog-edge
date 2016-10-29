@@ -26,7 +26,7 @@ mvn -P dev clean jetty:run
 
 To verify that the server is running, first [start Cassandra](https://github.com/kenzanmedia/million-song-library/tree/develop/tools/cassandra), and then access the following URL:
 
-http://msl.kenzanlabs.com:9003/catalog-edge/browse/album
+http://localhost:9003/catalog-edge/browse/album
 
 ## Code Formatting
 
