@@ -6,16 +6,16 @@ import com.google.common.base.Optional;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.AlbumArtistBySongDto;
-import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.client.services.CatalogDataClientService;
 import com.kenzan.msl.catalog.edge.TestConstants;
-import com.kenzan.msl.catalog.edge.services.impl.LibraryHelper;
+import com.kenzan.msl.catalog.edge.services.impl.LibraryHelperImpl;
 import com.kenzan.msl.catalog.edge.services.impl.Paginator;
 import com.kenzan.msl.catalog.edge.services.impl.SongsServiceImpl;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.SongBo;
 import com.kenzan.msl.common.bo.SongListBo;
-import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
+import com.kenzan.msl.ratings.client.services.RatingsDataClientService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,11 +51,11 @@ public class SongsServiceImplTest extends TestConstants {
   private ResultSet resultSet;
 
   @Mock
-  private CassandraCatalogService cassandraCatalogService;
+  private CatalogDataClientService cassandraCatalogService;
   @Mock
-  private CassandraRatingsService cassandraRatingsService;
+  private RatingsDataClientService cassandraRatingsService;
   @Mock
-  private LibraryHelper libraryHelper;
+  private LibraryHelperImpl libraryHelperImpl;
   @InjectMocks
   private SongsServiceImpl songsServiceImpl;
 
@@ -72,7 +72,7 @@ public class SongsServiceImplTest extends TestConstants {
         Observable.just(albumArtistBySongDtos));
     Mockito.when(albumArtistBySongDtos.one()).thenReturn(albumArtistBySongDto);
 
-    Mockito.when(libraryHelper.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
+    Mockito.when(libraryHelperImpl.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
     Mockito
         .when(cassandraRatingsService.getAverageRating(SONG_ID, ContentType.SONG.value))
         .thenReturn(
@@ -83,7 +83,7 @@ public class SongsServiceImplTest extends TestConstants {
 
     Optional<SongBo> response = songsServiceImpl.getSong(Optional.of(USER_ID), SONG_ID);
 
-    Mockito.verify(libraryHelper, times(1)).processLibrarySongInfo(anyObject(), anyObject());
+    Mockito.verify(libraryHelperImpl, times(1)).processLibrarySongInfo(anyObject(), anyObject());
     assertTrue(response.get().getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
     assertEquals(response.get().getPersonalRating(), Integer.valueOf(10));
   }
@@ -117,7 +117,7 @@ public class SongsServiceImplTest extends TestConstants {
 
     PowerMockito.whenNew(Paginator.class).withAnyArguments().thenReturn(paginator);
 
-    Mockito.when(libraryHelper.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
+    Mockito.when(libraryHelperImpl.getUserSongs(eq(USER_ID))).thenReturn(songsByUserDtos);
 
     PowerMockito.when(Translators.translateSongsByUserDto(songsByUserDtos)).thenReturn(
         songsByUserDtoList);
@@ -132,7 +132,7 @@ public class SongsServiceImplTest extends TestConstants {
 
     SongListBo result =
         songsServiceImpl.getSongsList(Optional.of(USER_ID), 10, "", Optional.absent());
-    Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
+    Mockito.verify(libraryHelperImpl, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
 
     for (SongBo songBo : result.getBoList()) {
       assertTrue(songBo.getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));

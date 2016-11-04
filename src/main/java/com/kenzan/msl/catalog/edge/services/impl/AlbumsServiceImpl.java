@@ -7,11 +7,13 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
+import com.google.inject.Inject;
 import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.SongsArtistByAlbumDto;
-import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.client.services.CatalogDataClientService;
 import com.kenzan.msl.catalog.edge.services.AlbumService;
+import com.kenzan.msl.catalog.edge.services.LibraryHelper;
 import com.kenzan.msl.catalog.edge.services.PaginatorHelper;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
@@ -19,7 +21,7 @@ import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.AlbumListBo;
 import com.kenzan.msl.ratings.client.dto.AverageRatingsDto;
 import com.kenzan.msl.ratings.client.dto.UserRatingsDto;
-import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
+import com.kenzan.msl.ratings.client.services.RatingsDataClientService;
 import rx.Observable;
 
 import java.util.List;
@@ -30,14 +32,16 @@ import java.util.UUID;
  */
 public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
-  private final CassandraCatalogService cassandraCatalogService;
-  private final CassandraRatingsService cassandraRatingsService;
+  private final CatalogDataClientService catalogDataClientService;
+  private final RatingsDataClientService ratingsDataClientService;
   private final LibraryHelper libraryHelper;
 
-  public AlbumsServiceImpl(final CassandraCatalogService cassandraCatalogService,
-      final CassandraRatingsService cassandraRatingsService, final LibraryHelper libraryHelper) {
-    this.cassandraCatalogService = cassandraCatalogService;
-    this.cassandraRatingsService = cassandraRatingsService;
+  @Inject
+  public AlbumsServiceImpl(final CatalogDataClientService catalogDataClientService,
+                           final RatingsDataClientService ratingsDataClientService,
+                           final LibraryHelper libraryHelper) {
+    this.catalogDataClientService = catalogDataClientService;
+    this.ratingsDataClientService = ratingsDataClientService;
     this.libraryHelper = libraryHelper;
   }
 
@@ -52,10 +56,10 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
   public Optional<AlbumBo> getAlbum(final Optional<UUID> userUuid, final UUID albumUuid) {
 
     Observable<ResultSet> queryResults =
-        cassandraCatalogService.getSongsArtistByAlbum(albumUuid, Optional.absent());
+        catalogDataClientService.getSongsArtistByAlbum(albumUuid, Optional.absent());
 
     Result<SongsArtistByAlbumDto> mappingResults =
-        cassandraCatalogService.mapSongsArtistByAlbum(queryResults).toBlocking().first();
+        catalogDataClientService.mapSongsArtistByAlbum(queryResults).toBlocking().first();
 
     if (mappingResults == null) {
       return Optional.absent();
@@ -90,7 +94,7 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
     // Process ratings
     Optional<AverageRatingsDto> averageRatingsDto =
-        cassandraRatingsService.getAverageRating(albumUuid, ContentType.ALBUM.value).toBlocking()
+        ratingsDataClientService.getAverageRating(albumUuid, ContentType.ALBUM.value).toBlocking()
             .first();
     if (averageRatingsDto.isPresent()) {
       albumBo.setAverageRating((int) (averageRatingsDto.get().getSumRating() / averageRatingsDto
@@ -99,7 +103,7 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
     if (userUuid.isPresent()) {
       Optional<UserRatingsDto> userRatingsDto =
-          cassandraRatingsService.getUserRating(userUuid.get(), ContentType.ALBUM.value, albumUuid)
+          ratingsDataClientService.getUserRating(userUuid.get(), ContentType.ALBUM.value, albumUuid)
               .toBlocking().first();
       if (userRatingsDto.isPresent()) {
         albumBo.setPersonalRating(userRatingsDto.get().getRating());
@@ -125,7 +129,7 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
     AlbumListBo albumListBo = new AlbumListBo();
 
-    new Paginator(CatalogEdgeConstants.MSL_CONTENT_TYPE.ALBUM, cassandraCatalogService, this,
+    new Paginator(CatalogEdgeConstants.MSL_CONTENT_TYPE.ALBUM, catalogDataClientService, this,
         pagingStateUuid, items, facets).getPage(albumListBo);
 
     if (userUuid.isPresent()) {
@@ -139,7 +143,7 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
     // Process ratings
     for (AlbumBo albumBo : albumListBo.getBoList()) {
       Optional<AverageRatingsDto> averageRatingsDto =
-          cassandraRatingsService.getAverageRating(albumBo.getAlbumId(), ContentType.ALBUM.value)
+          ratingsDataClientService.getAverageRating(albumBo.getAlbumId(), ContentType.ALBUM.value)
               .toBlocking().first();
 
       if (averageRatingsDto.isPresent()) {
@@ -150,7 +154,7 @@ public class AlbumsServiceImpl implements AlbumService, PaginatorHelper {
 
       if (userUuid.isPresent()) {
         Optional<UserRatingsDto> userRatingsDto =
-            cassandraRatingsService
+            ratingsDataClientService
                 .getUserRating(userUuid.get(), ContentType.ALBUM.value, albumBo.getAlbumId())
                 .toBlocking().first();
         if (userRatingsDto.isPresent()) {

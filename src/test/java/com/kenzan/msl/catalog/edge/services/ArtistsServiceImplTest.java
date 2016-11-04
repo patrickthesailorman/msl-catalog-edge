@@ -6,16 +6,16 @@ import com.google.common.base.Optional;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.catalog.client.cassandra.QueryAccessor;
 import com.kenzan.msl.catalog.client.dto.SongsAlbumsByArtistDto;
-import com.kenzan.msl.catalog.client.services.CassandraCatalogService;
+import com.kenzan.msl.catalog.client.services.CatalogDataClientService;
 import com.kenzan.msl.catalog.edge.TestConstants;
 import com.kenzan.msl.catalog.edge.services.impl.ArtistsServiceImpl;
-import com.kenzan.msl.catalog.edge.services.impl.LibraryHelper;
+import com.kenzan.msl.catalog.edge.services.impl.LibraryHelperImpl;
 import com.kenzan.msl.catalog.edge.services.impl.Paginator;
 import com.kenzan.msl.catalog.edge.translate.Translators;
 import com.kenzan.msl.common.ContentType;
 import com.kenzan.msl.common.bo.ArtistBo;
 import com.kenzan.msl.common.bo.ArtistListBo;
-import com.kenzan.msl.ratings.client.services.CassandraRatingsService;
+import com.kenzan.msl.ratings.client.services.RatingsDataClientService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,11 +52,11 @@ public class ArtistsServiceImplTest extends TestConstants {
   private ResultSet resultSet;
 
   @Mock
-  private CassandraCatalogService cassandraCatalogService;
+  private CatalogDataClientService catalogDataClientService;
   @Mock
-  private CassandraRatingsService cassandraRatingsService;
+  private RatingsDataClientService ratingsDataClientService;
   @Mock
-  private LibraryHelper libraryHelper;
+  private LibraryHelperImpl libraryHelperImpl;
   @InjectMocks
   private ArtistsServiceImpl artistsServiceImpl;
 
@@ -67,34 +67,34 @@ public class ArtistsServiceImplTest extends TestConstants {
 
   @Test
   public void getArtistTest() {
-    Mockito.when(cassandraCatalogService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
+    Mockito.when(catalogDataClientService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
         .thenReturn(Observable.just(resultSet));
-    Mockito.when(cassandraCatalogService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
+    Mockito.when(catalogDataClientService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
         Observable.just(songsAlbumsByArtistDtos));
     Mockito.when(songsAlbumsByArtistDtos.one()).thenReturn(songsAlbumsByArtistDto);
 
-    Mockito.when(libraryHelper.getUserArtists(eq(USER_ID))).thenReturn(artistsByUserDtos);
-    Mockito.when(cassandraRatingsService.getAverageRating(ARTIST_ID, ContentType.ARTIST.value))
+    Mockito.when(libraryHelperImpl.getUserArtists(eq(USER_ID))).thenReturn(artistsByUserDtos);
+    Mockito.when(ratingsDataClientService.getAverageRating(ARTIST_ID, ContentType.ARTIST.value))
         .thenReturn(
             Observable.just(Optional.of(getMockAverageRatingsDto(ARTIST_ID,
                 ContentType.ARTIST.value))));
     Mockito.when(
-        cassandraRatingsService.getUserRating(USER_ID, ContentType.ARTIST.value, ARTIST_ID))
+        ratingsDataClientService.getUserRating(USER_ID, ContentType.ARTIST.value, ARTIST_ID))
         .thenReturn(
             Observable.just(Optional.of(getMockUserRatings(ARTIST_ID, ContentType.ARTIST.value))));
 
     Optional<ArtistBo> response = artistsServiceImpl.getArtist(Optional.of(USER_ID), ARTIST_ID);
 
-    Mockito.verify(libraryHelper, times(1)).processLibraryArtistInfo(anyObject(), anyObject());
+    Mockito.verify(libraryHelperImpl, times(1)).processLibraryArtistInfo(anyObject(), anyObject());
     assertTrue(response.get().getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
     assertEquals(response.get().getPersonalRating(), Integer.valueOf(10));
   }
 
   @Test
   public void getArtistTestEmptyMappingResults() {
-    Mockito.when(cassandraCatalogService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
+    Mockito.when(catalogDataClientService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
         .thenReturn(Observable.just(resultSet));
-    Mockito.when(cassandraCatalogService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
+    Mockito.when(catalogDataClientService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
         Observable.just(null));
     Optional<ArtistBo> response = artistsServiceImpl.getArtist(Optional.of(USER_ID), ARTIST_ID);
     assertFalse(response.isPresent());
@@ -102,9 +102,9 @@ public class ArtistsServiceImplTest extends TestConstants {
 
   @Test
   public void getAlbumTestEmptyMappingResults2() {
-    Mockito.when(cassandraCatalogService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
+    Mockito.when(catalogDataClientService.getSongsAlbumsByArtist(ARTIST_ID, Optional.absent()))
         .thenReturn(Observable.just(resultSet));
-    Mockito.when(cassandraCatalogService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
+    Mockito.when(catalogDataClientService.mapSongsAlbumsByArtist(anyObject())).thenReturn(
         Observable.just(songsAlbumsByArtistDtos));
     Mockito.when(songsAlbumsByArtistDtos.one()).thenReturn(null);
     Optional<ArtistBo> response = artistsServiceImpl.getArtist(Optional.of(USER_ID), ARTIST_ID);
@@ -120,23 +120,23 @@ public class ArtistsServiceImplTest extends TestConstants {
 
     PowerMockito.whenNew(Paginator.class).withAnyArguments().thenReturn(paginator);
 
-    Mockito.when(libraryHelper.getUserArtists(eq(USER_ID))).thenReturn(artistsByUserDtos);
+    Mockito.when(libraryHelperImpl.getUserArtists(eq(USER_ID))).thenReturn(artistsByUserDtos);
 
     PowerMockito.when(Translators.translateArtistsByUserDto(artistsByUserDtos)).thenReturn(
         artistsByUserDtoList);
 
-    Mockito.when(cassandraRatingsService.getAverageRating(ALBUM_ID, ContentType.ARTIST.value))
+    Mockito.when(ratingsDataClientService.getAverageRating(ALBUM_ID, ContentType.ARTIST.value))
         .thenReturn(
             Observable.just(Optional.of(getMockAverageRatingsDto(ARTIST_ID,
                 ContentType.ARTIST.value))));
     Mockito
-        .when(cassandraRatingsService.getUserRating(USER_ID, ContentType.ARTIST.value, ALBUM_ID))
+        .when(ratingsDataClientService.getUserRating(USER_ID, ContentType.ARTIST.value, ALBUM_ID))
         .thenReturn(
             Observable.just(Optional.of(getMockUserRatings(ARTIST_ID, ContentType.ARTIST.value))));
 
     ArtistListBo result =
         artistsServiceImpl.getArtistsList(Optional.of(USER_ID), 10, "", Optional.absent());
-    Mockito.verify(libraryHelper, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
+    Mockito.verify(libraryHelperImpl, times(1)).processLibraryAlbumInfo(anyObject(), anyObject());
 
     for (ArtistBo artistBo : result.getBoList()) {
       assertTrue(artistBo.getAverageRating() == (int) (Long.valueOf(123) / Long.valueOf(123)));
