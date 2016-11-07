@@ -9,6 +9,7 @@ import com.kenzan.msl.ratings.client.services.RatingsDataClientService;
 import com.kenzan.msl.ratings.client.services.RatingsDataClientServiceImpl;
 import com.netflix.governator.guice.lazy.LazySingletonScope;
 import io.swagger.api.CatalogEdgeApiService;
+import io.swagger.api.factories.CatalogEdgeApiServiceFactory;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
 
 /**
@@ -18,6 +19,7 @@ public class CatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        requestStaticInjection(CatalogEdgeApiServiceFactory.class);
         bind(RatingsDataClientService.class).to(RatingsDataClientServiceImpl.class).in(LazySingletonScope.get());
         bind(AccountDataClientService.class).to(AccountDataClientServiceImpl.class).in(LazySingletonScope.get());
 

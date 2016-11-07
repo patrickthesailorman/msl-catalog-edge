@@ -4,7 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.kenzan.msl.catalog.client.config.CatalogDataClientModule;
-import com.netflix.governator.guice.LifecycleInjector;
 
 /**
  * @author Kenzan
@@ -27,8 +26,8 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 
 //        return LifecycleInjector.bootstrap(Bootstrap.class);
         return Guice.createInjector(
-                new RestModule(),
                 new CatalogDataClientModule(),
-                new CatalogEdgeModule());
+                new CatalogEdgeModule(),
+                new RestModule());
     }
 }

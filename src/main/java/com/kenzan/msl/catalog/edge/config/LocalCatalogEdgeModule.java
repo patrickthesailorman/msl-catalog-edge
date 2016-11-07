@@ -16,12 +16,14 @@ import com.kenzan.msl.ratings.client.services.RatingsDataClientService;
 import com.kenzan.msl.ratings.client.services.RatingsDataClientServiceStub;
 import com.netflix.governator.guice.lazy.LazySingletonScope;
 import io.swagger.api.CatalogEdgeApiService;
+import io.swagger.api.factories.CatalogEdgeApiServiceFactory;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
 
 public class LocalCatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        requestStaticInjection(CatalogEdgeApiServiceFactory.class);
         bind(RatingsDataClientService.class).to(RatingsDataClientServiceStub.class).in(LazySingletonScope.get());
         bind(AccountDataClientService.class).to(AccountDataClientServiceStub.class).in(LazySingletonScope.get());
 
