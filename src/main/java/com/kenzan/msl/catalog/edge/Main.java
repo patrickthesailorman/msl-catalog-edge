@@ -1,9 +1,10 @@
 package com.kenzan.msl.catalog.edge;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.kenzan.msl.catalog.client.config.CatalogDataClientModule;
 import com.kenzan.msl.catalog.edge.config.CatalogEdgeModule;
 import com.kenzan.msl.catalog.edge.config.RestModule;
+import com.netflix.governator.guice.LifecycleInjector;
 import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
@@ -25,7 +26,13 @@ public class Main {
    */
   public static void main(String[] args) throws Exception {
     // TODO
-    injector = Guice.createInjector(new CatalogEdgeModule(), new RestModule());
+    injector =  LifecycleInjector.builder()
+            .withModules(
+                    new RestModule(),
+                    new CatalogDataClientModule(),
+                    new CatalogEdgeModule())
+            .build()
+            .createInjector();
 
     Server jettyServer = new Server(9003);
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
