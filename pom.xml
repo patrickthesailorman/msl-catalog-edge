@@ -4,7 +4,7 @@
     <groupId>msl-catalog-edge</groupId>
     <artifactId>msl-catalog-edge</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <distributionManagement>
         <repository>
@@ -578,25 +578,17 @@
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-account-data-client</artifactId>
-            <version>1.2.0</version>
-            <!--<version>${msl-server.version}</version>-->
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../msl-account-data-client/target/msl-account-data-client-1.2.0.jar</systemPath>
+            <version>${msl-server.version}</version>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-catalog-data-client</artifactId>
-            <version>1.2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../msl-catalog-data-client/target/msl-catalog-data-client-1.2.0.jar</systemPath>
+            <version>${msl-server.version}</version>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-ratings-data-client</artifactId>
-            <version>1.2.0</version>
-            <!--<version>${msl-server.version}</version>-->
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../msl-ratings-data-client/target/msl-ratings-data-client-1.2.0.jar</systemPath>
+            <version>${msl-server.version}</version>
         </dependency>
 
     </dependencies>
@@ -646,7 +638,7 @@
         <karyon.version>2.7.5</karyon.version>
         <karyon-governator.version>1.9.3</karyon-governator.version>
 
-        <msl-server.version>1.1.0</msl-server.version>
+        <msl-server.version>1.2.0</msl-server.version>
 
     </properties>
 

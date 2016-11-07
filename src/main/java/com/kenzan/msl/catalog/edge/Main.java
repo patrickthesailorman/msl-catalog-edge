@@ -3,8 +3,8 @@ package com.kenzan.msl.catalog.edge;
 import com.google.inject.Injector;
 import com.kenzan.msl.catalog.client.config.CatalogDataClientModule;
 import com.kenzan.msl.catalog.edge.config.CatalogEdgeModule;
-import com.kenzan.msl.catalog.edge.config.RestModule;
 import com.netflix.governator.guice.LifecycleInjector;
+import com.netflix.governator.lifecycle.LifecycleManager;
 import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
@@ -17,7 +17,6 @@ import java.util.EnumSet;
 
 public class Main {
 
-  public static Injector injector;
   /**
    * Runs jetty server to expose jersey API
    *
@@ -25,14 +24,14 @@ public class Main {
    * @throws Exception if server doesn't start
    */
   public static void main(String[] args) throws Exception {
-    // TODO
-    injector =  LifecycleInjector.builder()
+    Injector injector =  LifecycleInjector.builder()
             .withModules(
-                    new RestModule(),
                     new CatalogDataClientModule(),
                     new CatalogEdgeModule())
             .build()
             .createInjector();
+
+    LifecycleManager manager = injector.getInstance(LifecycleManager.class);
 
     Server jettyServer = new Server(9003);
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -47,10 +46,11 @@ public class Main {
         CatalogEdgeApi.class.getCanonicalName());
 
     try {
+      manager.start();
       jettyServer.start();
       jettyServer.join();
-
     } finally {
+      manager.close();
       jettyServer.destroy();
     }
   }
