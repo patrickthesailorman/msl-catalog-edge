@@ -4,6 +4,7 @@
 package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.google.common.base.Optional;
+import com.google.inject.Inject;
 import com.kenzan.msl.catalog.edge.services.AlbumService;
 import com.kenzan.msl.catalog.edge.services.ArtistService;
 import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
@@ -36,6 +37,7 @@ public class CatalogEdgeServiceImpl implements CatalogEdgeService {
   private ArtistService artistsService;
   private SongService songsService;
 
+  @Inject
   public CatalogEdgeServiceImpl(final AlbumService albumsService,
       final ArtistService artistsService, final SongService songsService) {
     this.albumsService = albumsService;

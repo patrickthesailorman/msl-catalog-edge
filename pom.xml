@@ -4,7 +4,7 @@
     <groupId>msl-catalog-edge</groupId>
     <artifactId>msl-catalog-edge</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <distributionManagement>
         <repository>
@@ -381,6 +381,13 @@
             <version>2.4.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.sun.jersey.contribs/jersey-guice -->
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-guice</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+
         <!-- API -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -393,25 +400,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>3.0.1</version>
             <scope>compile</scope>
-        </dependency>
-
-        <!-- KARYON  -->
-        <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-jersey-blocking</artifactId>
-            <version>${karyon.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-core</artifactId>
-            <version>${karyon.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-admin-web</artifactId>
-            <version>${karyon.version}</version>
         </dependency>
 
         <dependency>
@@ -440,22 +428,17 @@
             <version>2.1</version>
         </dependency>
 
+        <!-- NETFLIX -->
         <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-archaius</artifactId>
-            <version>${karyon.version}</version>
+            <groupId>com.netflix.rxjava</groupId>
+            <artifactId>rxjava-core</artifactId>
+            <version>0.20.7</version>
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-eureka</artifactId>
-            <version>${karyon.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.netflix.karyon</groupId>
-            <artifactId>karyon2-servo</artifactId>
-            <version>${karyon.version}</version>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
+            <version>0.7.3</version>
         </dependency>
 
         <dependency>
@@ -465,9 +448,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.governator</groupId>
-            <artifactId>governator</artifactId>
-            <version>${karyon-governator.version}</version>
+            <groupId>com.netflix.karyon</groupId>
+            <artifactId>karyon-core</artifactId>
+            <version>1.0.27</version>
         </dependency>
 
         <!-- JETTY -->
@@ -494,19 +477,6 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jersey-jaxrs</artifactId>
             <version>${swagger-core-version}</version>
-        </dependency>
-
-        <!-- NETFLIX -->
-        <dependency>
-            <groupId>com.netflix.rxjava</groupId>
-            <artifactId>rxjava-core</artifactId>
-            <version>${rxjava-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.netflix.archaius</groupId>
-            <artifactId>archaius-core</artifactId>
-            <version>${archaius.version}</version>
         </dependency>
 
         <!-- CASSANDRA -->
@@ -603,7 +573,7 @@
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-common</artifactId>
-            <version>${msl-server.version}</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
@@ -668,7 +638,7 @@
         <karyon.version>2.7.5</karyon.version>
         <karyon-governator.version>1.9.3</karyon-governator.version>
 
-        <msl-server.version>1.1.0</msl-server.version>
+        <msl-server.version>1.2.0</msl-server.version>
 
     </properties>
 

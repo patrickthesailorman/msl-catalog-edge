@@ -5,11 +5,12 @@ package com.kenzan.msl.catalog.edge.services.impl;
 
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Optional;
+import com.google.inject.Inject;
 import com.kenzan.msl.account.client.dto.AlbumsByUserDto;
 import com.kenzan.msl.account.client.dto.ArtistsByUserDto;
 import com.kenzan.msl.account.client.dto.SongsByUserDto;
-import com.kenzan.msl.account.client.services.CassandraAccountService;
-import com.kenzan.msl.catalog.edge.Main;
+import com.kenzan.msl.account.client.services.AccountDataClientService;
+import com.kenzan.msl.catalog.edge.services.LibraryHelper;
 import com.kenzan.msl.common.bo.AlbumBo;
 import com.kenzan.msl.common.bo.ArtistBo;
 import com.kenzan.msl.common.bo.SongBo;
@@ -19,12 +20,13 @@ import java.util.UUID;
 /**
  * @author kenzan
  */
-public class LibraryHelper {
+public class LibraryHelperImpl implements LibraryHelper{
 
-  private final CassandraAccountService cassandraAccountService;
+  private final AccountDataClientService accountDataClientService;
 
-  public LibraryHelper(final CassandraAccountService cassandraAccountService) {
-    this.cassandraAccountService = cassandraAccountService;
+  @Inject
+  public LibraryHelperImpl(final AccountDataClientService accountDataClientService) {
+    this.accountDataClientService = accountDataClientService;
   }
 
   /**
@@ -34,9 +36,9 @@ public class LibraryHelper {
    * @return Result&lt;AlbumsByUserDto&gt;
    */
   public Result<AlbumsByUserDto> getUserAlbums(final UUID userId) {
-    return cassandraAccountService
+    return accountDataClientService
         .mapAlbumsByUser(
-            cassandraAccountService.getAlbumsByUser(userId, Optional.absent(), Optional.absent()))
+            accountDataClientService.getAlbumsByUser(userId, Optional.absent(), Optional.absent()))
         .toBlocking().first();
   }
 
@@ -65,9 +67,9 @@ public class LibraryHelper {
    * @return Result&lt;ArtistsByUserDto&gt;
    */
   public Result<ArtistsByUserDto> getUserArtists(final UUID userId) {
-    return cassandraAccountService
+    return accountDataClientService
         .mapArtistByUser(
-            cassandraAccountService.getArtistsByUser(userId, Optional.absent(), Optional.absent()))
+            accountDataClientService.getArtistsByUser(userId, Optional.absent(), Optional.absent()))
         .toBlocking().first();
   }
 
@@ -95,9 +97,9 @@ public class LibraryHelper {
    * @return Result&lt;SongsByUserDto&gt;
    */
   public Result<SongsByUserDto> getUserSongs(final UUID userId) {
-    return cassandraAccountService
+    return accountDataClientService
         .mapSongsByUser(
-            cassandraAccountService.getSongsByUser(userId, Optional.absent(), Optional.absent()))
+            accountDataClientService.getSongsByUser(userId, Optional.absent(), Optional.absent()))
         .toBlocking().first();
   }
 
