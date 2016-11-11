@@ -1,7 +1,7 @@
 package com.kenzan.msl.catalog.edge;
 
 import com.google.inject.Injector;
-import com.kenzan.msl.catalog.client.config.CatalogDataClientModule;
+import com.kenzan.msl.catalog.client.config.LocalCatalogDataClientModule;
 import com.kenzan.msl.catalog.edge.config.CatalogEdgeModule;
 import com.netflix.governator.guice.LifecycleInjector;
 import com.netflix.governator.lifecycle.LifecycleManager;
@@ -10,6 +10,7 @@ import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import javax.servlet.DispatcherType;
@@ -24,9 +25,10 @@ public class Main {
    * @throws Exception if server doesn't start
    */
   public static void main(String[] args) throws Exception {
+
     Injector injector =  LifecycleInjector.builder()
             .withModules(
-                    new CatalogDataClientModule(),
+                    new LocalCatalogDataClientModule(),
                     new CatalogEdgeModule())
             .build()
             .createInjector();
@@ -42,8 +44,10 @@ public class Main {
     ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/*");
     jerseyServlet.setInitOrder(0);
 
-    jerseyServlet.setInitParameter("jersey.config.server.provider.classnames",
+    jerseyServlet.setInitParameter(ServerProperties.PROVIDER_CLASSNAMES,
         CatalogEdgeApi.class.getCanonicalName());
+    jerseyServlet.setInitParameter(ServerProperties.PROVIDER_PACKAGES, "io.swagger.jaxrs.json;io.swagger.jaxrs.listing;io.swagger.api");
+    jerseyServlet.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
     try {
       manager.start();
