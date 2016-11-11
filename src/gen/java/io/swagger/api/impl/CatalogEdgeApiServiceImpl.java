@@ -24,10 +24,12 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
 
 
     private CatalogEdgeService catalogEdgeService;
+    private CatalogEdgeSessionToken catalogEdgeSessionToken;
 
     @Inject
-    public CatalogEdgeApiServiceImpl (final CatalogEdgeService catalogEdgeService) {
+    public CatalogEdgeApiServiceImpl (final CatalogEdgeService catalogEdgeService, final CatalogEdgeSessionToken catalogEdgeSessionToken) {
         this.catalogEdgeService = catalogEdgeService;
+        this.catalogEdgeSessionToken = catalogEdgeSessionToken;
     }
 
     @Override
@@ -91,7 +93,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         AlbumList albumList;
         try {
-            albumList = catalogEdgeService.browseAlbums(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            albumList = catalogEdgeService.browseAlbums(pagingState, items, facets, catalogEdgeSessionToken.getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -110,7 +112,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         ArtistList artistList;
         try {
-            artistList = catalogEdgeService.browseArtists(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            artistList = catalogEdgeService.browseArtists(pagingState, items, facets, catalogEdgeSessionToken.getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {
@@ -129,7 +131,7 @@ public class CatalogEdgeApiServiceImpl extends CatalogEdgeApiService {
             throws NotFoundException {
         SongList songList;
         try {
-            songList = catalogEdgeService.browseSongs(pagingState, items, facets, CatalogEdgeSessionToken.getInstance().getTokenValue())
+            songList = catalogEdgeService.browseSongs(pagingState, items, facets, catalogEdgeSessionToken.getTokenValue())
                     .toBlocking()
                     .first();
         } catch (Exception e) {

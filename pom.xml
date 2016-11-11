@@ -573,7 +573,7 @@
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-common</artifactId>
-            <version>1.1.0</version>
+            <version>${msl-server.version}</version>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
