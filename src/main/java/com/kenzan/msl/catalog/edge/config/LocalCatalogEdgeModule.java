@@ -17,13 +17,24 @@ import com.kenzan.msl.ratings.client.services.RatingsDataClientServiceStub;
 import com.netflix.governator.guice.lazy.LazySingletonScope;
 import io.swagger.api.CatalogEdgeApiService;
 import io.swagger.api.factories.CatalogEdgeApiServiceFactory;
+import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
+import io.swagger.api.impl.CatalogEdgeSessionToken;
+import io.swagger.api.impl.CatalogEdgeSessionTokenImpl;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Properties;
 
 public class LocalCatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
         requestStaticInjection(CatalogEdgeApiServiceFactory.class);
+        requestStaticInjection(CatalogEdgeApiOriginFilter.class);
+
+        bind(CatalogEdgeSessionToken.class).to(CatalogEdgeSessionTokenImpl.class).in(
+                LazySingletonScope.get());
+
         bind(RatingsDataClientService.class).to(RatingsDataClientServiceStub.class).in(LazySingletonScope.get());
         bind(AccountDataClientService.class).to(AccountDataClientServiceStub.class).in(LazySingletonScope.get());
 
@@ -34,5 +45,11 @@ public class LocalCatalogEdgeModule extends AbstractModule {
 
         bind(CatalogEdgeService.class).to(StubCatalogEdgeService.class).in(LazySingletonScope.get());
         bind(CatalogEdgeApiService.class).to(CatalogEdgeApiServiceImpl.class).in(LazySingletonScope.get());
+    }
+
+    public void setupArchaius() {
+        String configUrl = "file://" + System.getProperty("user.dir") + "/../msl-ratings-data-client-config/data-client-config.properties";
+        String additionalUrlsProperty = "archaius.configurationSource.additionalUrls";
+        System.setProperty(additionalUrlsProperty, configUrl);
     }
 }

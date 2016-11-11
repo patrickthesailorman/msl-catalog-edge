@@ -388,6 +388,12 @@
             <version>1.18.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+
         <!-- API -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -573,7 +579,7 @@
         <dependency>
             <groupId>msl.server</groupId>
             <artifactId>msl-common</artifactId>
-            <version>1.1.0</version>
+            <version>${msl-server.version}</version>
         </dependency>
         <dependency>
             <groupId>msl.server</groupId>
@@ -638,7 +644,7 @@
         <karyon.version>2.7.5</karyon.version>
         <karyon-governator.version>1.9.3</karyon-governator.version>
 
-        <msl-server.version>1.2.0</msl-server.version>
+        <msl-server.version>1.3.0</msl-server.version>
 
     </properties>
 
