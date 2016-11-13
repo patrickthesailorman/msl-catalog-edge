@@ -8,9 +8,12 @@ import java.util.UUID;
 
 public class CatalogEdgeSessionTokenImpl implements CatalogEdgeSessionToken{
 
-    private static CatalogEdgeSessionTokenImpl catalogEdgeSessionToken = null;
-
     private String tokenValue;
+    private String domain = "localhost";
+
+    public void setDomain (String domain) {
+        this.domain = domain;
+    }
 
     /**
      * Updates sessionToken on each coming request

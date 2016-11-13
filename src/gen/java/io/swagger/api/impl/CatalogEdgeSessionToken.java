@@ -9,6 +9,8 @@ import java.util.UUID;
  */
 public interface CatalogEdgeSessionToken {
 
+    void setDomain (String domain);
+
     void updateSessionToken(HttpServletRequest req);
 
     boolean isValidToken();
