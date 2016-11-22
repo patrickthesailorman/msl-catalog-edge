@@ -1,11 +1,9 @@
 package com.kenzan.msl.catalog.edge.config;
 
-
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.kenzan.msl.account.client.services.AccountDataClientService;
 import com.kenzan.msl.account.client.services.AccountDataClientServiceStub;
-import com.kenzan.msl.catalog.client.services.CatalogDataClientService;
-import com.kenzan.msl.catalog.client.services.CatalogDataClientServiceStub;
 import com.kenzan.msl.catalog.edge.services.*;
 import com.kenzan.msl.catalog.edge.services.impl.*;
 import com.kenzan.msl.catalog.edge.services.stub.StubAlbumService;
@@ -21,14 +19,16 @@ import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
 import io.swagger.api.impl.CatalogEdgeSessionToken;
 import io.swagger.api.impl.CatalogEdgeSessionTokenImpl;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Properties;
-
+/**
+ * @author Kenzan
+ */
 public class LocalCatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bindConstant().annotatedWith(Names.named("clientPort")).to("3000");
+
         requestStaticInjection(CatalogEdgeApiServiceFactory.class);
         requestStaticInjection(CatalogEdgeApiOriginFilter.class);
 
@@ -45,11 +45,5 @@ public class LocalCatalogEdgeModule extends AbstractModule {
 
         bind(CatalogEdgeService.class).to(StubCatalogEdgeService.class).in(LazySingletonScope.get());
         bind(CatalogEdgeApiService.class).to(CatalogEdgeApiServiceImpl.class).in(LazySingletonScope.get());
-    }
-
-    public void setupArchaius() {
-        String configUrl = "file://" + System.getProperty("user.dir") + "/../msl-ratings-data-client-config/data-client-config.properties";
-        String additionalUrlsProperty = "archaius.configurationSource.additionalUrls";
-        System.setProperty(additionalUrlsProperty, configUrl);
     }
 }
