@@ -3,6 +3,7 @@
          xmlns:j2ee="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+    <display-name>catalogedge</display-name>
     <servlet>
         <servlet-name>jersey</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -51,7 +52,7 @@
     </servlet>
 
     <listener>
-        <listener-class>com.kenzan.msl.catalog.edge.config.GuiceServletConfig</listener-class>
+        <listener-class>com.kenzan.msl.catalog.edge.config.KaryonGuiceContextListener</listener-class>
     </listener>
 
     <filter>
@@ -71,6 +72,5 @@
         <filter-name>CatalogEdgeApiOriginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
 </web-app>

@@ -17,12 +17,12 @@ import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
 import io.swagger.api.impl.CatalogEdgeSessionToken;
 import io.swagger.api.impl.CatalogEdgeSessionTokenImpl;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
+ * Catalog Edge Module, a support class for Modules which reduces repetition and results in a more readable configuration
+ * if no archaius.configurationSource.additionalUrls property is passed in, archaius uses default configuration. See readme to
+ * understand how to pass in these variables
+ *
  * @author Kenzan
  */
 public class CatalogEdgeModule extends AbstractModule {
@@ -34,13 +34,11 @@ public class CatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        configureArchaius();
         bindConstant().annotatedWith(Names.named("clientPort")).to(CLIENT_PORT.get());
 
         requestStaticInjection(CatalogEdgeApiServiceFactory.class);
         requestStaticInjection(CatalogEdgeApiOriginFilter.class);
-        bind(CatalogEdgeSessionToken.class).to(CatalogEdgeSessionTokenImpl.class).in(
-                LazySingletonScope.get());
+        bind(CatalogEdgeSessionToken.class).to(CatalogEdgeSessionTokenImpl.class).in(LazySingletonScope.get());
 
         bind(RatingsDataClientService.class).to(RatingsDataClientServiceImpl.class).in(LazySingletonScope.get());
         bind(AccountDataClientService.class).to(AccountDataClientServiceImpl.class).in(LazySingletonScope.get());
@@ -52,17 +50,5 @@ public class CatalogEdgeModule extends AbstractModule {
 
         bind(CatalogEdgeService.class).to(CatalogEdgeServiceImpl.class).in(LazySingletonScope.get());
         bind(CatalogEdgeApiService.class).to(CatalogEdgeApiServiceImpl.class).in(LazySingletonScope.get());
-    }
-
-    private void configureArchaius() {
-        Properties props = System.getProperties();
-        String ENV = props.getProperty("env");
-        if (StringUtils.isEmpty(ENV) || ENV.toLowerCase().contains("local")) {
-            String configUrl = "file://" + System.getProperty("user.dir") + "/../msl-catalog-edge-config/edge-config.properties";
-            File f = new File(configUrl);
-            if(f.exists() && !f.isDirectory()) {
-                System.setProperty("archaius.configurationSource.additionalUrls", configUrl);
-            }
-        }
     }
 }

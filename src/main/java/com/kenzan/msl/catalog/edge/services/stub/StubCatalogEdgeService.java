@@ -4,6 +4,7 @@
 package com.kenzan.msl.catalog.edge.services.stub;
 
 import com.google.common.base.Optional;
+import com.google.inject.Inject;
 import com.kenzan.msl.catalog.edge.services.AlbumService;
 import com.kenzan.msl.catalog.edge.services.ArtistService;
 import com.kenzan.msl.catalog.edge.services.CatalogEdgeService;
@@ -33,6 +34,7 @@ public class StubCatalogEdgeService implements CatalogEdgeService {
   private final ArtistService artistService;
   private final SongService songService;
 
+  @Inject
   public StubCatalogEdgeService(final AlbumService albumService, final ArtistService artistService,
       final SongService songService) {
     this.albumService = albumService;

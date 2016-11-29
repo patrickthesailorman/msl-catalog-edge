@@ -52,6 +52,14 @@ Use the following command to package the application code:
 mvn -P no-tests package
 ```
 
+There are some archaius properties that need to be provided when running the jar files, see example: 
+
+```
+java -jar msl-catalog-edge.jar
+-Darchaius.deployment.environment=dev \
+-Darchaius.configurationSource.additionalUrls=file://${PWD}/../msl-catalog-edge-config/edge-config.properties,file://${PWD}/../msl-catalog-data-client-config/data-client-config.properties
+```
+
 ## Testing and Reports
 
 You can use either Cobertura or EclEmma to run tests, whichever you prefer.
