@@ -4,6 +4,7 @@ import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.karyon.server.KaryonServer;
 import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
+import org.apache.maven.properties.internal.SystemProperties;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -22,6 +23,7 @@ public class Main {
      * @throws Exception if server doesn't start
      */
     public static void main(String[] args) throws Exception {
+        System.setProperty("archaius.deployment.applicationId", "catalogedge");
         Server jettyServer = new Server(9003);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
