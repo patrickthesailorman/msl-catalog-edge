@@ -33,6 +33,13 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+          <id>apache</id>
+          <name>Apache Central Repo</name>
+          <layout>default</layout>
+          <url>http://jcenter.bintray.com/</url>
+          <snapshots><enabled>false</enabled></snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -202,6 +209,59 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <!-- To package this into an RPM, ensure RPM is installed on the build machine and run mvn compile with '-P rpm-package' -->
+        <profile>
+          <id>rpm-package</id>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>rpm-maven-plugin</artifactId>
+                  <version>2.1.5</version>
+                  <executions>
+                    <execution>
+                      <goals>
+                        <goal>rpm</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                <configuration>
+                  <license>2016, Kenzan Media, LLC</license>
+                  <group>Development</group>
+                  <description>Million Song Library catalog-edge</description>
+                  <needarch>x86_64</needarch>
+                  <provides>
+                    <provide>msl-catalog-edge</provide>
+                  </provides>
+                  <requires>
+                    <require>java-1.8.0-openjdk</require>
+                  </requires>
+                  <postinstallScriptlet>
+                    <scriptFile>install-catalog-edge.sh</scriptFile>
+                  </postinstallScriptlet>
+                  <mappings>
+                    <mapping>
+                      <directory>/opt/kenzan/</directory>
+                        <dependency/>
+                        <directoryIncluded>false</directoryIncluded>
+                        <sources>
+                        <source>
+                          <location>target/${project.build.finalName}-jar-with-dependencies.jar</location>
+                          <destination>/opt/kenzan/</destination>
+                        </source>
+                      </sources>
+                      <artifact/>
+                    </mapping>
+                    <mapping>
+                      <directory>/var/log/msl/</directory>
+                    </mapping>
+                  </mappings>
+                </configuration>
+              </plugin>
+            </plugins>
+          </build>
         </profile>
 
     </profiles>
@@ -667,6 +727,8 @@
 
         <formatter-maven-plugin.version>0.5.2</formatter-maven-plugin.version>
         <jackson.version>2.5.4</jackson.version>
+
+        <rpm-maven-plugin.version>2.1.5</rpm-maven-plugin.version>
 
         <msl-server.version>1.4.0</msl-server.version>
 
