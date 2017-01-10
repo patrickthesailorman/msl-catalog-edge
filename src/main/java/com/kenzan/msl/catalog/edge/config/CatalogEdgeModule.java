@@ -11,12 +11,14 @@ import com.kenzan.msl.ratings.client.services.RatingsDataClientServiceImpl;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.config.DynamicStringProperty;
 import com.netflix.governator.guice.lazy.LazySingletonScope;
+import io.swagger.api.CatalogEdgeApi;
 import io.swagger.api.CatalogEdgeApiService;
 import io.swagger.api.factories.CatalogEdgeApiServiceFactory;
 import io.swagger.api.impl.CatalogEdgeApiOriginFilter;
 import io.swagger.api.impl.CatalogEdgeApiServiceImpl;
 import io.swagger.api.impl.CatalogEdgeSessionToken;
 import io.swagger.api.impl.CatalogEdgeSessionTokenImpl;
+import org.jboss.resteasy.plugins.server.netty.RequestHandler;
 
 /**
  * Catalog Edge Module, a support class for Modules which reduces repetition and results in a more readable configuration
@@ -27,17 +29,11 @@ import io.swagger.api.impl.CatalogEdgeSessionTokenImpl;
  */
 public class CatalogEdgeModule extends AbstractModule {
 
-    private final String DEFAULT_CLIENT_PORT = "3000";
-
-    private DynamicStringProperty CLIENT_PORT =
-            DynamicPropertyFactory.getInstance().getStringProperty("clientPort", DEFAULT_CLIENT_PORT);
-
     @Override
     protected void configure() {
-        bindConstant().annotatedWith(Names.named("clientPort")).to(CLIENT_PORT.get());
 
-        requestStaticInjection(CatalogEdgeApiServiceFactory.class);
-        requestStaticInjection(CatalogEdgeApiOriginFilter.class);
+        requestStaticInjection(NettyServer.class);
+        requestStaticInjection(RequestHandler.class);
         bind(CatalogEdgeSessionToken.class).to(CatalogEdgeSessionTokenImpl.class).in(LazySingletonScope.get());
 
         bind(RatingsDataClientService.class).to(RatingsDataClientServiceImpl.class).in(LazySingletonScope.get());

@@ -1,9 +1,12 @@
 package io.swagger.api.impl;
 
+import org.jboss.resteasy.plugins.server.netty.NettyHttpRequest;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.NewCookie;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class CatalogEdgeSessionTokenImpl implements CatalogEdgeSessionToken{
@@ -19,6 +22,9 @@ public class CatalogEdgeSessionTokenImpl implements CatalogEdgeSessionToken{
      * Updates sessionToken on each coming request
      *
      * @param req HttpServletRequest
+     * @deprecated only used when running the local catalog edge
+     * module which uses the catalogEdgeApiOriginFilter original approach
+     *
      */
     public void updateSessionToken(HttpServletRequest req) {
         String sessionTokenValue = "";
@@ -27,6 +33,24 @@ public class CatalogEdgeSessionTokenImpl implements CatalogEdgeSessionToken{
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals("sessionToken")) {
                     sessionTokenValue = cookies[i].getValue();
+                }
+            }
+        }
+        setTokenValue(sessionTokenValue);
+    }
+
+    /**
+     * Updates sessionToken from incoming netty http request
+     *
+     * @param req NettyHttpRequest
+     */
+    public void updateSessionToken (NettyHttpRequest req) {
+        String sessionTokenValue = "";
+        if (req.getHttpHeaders().getCookies() != null) {
+            Map<String, javax.ws.rs.core.Cookie> cookies = req.getHttpHeaders().getCookies();
+            for (Map.Entry<String, javax.ws.rs.core.Cookie> entry : cookies.entrySet()) {
+                if (entry.getValue().getName().equals("sessionToken")) {
+                    sessionTokenValue = entry.getValue().getName();
                 }
             }
         }

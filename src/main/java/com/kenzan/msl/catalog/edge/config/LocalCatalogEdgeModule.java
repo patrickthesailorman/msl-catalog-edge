@@ -27,8 +27,6 @@ public class LocalCatalogEdgeModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bindConstant().annotatedWith(Names.named("clientPort")).to("3000");
-
         requestStaticInjection(CatalogEdgeApiServiceFactory.class);
         requestStaticInjection(CatalogEdgeApiOriginFilter.class);
 
