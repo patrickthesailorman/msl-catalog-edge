@@ -1,5 +1,7 @@
 package io.swagger.api.impl;
 
+import org.jboss.resteasy.plugins.server.netty.NettyHttpRequest;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.NewCookie;
 import java.util.UUID;
@@ -12,6 +14,8 @@ public interface CatalogEdgeSessionToken {
     void setDomain (String domain);
 
     void updateSessionToken(HttpServletRequest req);
+
+    void updateSessionToken(NettyHttpRequest req);
 
     boolean isValidToken();
 

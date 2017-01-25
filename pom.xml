@@ -593,6 +593,18 @@
         <!-- RESTEASY -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-netty</artifactId>
+            <version>${resteasy-netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>${resteasy-netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
             <version>${resteasy-client}</version>
         </dependency>
@@ -709,6 +721,7 @@
         <servlet-api-version>2.5</servlet-api-version>
         <jersey.version>2.4.1</jersey.version>
         <resteasy-client>3.0.2.Final</resteasy-client>
+        <resteasy-netty.version>3.0.6.Final</resteasy-netty.version>
         <org-jboss-resteasy.version>3.0.13.Final</org-jboss-resteasy.version>
 
         <cassandra-driver-core.version>2.1.9</cassandra-driver-core.version>
